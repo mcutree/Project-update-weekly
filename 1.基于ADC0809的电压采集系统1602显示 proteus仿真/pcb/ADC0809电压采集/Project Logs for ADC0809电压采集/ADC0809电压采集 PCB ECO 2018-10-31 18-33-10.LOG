@@ -1,0 +1,70 @@
+Removed Pin From Net: NetName=P3.7 Pin=U1-10
+Removed Pin From Net: NetName=GND Pin=U1-23
+Removed Pin From Net: NetName=GND Pin=U1-24
+Removed Pin From Net: NetName=GND Pin=U1-25
+Removed Pin From Net: NetName=NetJ1_13 Pin=U2-26
+Removed Pin From Net: NetName=NetJ1_12 Pin=U2-27
+Change Component Designator: OldDesignator= NewDesignator=J2
+Added Pin To Net: NetName=P3.7 Pin=U1-17
+Added Pin To Net: NetName=NetJ1_12 Pin=U2-26
+Added Pin To Net: NetName=NetJ1_13 Pin=U2-27
+Added Pin To Net: NetName=NetU1_6 Pin=U1-6
+Added Pin To Net: NetName=NetU1_6 Pin=U1-22
+Added Pin To Net: NetName=NetU1_6 Pin=U2-3
+Added Net: Name=NetU1_6
+Added Pin To Net: NetName=NetU1_7 Pin=U1-7
+Added Pin To Net: NetName=NetU1_7 Pin=U2-2
+Added Net: Name=NetU1_7
+Added Pin To Net: NetName=NetU1_9 Pin=U1-9
+Added Pin To Net: NetName=NetU1_9 Pin=U2-1
+Added Net: Name=NetU1_9
+Added Pin To Net: NetName=NetU1_10 Pin=U1-10
+Added Pin To Net: NetName=NetU1_10 Pin=U2-4
+Added Net: Name=NetU1_10
+Added Pin To Net: NetName=NetU1_23 Pin=U1-23
+Added Pin To Net: NetName=NetU1_23 Pin=U2-7
+Added Net: Name=NetU1_23
+Added Pin To Net: NetName=NetU1_24 Pin=U1-24
+Added Pin To Net: NetName=NetU1_24 Pin=U2-6
+Added Net: Name=NetU1_24
+Added Pin To Net: NetName=NetU1_25 Pin=U1-25
+Added Pin To Net: NetName=NetU1_25 Pin=U2-5
+Added Net: Name=NetU1_25
+Added Pin To Net: NetName=P3.0 Pin=U1-21
+Added Net: Name=P3.0
+Added Pin To Net: NetName=P3.1 Pin=U1-20
+Added Pin To Net: NetName=P3.1 Pin=U2-11
+Added Net: Name=P3.1
+Added Pin To Net: NetName=P3.2 Pin=U1-19
+Added Pin To Net: NetName=P3.2 Pin=U2-12
+Added Net: Name=P3.2
+Added Pin To Net: NetName=P3.3 Pin=U1-18
+Added Pin To Net: NetName=P3.3 Pin=U2-13
+Added Net: Name=P3.3
+Added Pin To Net: NetName=P3.4 Pin=U1-8
+Added Pin To Net: NetName=P3.4 Pin=U2-14
+Added Net: Name=P3.4
+Added Pin To Net: NetName=P3.5 Pin=U1-15
+Added Pin To Net: NetName=P3.5 Pin=U2-15
+Added Net: Name=P3.5
+Added Pin To Net: NetName=P3.6 Pin=U1-14
+Added Pin To Net: NetName=P3.6 Pin=U2-16
+Added Net: Name=P3.6
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component C1 10uf
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component C2 100uf
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component C3 30pf
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component C4 30pf
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component J1 CON16
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component J2 CON2
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component L1 B_LED
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component R1 4.7k
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component R2 10K
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component R3 1K
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component S1 单刀开关
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component  SW2
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component U1 ADC0809
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component U2 89C52
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component VR1 10K
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component VR2 10K
+Added Member To Class: ClassName=ADC0809电压采集 Member=Component X1 12M
+Added Room: Name=ADC0809电压采集
