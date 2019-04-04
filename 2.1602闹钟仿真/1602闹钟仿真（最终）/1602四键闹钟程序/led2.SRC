@@ -1,0 +1,163 @@
+; led2.SRC generated from: led2.c
+; COMPILER INVOKED BY:
+;        C:\Keil\C51\BIN\C51.EXE led2.c BROWSE DEBUG OBJECTEXTEND
+
+$NOMOD51
+
+NAME	LED2
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+IE	DATA	0A8H
+RD	BIT	0B0H.7
+ES	BIT	0A8H.4
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+PS	BIT	0B8H.4
+SP	DATA	081H
+OV	BIT	0D0H.2
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+ACC	DATA	0E0H
+ET0	BIT	0A8H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?main?LED2        SEGMENT CODE 
+?PR?_delay?LED2      SEGMENT CODE 
+	EXTRN	CODE (?C_STARTUP)
+	PUBLIC	_delay
+	PUBLIC	main
+; /**************************************************************************************
+; *		              LED闪烁的简单试验												  *
+; *	
+; *     连接方法： JP11（P2）和JP1用8PIN排线连接起来								      *
+; *																					  *
+; ***************************************************************************************/
+; #pragma SRC
+; #include <reg51.h>	   //此文件中定义了51的一些特殊功能寄存器
+; 
+; void delay(unsigned int i);  //声明延时函数
+; 
+; main()
+
+	RSEG  ?PR?main?LED2
+main:
+	USING	0
+			; SOURCE LINE # 12
+; { 
+			; SOURCE LINE # 13
+;    
+;   P2  = 0x00;
+			; SOURCE LINE # 15
+	CLR  	A
+	MOV  	P2,A
+;   
+;   delay(600);
+			; SOURCE LINE # 17
+	MOV  	R7,#058H
+	MOV  	R6,#02H
+	LCALL	_delay
+; 
+;   P2  = 0xff;
+			; SOURCE LINE # 19
+	MOV  	P2,#0FFH
+;   
+; 
+;   delay(600);
+			; SOURCE LINE # 22
+	MOV  	R7,#058H
+	MOV  	R6,#02H
+	LJMP 	_delay
+; END OF main
+
+; 
+; 
+; }
+; 
+; /*******延时函数*************/
+; void delay(unsigned int i)
+
+	RSEG  ?PR?_delay?LED2
+_delay:
+	USING	0
+			; SOURCE LINE # 28
+;---- Variable 'i?140' assigned to Register 'R6/R7' ----
+; {
+			; SOURCE LINE # 29
+;     unsigned char j;
+;     for(i; i > 0; i--)
+			; SOURCE LINE # 31
+?C0002:
+	SETB 	C
+	MOV  	A,R7
+	SUBB 	A,#00H
+	MOV  	A,R6
+	SUBB 	A,#00H
+	JC   	?C0008
+;         for(j = 255; j > 0; j--);
+			; SOURCE LINE # 32
+;---- Variable 'j?141' assigned to Register 'R5' ----
+	MOV  	R5,#0FFH
+?C0005:
+	DJNZ 	R5,?C0005
+?C0004:
+	MOV  	A,R7
+	DEC  	R7
+	JNZ  	?C0002
+	DEC  	R6
+?C0009:
+	SJMP 	?C0002
+; }
+			; SOURCE LINE # 33
+?C0008:
+	RET  	
+; END OF _delay
+
+	END

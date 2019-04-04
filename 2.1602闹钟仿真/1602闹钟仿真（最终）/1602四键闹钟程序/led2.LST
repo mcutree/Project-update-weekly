@@ -1,0 +1,70 @@
+C51 COMPILER V7.10   LED2                                                                  11/10/2010 17:47:29 PAGE 1   
+
+
+C51 COMPILER V7.10, COMPILATION OF MODULE LED2
+OBJECT MODULE PLACED IN led2.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE led2.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /**************************************************************************************
+   2          *                             LED闪烁的简单试验                                                                                           *
+   3          *       
+   4          *     连接方法： JP11（P2）和JP1用8PIN排线连接起来                                                                    *
+   5          *                                                                                                                                                                         *
+   6          ***************************************************************************************/
+   7          
+   8          #include <reg51.h>         //此文件中定义了51的一些特殊功能寄存器
+   9          
+  10          void delay(unsigned int i);  //声明延时函数
+  11          
+  12          main()
+  13          { 
+  14   1         
+  15   1        P2  = 0x00; //置P0口为低电平
+  16   1        
+  17   1        delay(600); // 调用延时程序
+  18   1      
+  19   1        P2  = 0xff; //置P0口为高电平
+  20   1        
+  21   1      
+  22   1        delay(600); // 调用延时程序
+  23   1      
+  24   1      
+  25   1      }
+  26          
+  27          /*******延时函数*************/
+  28          void delay(unsigned int i)
+  29          {
+  30   1          unsigned char j;
+  31   1          for(i; i > 0; i--)   
+  32   1              for(j = 255; j > 0; j--);
+  33   1      }
+  34          
+  35          
+  36          
+  37          
+  38          
+  39          
+  40          
+  41          
+  42          
+  43          
+  44          
+  45          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     41    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V7.10   LED2                                                                  11/10/2010 17:47:29 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
