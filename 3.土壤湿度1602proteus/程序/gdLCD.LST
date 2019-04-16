@@ -1,0 +1,191 @@
+C51 COMPILER V9.00   GDLCD                                                                 04/16/2019 09:35:04 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE GDLCD
+OBJECT MODULE PLACED IN gdLCD.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\keil4_c51\C51\BIN\C51.EXE gdLCD.C BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg51.h>      //51寄存器文件
+   2          #include <intrins.h>
+   3                  
+   4          typedef unsigned char BYTE;     //用BYTE代替unsigned char 
+   5          typedef bit BOOL;  // 用BOOL代替bit 
+   6          
+   7          sbit LCD_RS = P2^6;  //寄存器选择（RS＝0，命令寄存器；RS＝1，数据寄存器）            
+   8          sbit LCD_RW = P2^5;      //读写端（RW＝1，读；RW＝0，写）
+   9          sbit LCD_EP = P2^7;      //使能端
+  10          sbit ST=P3^0;   //A/D启动转换信号
+  11          sbit OE=P3^1;   //数据输出允许信号
+  12          sbit EOC=P3^2;  //A/D转换结束信号
+  13          sbit CLK=P3^3;  //时钟脉冲  
+  14          sbit LED=P3^4;
+  15          sbit MOTOR=P3^5;
+  16          int z,x,c,v,AD0809, date;       //定义数据类型
+  17          
+  18          /****************延时函数************************/      
+  19                  void delay(int ms)
+  20                  {                    //延时子程序
+  21   1              int i;
+  22   1              while(ms--)
+  23   1              {
+  24   2                for(i = 0; i< 250; i++)
+  25   2                {
+  26   3                 _nop_();       //空执行
+  27   3                 _nop_();
+  28   3                 _nop_();
+  29   3                 _nop_();
+  30   3                }
+  31   2              }
+  32   1              }
+  33          
+  34          /****************查忙函数************************/              
+  35                  BOOL lcd_bz()
+  36                  {                         
+  37   1              BOOL result;
+  38   1              LCD_RS = 0;
+  39   1              LCD_RW = 1;
+  40   1              LCD_EP = 1;
+  41   1              _nop_();
+  42   1              _nop_();
+  43   1              _nop_();
+  44   1              _nop_();
+  45   1              result = (BOOL)(P0 & 0x80);      //检测P0最高位是否为1
+  46   1              LCD_EP = 0;
+  47   1              return result;//返回查忙结果
+  48   1              }
+  49          
+  50          /****************写命令函数************************/    
+  51                  void lcd_wcmd(BYTE cmd)
+  52                  {                          // 写入指令数据到LCD
+  53   1              while(lcd_bz());
+  54   1              LCD_RS = 0;
+  55   1              LCD_RW = 0;
+C51 COMPILER V9.00   GDLCD                                                                 04/16/2019 09:35:04 PAGE 2   
+
+  56   1              LCD_EP = 0;
+  57   1              _nop_();
+  58   1              _nop_(); 
+  59   1              P0 = cmd; //将8位指令通过P0口传给1602
+  60   1              _nop_();
+  61   1              _nop_(); //用于产生一个脉冲宽度
+  62   1              _nop_();
+  63   1              _nop_();
+  64   1              LCD_EP = 1;
+  65   1              _nop_();
+  66   1              _nop_();
+  67   1              _nop_();
+  68   1              _nop_();
+  69   1              LCD_EP = 0;  
+  70   1              }
+  71                  
+  72                  void lcd_pos(BYTE pos)
+  73                  {                          //设定显示位置
+  74   1              lcd_wcmd(pos | 0x80);
+  75   1              }
+  76          
+  77          /****************写数据函数************************/    
+  78                  void lcd_wdat(BYTE dat) 
+  79                  {                   //写入字符显示数据到LCD
+  80   1              while(lcd_bz());
+  81   1              LCD_RS = 1;
+  82   1              LCD_RW = 0;
+  83   1              LCD_EP = 0;
+  84   1              P0 = dat;  //将8位数据通过P0口传给1602
+  85   1              _nop_();
+  86   1              _nop_();   //用于产生一个脉冲宽度
+  87   1              _nop_();
+  88   1              _nop_();
+  89   1              LCD_EP = 1;
+  90   1              _nop_();
+  91   1              _nop_();
+  92   1              _nop_();
+  93   1              _nop_();
+  94   1              LCD_EP = 0; 
+  95   1              }
+  96                  
+  97                  void lcd_init()
+  98                  {                   //LCD初始化设定
+  99   1              lcd_wcmd(0x38);     //16*2显示，5*7点阵，8位数据
+ 100   1              delay(1);
+ 101   1              lcd_wcmd(0x0c);     //显示开，关光标
+ 102   1              delay(1);
+ 103   1              lcd_wcmd(0x06);     //移动光标
+ 104   1              delay(1);
+ 105   1              lcd_wcmd(0x01);     //清除LCD的显示内容
+ 106   1              delay(1);
+ 107   1              }
+ 108          
+ 109                  void Print(unsigned char RH)
+ 110                  {
+ 111   1                   lcd_pos(0);
+ 112   1                      lcd_wdat('R');delay(1);
+ 113   1                      lcd_wdat('H');delay(1);
+ 114   1                      lcd_wdat(':');delay(1);
+ 115   1                      lcd_wdat('0'+RH/10);delay(1);
+ 116   1                      lcd_wdat('0'+RH%10);delay(1);
+ 117   1                      lcd_wdat('%');delay(1);
+C51 COMPILER V9.00   GDLCD                                                                 04/16/2019 09:35:04 PAGE 3   
+
+ 118   1      
+ 119   1                      
+ 120   1              }
+ 121          /****************主函数************************/        
+ 122                  main()
+ 123                  {
+ 124   1                  BYTE i;
+ 125   1                      lcd_init();// 初始化LCD
+ 126   1                      TMOD=0X01;                        //定时器中断0
+ 127   1                      CLK=0;                            //脉冲信号初始值为0
+ 128   1                      TH0=(65536-2)/256;        //定时时间高八位初值
+ 129   1                      TL0=(65536-2)%256;        //定时时间低八位初值
+ 130   1                      EA=1;                             //开CPU中断
+ 131   1                      ET0=1;                            //开T/C0中断
+ 132   1                      TR0=1;
+ 133   1                  
+ 134   1                  delay(10);
+ 135   1              
+ 136   1                  while(1)
+ 137   1                      {
+ 138   2              ST=0;                           //使采集信号为低
+ 139   2              ST=1;                           //开始数据转换
+ 140   2              ST=0;                           //停止数据转换
+ 141   2              while(!EOC);            //等待数据转换完毕
+ 142   2              OE=1;                           //允许数据输出信号
+ 143   2              AD0809=P1;                  //读取数据
+ 144   2              OE=0;                           //关闭数据输出允许信号
+ 145   2              if(AD0809>=251)         //电压显示不能超过5V
+ 146   2              AD0809=249;
+ 147   2              date=AD0809/2.5;                //数码管显示的数据值，其中20为采集数据的毫安值
+ 148   2              if(date<40)
+ 149   2              {LED=1;MOTOR=0;}
+ 150   2              else 
+ 151   2              {LED=0;MOTOR=1;}
+ 152   2              Print(date);                    //数码管显示函数
+ 153   2              delay(30);
+ 154   2                      }                       
+ 155   1              }
+*** WARNING C280 IN LINE 124 OF GDLCD.C: 'i': unreferenced local variable
+ 156                   
+ 157          void timer0( ) interrupt 1 //定时器0工作方式1
+ 158          {
+ 159   1      
+ 160   1      TH0=(65536-2)/256;        //重装计数初值
+ 161   1      TL0=(65536-2)%256;        //重装计数初值
+ 162   1      CLK=!CLK;                         //取反
+ 163   1      }        
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    365    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

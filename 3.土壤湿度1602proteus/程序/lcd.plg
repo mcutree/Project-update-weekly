@@ -1,0 +1,16 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+E:\i4Tools7\design\收集的未整理的文件\000000文档处理集合\2.土壤湿度1602proteus\程序\lcd.uvproj
+Project File Date:  05/20/2018
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling gdLCD.C...
+GDLCD.C(124): warning C280: 'i': unreferenced local variable
+linking...
+Program Size: data=22.1 xdata=0 code=748
+creating hex file from "lcd"...
+"lcd" - 0 Error(s), 1 Warning(s).
