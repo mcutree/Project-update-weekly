@@ -1,0 +1,239 @@
+C51 COMPILER V6.12  MAIN                                                                   06/05/2007 15:43:31 PAGE 1   
+
+
+C51 COMPILER V6.12, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\main.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE .\main.c DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <showfun.h>
+   2          #include <stdio.h>
+   3          
+   4          extern char fnLCMInit(); // LCM 初始化
+   5          extern void at(unsigned char x,unsigned char y);/*设定文本x,y值*/
+   6          extern void cls();	 // 清屏
+   7          extern void charout(unsigned char *str); //ASCII(8*8) 显示函数
+   8          extern void fnSetPos(unsigned char urow, unsigned char  ucol);	// 设置当前地址
+   9          extern uchar dprintf(uchar x,uchar y,char *fmt);// ASCII(8*16) 及 汉字(16*16) 显示函数
+  10          extern uchar fnPR12(uchar uCmd); // 写无参数的指令
+  11          extern uchar fnPR13(uchar uData); // 写数据
+  12          extern unsigned int Adc0832(unsigned char channel);
+  13          extern void Line( unsigned char x1, unsigned char y1, unsigned char x2, unsigned char y2, bit Mode);
+  14          extern void Pixel(unsigned char PointX,unsigned char PointY, bit Mode);
+  15          
+  16          
+  17          
+  18          uchar dsp[10]={0,0,0,0,0,0,0,0,0,0,};
+  19          char abc[3]={0,0,0,};
+  20          uchar key=0;
+  21          uint a=100;
+  22          uchar n=5;
+  23          uchar count=1; 
+  24          uint k1=0;
+  25          
+  26          uchar GeyKey();
+  27          void delay(uchar i);
+  28          void control();
+  29          
+  30          
+  31          main()
+  32          {  
+  33   1           
+  34   1       	fnLCMInit();
+  35   1      	fnSetPos(0,0);
+  36   1      	dprintf(0,0,"直流电机加-减速及测速系统");
+  37   1      	dprintf(0,12,"键盘+:步长加速");
+  38   1      	dprintf(0,24,"键盘-:步长减速");
+  39   1      	dprintf(0,36,"键盘=:顺时针转");
+  40   1      	dprintf(0,48,"键盘on/c:逆时针转");
+  41   1           
+  42   1           dprintf(0,72,"方向:");
+  43   1        	 dprintf(0,84,"转速:");  
+  44   1          
+  45   1      	 P1_1=0;
+  46   1           TMOD=0x15;
+  47   1      	 TH1=0x3c;
+  48   1      	 TL1=0xb0;
+  49   1           TH0=0x00;
+  50   1      	 TL0=0x00;
+  51   1      	 ET0=1;
+  52   1      	 ET1=1;
+  53   1      	 TR0=1;
+  54   1      	 TR1=1;
+  55   1          
+C51 COMPILER V6.12  MAIN                                                                   06/05/2007 15:43:31 PAGE 2   
+
+  56   1          while(1)
+  57   1      	{  key=GeyKey();
+  58   2            switch(key)
+  59   2             {   case '1': {          a=10;
+  60   4      	                            //sprintf(abc,"%3.2f",a/255.0);
+  61   4      		                        dprintf(0,96,"  5    r/min");   
+  62   4                                      //dprintf(0,96,abc);  
+  63   4                                      dprintf(60,96,"r/min");
+  64   4      	                            break;      }
+  65   3      	       case '2': {          a=25;dprintf(0,96,"  25    r/min");    break;      }
+  66   3      		   case '3': {          a=40; dprintf(0,96," 40    r/min");   break;      }
+  67   3      		   case '4': {          a=55; dprintf(0,96," 60    r/min");   break;      }
+  68   3      		   case '5': {          a=70; dprintf(0,96," 80    r/min");   break;      }
+  69   3      		   case '6': {          a=90; dprintf(0,96,"100    r/min");   break;      }
+  70   3      		   case '7': {          a=110; dprintf(0,96,"120    r/min");   break;      }
+  71   3      		   case '8': {          a=130; dprintf(0,96,"135    r/min");   break;      }
+  72   3      		   case '9': {          a=150; dprintf(0,96,"150    r/min");   break;      }
+  73   3      	       case '+': {          dprintf(0,72,"方向: 顺时针");
+  74   4      	                            control();
+  75   4      								break;
+  76   4      						}
+  77   3                 case '-': {         P1_0=0;
+  78   4      		                        dprintf(0,72,"方向: 逆时针");
+  79   4      		                         control();
+  80   4      		                        break;
+  81   4      					}
+  82   3                 case '=': {P1_0=1;dprintf(0,72,"方向: 顺时针");break;}
+  83   3                 case 'c': {P1_0=0;dprintf(0,72,"方向: 逆时针");break;}
+  84   3                 case '/': {dprintf(0,72,"方向: 顺时针");
+  85   4      	                            control();}
+  86   3      		   default:  break;
+  87   3              }
+  88   2          }
+  89   1      }
+  90          
+  91          
+  92          uchar GeyKey()
+  93          {
+  94   1       	P1_4=0;
+  95   1       	P1_5=1;
+  96   1       	P1_6=1;
+  97   1       	P1_7=1;
+  98   1      	P3_0=1;
+  99   1      	P3_1=1;
+ 100   1      	P3_2=1;
+ 101   1          P3_3=1;
+ 102   1      	_nop_();_nop_();
+ 103   1      	if(!P3_0)return '7';
+ 104   1       	if(!P3_1)return '8';
+ 105   1       	if(!P3_2)return '9';
+ 106   1          if(!P3_3)return '/';
+ 107   1       	P1_4=1;
+ 108   1       	P1_5=0;
+ 109   1       	P1_6=1;
+ 110   1       	P1_7=1;
+ 111   1      	_nop_();_nop_();
+ 112   1      	if(!P3_0)return '4';
+ 113   1       	if(!P3_1)return '5';
+ 114   1       	if(!P3_2)return '6';
+ 115   1          if(!P3_3)return '*';
+ 116   1      
+ 117   1       	P1_4=1;
+C51 COMPILER V6.12  MAIN                                                                   06/05/2007 15:43:31 PAGE 3   
+
+ 118   1       	P1_5=1;
+ 119   1       	P1_6=0;
+ 120   1       	P1_7=1;
+ 121   1      	_nop_();_nop_();
+ 122   1      	if(!P3_0)return '1';
+ 123   1       	if(!P3_1)return '2';
+ 124   1       	if(!P3_2)return '3';
+ 125   1          if(!P3_3)return '-';
+ 126   1      
+ 127   1      
+ 128   1       	P1_4=1;
+ 129   1       	P1_5=1;
+ 130   1       	P1_6=1;
+ 131   1       	P1_7=0;
+ 132   1      	_nop_();_nop_();
+ 133   1      	if(!P3_0)return 'c';
+ 134   1       	if(!P3_1)return '0';
+ 135   1       	if(!P3_2)return '=';
+ 136   1          if(!P3_3)return '+';
+ 137   1      
+ 138   1      	return 0;
+ 139   1      }
+ 140          
+ 141          
+ 142          void delay(uchar i)
+ 143          {  uchar j,k;
+ 144   1          for(;i>0;i--)
+ 145   1          for(j=15;j>0;j--)
+ 146   1          for(k=11;k>0;k--);
+ 147   1      }
+ 148          	
+ 149          	
+ 150          	
+ 151          void time()interrupt 3 
+ 152          {    
+ 153   1           TR1=0;
+ 154   1           count++;
+ 155   1           k1+=TL0;
+ 156   1      	 if(count==51)
+ 157   1      	 {     
+ 158   2      	      sprintf(dsp,"%3d",k1);
+ 159   2      		  dprintf(0,108,dsp);   
+ 160   2                dprintf(60,108,"r/min");   
+ 161   2      		  count=1;
+ 162   2                k1=0;
+ 163   2            }
+ 164   1      	  TH1=0x3c;
+ 165   1      	  TL1=0xb0;
+ 166   1      	  TH0=0x00;
+ 167   1      	  TL0=0x00;
+ 168   1      	  TR1=1;
+ 169   1      
+ 170   1      }
+ 171          
+ 172          void control()
+ 173          {                            
+ 174   1             EA=1;
+ 175   1      	   while(1)
+ 176   1      	   {    if(a>=150) 
+ 177   2                     a=150;
+ 178   2      			if(a<=10) 
+ 179   2      			    a=10;
+C51 COMPILER V6.12  MAIN                                                                   06/05/2007 15:43:31 PAGE 4   
+
+ 180   2      			 P1_1=0; 
+ 181   2      			 delay(160-a);
+ 182   2      			 P1_1=1;
+ 183   2      			 delay(a);
+ 184   2      			 key=GeyKey();
+ 185   2      			 if(key=='-') a-=n;
+ 186   2      			 else 
+ 187   2      			   if(key=='+') a+=n;
+ 188   2      			 else 
+ 189   2      			   if(key=='=')
+ 190   2      			   {  P1_0=1;
+ 191   3      				   dprintf(0,72,"方向: 顺时针");
+ 192   3      			 }
+ 193   2      			 else 
+ 194   2      			 if(key=='c') 
+ 195   2      			 {  P1_0=0;
+ 196   3      			   dprintf(0,72,"方向: 逆时针");
+ 197   3      			 }
+ 198   2      			 else  
+ 199   2      			  if(key=='*')
+ 200   2      			  {   P1_1=0;
+ 201   3      			      break;
+ 202   3      			  }
+ 203   2      			  else
+ 204   2      			 if(key!=0)
+ 205   2      			   break;
+ 206   2      			 }
+ 207   1      		 EA=0;
+ 208   1      }
+ 209          
+ 210          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    959    ----
+   CONSTANT SIZE    =    255    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     20    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

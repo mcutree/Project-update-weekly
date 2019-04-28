@@ -1,0 +1,267 @@
+BL51 BANKED LINKER/LOCATER V5.03                                                        08/02/2007  13:24:38  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.03, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE 02.obj TO 接受2 RAMSIZE (128)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  02.obj (02)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  接受2 (02)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0007H     UNIT         ?DT?02
+            IDATA   000FH     000DH     UNIT         ?ID?02
+            IDATA   001CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00D2H     UNIT         ?PR?RECEIVE?02
+            CODE    00D5H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0161H     001FH     UNIT         ?PR?DISPLAY?02
+            CODE    0180H     0012H     UNIT         ?PR?_DELAY?02
+            CODE    0192H     0012H     UNIT         ?PR?INIT?02
+            CODE    01A4H     0010H     UNIT         ?PR?MAIN?02
+            CODE    01B4H     0006H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   接受2 (02)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?02
+  +--> ?C_INITSEG
+
+?PR?MAIN?02
+  +--> ?PR?_DELAY?02
+  +--> ?PR?INIT?02
+  +--> ?PR?RECEIVE?02
+  +--> ?PR?DISPLAY?02
+
+?PR?DISPLAY?02
+  +--> ?PR?_DELAY?02
+
+
+
+BL51 BANKED LINKER/LOCATER V5.03                                                      08/02/2007  13:24:38  PAGE 2
+
+
+SYMBOL TABLE OF MODULE:  接受2 (02)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        02
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  B:0098H.0       PUBLIC        RI
+  D:0008H         PUBLIC        flag
+  B:0098H.1       PUBLIC        TI
+  C:01A4H         PUBLIC        main
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  C:0192H         PUBLIC        init
+  I:000FH         PUBLIC        buf
+  D:0009H         PUBLIC        data1
+  D:008DH         PUBLIC        TH1
+  D:000AH         PUBLIC        flag2
+  D:000BH         PUBLIC        data2
+  B:0098H.3       PUBLIC        TB8
+  D:000CH         PUBLIC        data3
+  D:008BH         PUBLIC        TL1
+  B:0098H.5       PUBLIC        SM2
+  D:000DH         PUBLIC        pf
+  B:0088H.6       PUBLIC        TR1
+  C:0003H         PUBLIC        receive
+  D:000EH         PUBLIC        i
+  I:0019H         PUBLIC        buf1
+  C:0180H         PUBLIC        _delay
+  C:0161H         PUBLIC        display
+  B:00A0H.0       PUBLIC        key1
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        k
+  -------         DO            
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:0180H         LINE#         15
+  C:0180H         LINE#         16
+  C:0180H         LINE#         18
+  C:0186H         LINE#         19
+  C:0186H         LINE#         20
+  C:018EH         LINE#         21
+  C:0191H         LINE#         22
+  C:0191H         LINE#         23
+  -------         ENDPROC       _DELAY
+  -------         PROC          INIT
+  C:0192H         LINE#         25
+  C:0192H         LINE#         26
+  C:0192H         LINE#         27
+  C:0195H         LINE#         28
+  C:0198H         LINE#         29
+  C:019BH         LINE#         30
+  C:019EH         LINE#         31
+BL51 BANKED LINKER/LOCATER V5.03                                                      08/02/2007  13:24:38  PAGE 3
+
+
+  C:01A0H         LINE#         32
+  C:01A3H         LINE#         33
+  -------         ENDPROC       INIT
+  -------         PROC          RECEIVE
+  C:0003H         LINE#         35
+  C:0003H         LINE#         36
+  C:0003H         LINE#         37
+  C:0005H         LINE#         38
+  C:0007H         LINE#         39
+  C:000AH         LINE#         40
+  C:000AH         LINE#         42
+  C:000AH         LINE#         43
+  C:000DH         LINE#         44
+  C:000FH         LINE#         45
+  C:0015H         LINE#         46
+  C:0015H         LINE#         47
+  C:0018H         LINE#         48
+  C:0019H         LINE#         49
+  C:0019H         LINE#         50
+  C:001BH         LINE#         51
+  C:001EH         LINE#         52
+  C:0020H         LINE#         53
+  C:0022H         LINE#         54
+  C:0025H         LINE#         55
+  C:0028H         LINE#         56
+  C:0028H         LINE#         58
+  C:0028H         LINE#         59
+  C:002AH         LINE#         60
+  C:002DH         LINE#         61
+  C:002FH         LINE#         62
+  C:0031H         LINE#         63
+  C:0034H         LINE#         64
+  C:0034H         LINE#         66
+  C:0034H         LINE#         67
+  C:0037H         LINE#         68
+  C:0039H         LINE#         69
+  C:003BH         LINE#         70
+  C:0041H         LINE#         71
+  C:0043H         LINE#         73
+  C:0046H         LINE#         74
+  C:0049H         LINE#         75
+  C:0049H         LINE#         77
+  C:0049H         LINE#         78
+  C:004BH         LINE#         79
+  C:004EH         LINE#         80
+  C:0056H         LINE#         81
+  C:005AH         LINE#         82
+  C:005DH         LINE#         83
+  C:005DH         LINE#         85
+  C:005DH         LINE#         86
+  C:005FH         LINE#         87
+  C:0066H         LINE#         88
+  C:0069H         LINE#         89
+  C:006CH         LINE#         90
+  C:006CH         LINE#         92
+  C:006CH         LINE#         93
+  C:006EH         LINE#         94
+BL51 BANKED LINKER/LOCATER V5.03                                                      08/02/2007  13:24:38  PAGE 4
+
+
+  C:006EH         LINE#         96
+  C:0074H         LINE#         97
+  C:0076H         LINE#         98
+  C:0078H         LINE#         99
+  C:007BH         LINE#         100
+  C:007EH         LINE#         101
+  C:007EH         LINE#         103
+  C:007EH         LINE#         104
+  C:0080H         LINE#         105
+  C:0082H         LINE#         106
+  C:0085H         LINE#         107
+  C:0085H         LINE#         108
+  C:0088H         LINE#         109
+  C:0088H         LINE#         111
+  C:0088H         LINE#         112
+  C:008FH         LINE#         113
+  C:0099H         LINE#         114
+  C:009BH         LINE#         115
+  C:00A2H         LINE#         116
+  C:00A5H         LINE#         117
+  C:00A5H         LINE#         119
+  C:00A5H         LINE#         120
+  C:00A8H         LINE#         121
+  C:00AAH         LINE#         122
+  C:00ACH         LINE#         123
+  C:00B1H         LINE#         124
+  C:00B1H         LINE#         125
+  C:00B3H         LINE#         126
+  C:00B6H         LINE#         127
+  C:00B9H         LINE#         128
+  C:00B9H         LINE#         130
+  C:00B9H         LINE#         131
+  C:00BBH         LINE#         132
+  C:00BCH         LINE#         133
+  C:00BCH         LINE#         134
+  C:00BEH         LINE#         135
+  C:00C1H         LINE#         136
+  C:00C4H         LINE#         137
+  C:00C4H         LINE#         139
+  C:00C4H         LINE#         140
+  C:00C6H         LINE#         141
+  C:00C6H         LINE#         142
+  C:00C7H         LINE#         144
+  C:00C9H         LINE#         145
+  C:00CCH         LINE#         146
+  C:00CFH         LINE#         147
+  C:00D2H         LINE#         148
+  C:00D2H         LINE#         150
+  C:00D2H         LINE#         151
+  C:00D4H         LINE#         152
+  C:00D4H         LINE#         153
+  C:00D4H         LINE#         154
+  -------         ENDPROC       RECEIVE
+  -------         PROC          DISPLAY
+  C:0161H         LINE#         156
+  C:0161H         LINE#         157
+  C:0166H         LINE#         158
+BL51 BANKED LINKER/LOCATER V5.03                                                      08/02/2007  13:24:38  PAGE 5
+
+
+  C:0166H         LINE#         159
+  C:0169H         LINE#         160
+  C:0169H         LINE#         161
+  C:0171H         LINE#         162
+  C:0176H         LINE#         163
+  C:017FH         LINE#         164
+  C:017FH         LINE#         165
+  -------         ENDPROC       DISPLAY
+  -------         PROC          MAIN
+  C:01A4H         LINE#         168
+  C:01A4H         LINE#         169
+  C:01A4H         LINE#         170
+  C:01A9H         LINE#         171
+  C:01ACH         LINE#         172
+  C:01ACH         LINE#         173
+  C:01ACH         LINE#         174
+  C:01AFH         LINE#         175
+  C:01B2H         LINE#         176
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        02
+
+Program Size: data=29.0 xdata=0 code=442
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

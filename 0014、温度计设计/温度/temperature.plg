@@ -1,0 +1,15 @@
+<html>
+<body>
+<pre>
+<h1>µVision3 Build Log</h1>
+<h2>Project:</h2>
+D:\1B.MCU\clock_demo\tmp\temperature.uv2
+Project File Date:  11/01/2006
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling temperature.c...
+linking...
+Program Size: data=34.0 xdata=0 code=604
+creating hex file from "temperature"...
+"temperature" - 0 Error(s), 0 Warning(s).

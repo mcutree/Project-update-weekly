@@ -1,0 +1,492 @@
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.09
+OBJECT MODULE PLACED IN main.OBJ
+ASSEMBLER INVOKED BY: C:\Program Files\Keil\C51\BIN\A51.EXE main.src PR(.\main.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\main.SRC generated from: main.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Program Files\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND SRC(.\main.
+                             SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    MAIN
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00D6                13     AC      BIT     0D0H.6
+  00B4                14     T0      BIT     0B0H.4
+  00B5                15     T1      BIT     0B0H.5
+  00AF                16     EA      BIT     0A8H.7
+  00A8                17     IE      DATA    0A8H
+  0080                18     P0_0    BIT     080H.0
+  0090                19     P1_0    BIT     090H.0
+  0081                20     P0_1    BIT     080H.1
+  00D1                21     FL      BIT     0D0H.1
+  00A0                22     P2_0    BIT     0A0H.0
+  0091                23     P1_1    BIT     090H.1
+  0082                24     P0_2    BIT     080H.2
+  00B0                25     P3_0    BIT     0B0H.0
+  00A1                26     P2_1    BIT     0A0H.1
+  0092                27     P1_2    BIT     090H.2
+  0083                28     P0_3    BIT     080H.3
+  00B1                29     P3_1    BIT     0B0H.1
+  00A2                30     P2_2    BIT     0A0H.2
+  0093                31     P1_3    BIT     090H.3
+  0084                32     P0_4    BIT     080H.4
+  00B2                33     P3_2    BIT     0B0H.2
+  00A3                34     P2_3    BIT     0A0H.3
+  0094                35     P1_4    BIT     090H.4
+  0085                36     P0_5    BIT     080H.5
+  00B7                37     RD      BIT     0B0H.7
+  00B3                38     P3_3    BIT     0B0H.3
+  00A4                39     P2_4    BIT     0A0H.4
+  0095                40     P1_5    BIT     090H.5
+  0086                41     P0_6    BIT     080H.6
+  00B4                42     P3_4    BIT     0B0H.4
+  00A5                43     P2_5    BIT     0A0H.5
+  0096                44     P1_6    BIT     090H.6
+  0087                45     P0_7    BIT     080H.7
+  00B5                46     P3_5    BIT     0B0H.5
+  00AC                47     ES      BIT     0A8H.4
+  00A6                48     P2_6    BIT     0A0H.6
+  0097                49     P1_7    BIT     090H.7
+  00B6                50     P3_6    BIT     0B0H.6
+  00A7                51     P2_7    BIT     0A0H.7
+  00B8                52     IP      DATA    0B8H
+  00B7                53     P3_7    BIT     0B0H.7
+  0098                54     RI      BIT     098H.0
+  00D7                55     CY      BIT     0D0H.7
+  00B2                56     INT0    BIT     0B0H.2
+  00B3                57     INT1    BIT     0B0H.3
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     2
+
+  0099                58     TI      BIT     098H.1
+  00BC                59     PS      BIT     0B8H.4
+  0081                60     SP      DATA    081H
+  00D2                61     OV      BIT     0D0H.2
+  00B6                62     WR      BIT     0B0H.6
+  0099                63     SBUF    DATA    099H
+  0087                64     PCON    DATA    087H
+  0098                65     SCON    DATA    098H
+  0089                66     TMOD    DATA    089H
+  0088                67     TCON    DATA    088H
+  0089                68     IE0     BIT     088H.1
+  008B                69     IE1     BIT     088H.3
+  00F0                70     B       DATA    0F0H
+  00E0                71     ACC     DATA    0E0H
+  00A9                72     ET0     BIT     0A8H.1
+  00AB                73     ET1     BIT     0A8H.3
+  008D                74     TF0     BIT     088H.5
+  00AD                75     ET2     BIT     0A8H.5
+  008F                76     TF1     BIT     088H.7
+  009A                77     RB8     BIT     098H.2
+  008C                78     TH0     DATA    08CH
+  00A8                79     EX0     BIT     0A8H.0
+  0088                80     IT0     BIT     088H.0
+  008D                81     TH1     DATA    08DH
+  00AA                82     EX1     BIT     0A8H.2
+  009B                83     TB8     BIT     098H.3
+  008A                84     IT1     BIT     088H.2
+  00D0                85     P       BIT     0D0H.0
+  009F                86     SM0     BIT     098H.7
+  008A                87     TL0     DATA    08AH
+  009E                88     SM1     BIT     098H.6
+  008B                89     TL1     DATA    08BH
+  009D                90     SM2     BIT     098H.5
+  00B9                91     PT0     BIT     0B8H.1
+  00D3                92     RS0     BIT     0D0H.3
+  00BB                93     PT1     BIT     0B8H.3
+  00D4                94     RS1     BIT     0D0H.4
+  00BD                95     PT2     BIT     0B8H.5
+  008C                96     TR0     BIT     088H.4
+  008E                97     TR1     BIT     088H.6
+  00B8                98     PX0     BIT     0B8H.0
+  00BA                99     PX1     BIT     0B8H.2
+  0083               100     DPH     DATA    083H
+  0082               101     DPL     DATA    082H
+  009C               102     REN     BIT     098H.4
+  00B0               103     RXD     BIT     0B0H.0
+  00B1               104     TXD     BIT     0B0H.1
+  00D5               105     F0      BIT     0D0H.5
+  00D0               106     PSW     DATA    0D0H
+                     107     ?PR?_Delay1ms?MAIN   SEGMENT CODE 
+                     108     ?PR?main?MAIN        SEGMENT CODE 
+                     109     ?DT?main?MAIN        SEGMENT DATA OVERLAYABLE 
+                     110     ?CO?MAIN             SEGMENT CODE 
+                     111             EXTRN   IDATA (CursorPosion)
+                     112             EXTRN   CODE (_SerialSendStr)
+                     113             EXTRN   DATA (flag)
+                     114             EXTRN   CODE (_ExecCommand)
+                     115             EXTRN   IDATA (SerialBuffer)
+                     116             EXTRN   IDATA (PromptBuffer)
+                     117             EXTRN   CODE (InitHyperTerminal)
+                     118             EXTRN   CODE (_ParseArgs)
+                     119             EXTRN   DATA (?_ParseArgs?BYTE)
+                     120             EXTRN   CODE (?C_STARTUP)
+                     121             PUBLIC  main
+                     122             PUBLIC  _Delay1ms
+                     123     
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     3
+
+----                 124             RSEG  ?DT?main?MAIN
+0000                 125     ?main?BYTE:
+0000                 126            argc?143:   DS   1
+0001                 127            argv?144:   DS   24
+0019                 128           resid?145:   DS   3
+                     129     
+----                 130             RSEG  ?CO?MAIN
+0000                 131     ?SC_0:
+0000 68747470        132             DB  'h' ,'t' ,'t' ,'p' ,':' ,'/' ,'/' ,'w' ,'w' ,'w' 
+0004 3A2F2F77                
+0008 7777                    
+000A 2E6A6A6A        133             DB  '.' ,'j' ,'j' ,'j' ,'b' ,'b' ,'s' ,'.' ,'c' ,'o' 
+000E 6262732E                
+0012 636F                    
+0014 6D0D0A00        134             DB  'm' ,00DH,00AH,000H
+                     135     
+0018                 136     ?SC_24:
+0018 6D6F7665        137             DB  'm' ,'o' ,'v' ,'e' ,' ' ,'1' ,' ' ,'2' ,' ' ,'3' 
+001C 20312032                
+0020 2033                    
+0022 00              138             DB  000H
+                     139     
+                     140     ; #include <REGX51.H>
+                     141     ; #include "HyperTerminal.h"
+                     142     ; 
+                     143     ; extern char idata SerialBuffer[MAX_SERIAL_BUFFER_SIZE];
+                     144     ; extern char idata PromptBuffer[MAX_PROMPT_BUFFER_SIZE];
+                     145     ; extern unsigned char idata CursorPosion;
+                     146     ; extern unsigned char flag;
+                     147     ; 
+                     148     ; void Delay1ms(unsigned int count)
+                     149     
+----                 150             RSEG  ?PR?_Delay1ms?MAIN
+0000                 151     _Delay1ms:
+                     152             USING   0
+                     153                             ; SOURCE LINE # 9
+                     154     ;---- Variable 'count?040' assigned to Register 'R6/R7' ----
+                     155     ; {
+                     156                             ; SOURCE LINE # 10
+                     157     ;       unsigned int i,j;
+                     158     ;       for(i=0;i<count;i++)
+                     159                             ; SOURCE LINE # 12
+                     160     ;---- Variable 'i?041' assigned to Register 'R4/R5' ----
+0000 E4              161             CLR     A
+0001 FD              162             MOV     R5,A
+0002 FC              163             MOV     R4,A
+0003                 164     ?C0001:
+0003 C3              165             CLR     C
+0004 ED              166             MOV     A,R5
+0005 9F              167             SUBB    A,R7
+0006 EC              168             MOV     A,R4
+0007 9E              169             SUBB    A,R6
+0008 5015            170             JNC     ?C0007
+                     171     ;       for(j=0;j<120;j++);
+                     172                             ; SOURCE LINE # 13
+                     173     ;---- Variable 'j?042' assigned to Register 'R2/R3' ----
+000A E4              174             CLR     A
+000B FB              175             MOV     R3,A
+000C FA              176             MOV     R2,A
+000D                 177     ?C0004:
+000D 0B              178             INC     R3
+000E BB0001          179             CJNE    R3,#00H,?C0015
+0011 0A              180             INC     R2
+0012                 181     ?C0015:
+0012 EB              182             MOV     A,R3
+0013 6478            183             XRL     A,#078H
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     4
+
+0015 4A              184             ORL     A,R2
+0016 70F5            185             JNZ     ?C0004
+0018                 186     ?C0003:
+0018 0D              187             INC     R5
+0019 BD0001          188             CJNE    R5,#00H,?C0016
+001C 0C              189             INC     R4
+001D                 190     ?C0016:
+001D 80E4            191             SJMP    ?C0001
+                     192     ; }
+                     193                             ; SOURCE LINE # 14
+001F                 194     ?C0007:
+001F 22              195             RET     
+                     196     ; END OF _Delay1ms
+                     197     
+                     198     ; 
+                     199     ; void main(void)
+                     200     
+----                 201             RSEG  ?PR?main?MAIN
+0000                 202     main:
+                     203             USING   0
+                     204                             ; SOURCE LINE # 16
+                     205     ; {
+                     206                             ; SOURCE LINE # 17
+                     207     ;       char argc;
+                     208     ;       char *argv[8];
+                     209     ;       char *resid;
+                     210     ; 
+                     211     ;       InitHyperTerminal();
+                     212                             ; SOURCE LINE # 22
+0000 120000   F      213             LCALL   InitHyperTerminal
+0003                 214     ?C0008:
+                     215     ; 
+                     216     ;       while(1)
+                     217                             ; SOURCE LINE # 24
+                     218     ;       {
+                     219                             ; SOURCE LINE # 25
+                     220     ;               if(flag == 1)
+                     221                             ; SOURCE LINE # 26
+0003 E500     F      222             MOV     A,flag
+0005 B40118          223             CJNE    A,#01H,?C0010
+                     224     ;               {
+                     225                             ; SOURCE LINE # 27
+                     226     ;                       ExecCommand(&SerialBuffer[0]);
+                     227                             ; SOURCE LINE # 28
+0008 7B00            228             MOV     R3,#00H
+000A 7A00     F      229             MOV     R2,#HIGH (SerialBuffer)
+000C 7900     F      230             MOV     R1,#LOW (SerialBuffer)
+000E 120000   F      231             LCALL   _ExecCommand
+                     232     ;                       SerialSendStr(&PromptBuffer[0]);
+                     233                             ; SOURCE LINE # 29
+0011 7B00            234             MOV     R3,#00H
+0013 7A00     F      235             MOV     R2,#HIGH (PromptBuffer)
+0015 7900     F      236             MOV     R1,#LOW (PromptBuffer)
+0017 120000   F      237             LCALL   _SerialSendStr
+                     238     ;                       CursorPosion = 0;
+                     239                             ; SOURCE LINE # 30
+001A E4              240             CLR     A
+001B 7800     F      241             MOV     R0,#LOW (CursorPosion)
+001D F6              242             MOV     @R0,A
+                     243     ;                       flag = 0;
+                     244                             ; SOURCE LINE # 31
+001E F500     F      245             MOV     flag,A
+                     246     ;               }
+                     247                             ; SOURCE LINE # 32
+0020                 248     ?C0010:
+                     249     ;               if(P1_0 == 0)
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     5
+
+                     250                             ; SOURCE LINE # 33
+0020 209010          251             JB      P1_0,?C0011
+                     252     ;               {
+                     253                             ; SOURCE LINE # 34
+                     254     ;                       SerialSendStr("http://www.jjjbbs.com\r\n");
+                     255                             ; SOURCE LINE # 35
+0023 7BFF            256             MOV     R3,#0FFH
+0025 7A00     F      257             MOV     R2,#HIGH (?SC_0)
+0027 7900     F      258             MOV     R1,#LOW (?SC_0)
+0029 120000   F      259             LCALL   _SerialSendStr
+                     260     ;                       Delay1ms(200);
+                     261                             ; SOURCE LINE # 36
+002C 7FC8            262             MOV     R7,#0C8H
+002E 7E00            263             MOV     R6,#00H
+0030 120000   F      264             LCALL   _Delay1ms
+                     265     ;               }
+                     266                             ; SOURCE LINE # 37
+0033                 267     ?C0011:
+                     268     ;               if(P1_1 == 0)
+                     269                             ; SOURCE LINE # 38
+0033 20910A          270             JB      P1_1,?C0012
+                     271     ;               {
+                     272                             ; SOURCE LINE # 39
+                     273     ;               //      (*(void(*)( ))0)(); 
+                     274     ;               #pragma ASM     
+                     275     ;               LJMP 0000H
+0036 020000          276               LJMP 0000H
+                     277     ;               #pragma ENDASM
+                     278     ;                       Delay1ms(200);
+                     279                             ; SOURCE LINE # 44
+0039 7FC8            280             MOV     R7,#0C8H
+003B 7E00            281             MOV     R6,#00H
+003D 120000   F      282             LCALL   _Delay1ms
+                     283     ;               }
+                     284                             ; SOURCE LINE # 45
+0040                 285     ?C0012:
+                     286     ;               if(P1_2 == 0)
+                     287                             ; SOURCE LINE # 46
+0040 2092C0          288             JB      P1_2,?C0008
+                     289     ;               {
+                     290                             ; SOURCE LINE # 47
+                     291     ;                       ParseArgs("move 1 2 3",&argc, argv, &resid);
+                     292                             ; SOURCE LINE # 48
+0043 750000   F      293             MOV     ?_ParseArgs?BYTE+03H,#00H
+0046 750000   F      294             MOV     ?_ParseArgs?BYTE+04H,#HIGH (argc?143)
+0049 750000   F      295             MOV     ?_ParseArgs?BYTE+05H,#LOW (argc?143)
+004C 750000   F      296             MOV     ?_ParseArgs?BYTE+06H,#00H
+004F 750000   F      297             MOV     ?_ParseArgs?BYTE+07H,#HIGH (argv?144)
+0052 750000   F      298             MOV     ?_ParseArgs?BYTE+08H,#LOW (argv?144)
+0055 750000   F      299             MOV     ?_ParseArgs?BYTE+09H,#00H
+0058 750000   F      300             MOV     ?_ParseArgs?BYTE+0AH,#HIGH (resid?145)
+005B 750000   F      301             MOV     ?_ParseArgs?BYTE+0BH,#LOW (resid?145)
+005E 7BFF            302             MOV     R3,#0FFH
+0060 7A00     F      303             MOV     R2,#HIGH (?SC_24)
+0062 7900     F      304             MOV     R1,#LOW (?SC_24)
+0064 120000   F      305             LCALL   _ParseArgs
+                     306     ;                       Delay1ms(100);
+                     307                             ; SOURCE LINE # 49
+0067 7F64            308             MOV     R7,#064H
+0069 7E00            309             MOV     R6,#00H
+006B 120000   F      310             LCALL   _Delay1ms
+                     311     ;               }
+                     312                             ; SOURCE LINE # 50
+                     313     ;       }
+                     314                             ; SOURCE LINE # 51
+006E 8093            315             SJMP    ?C0008
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     6
+
+                     316     ; END OF main
+                     317     
+                     318             END
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+?C0001 . . . . . .  C ADDR   0003H   R   SEG=?PR?_DELAY1MS?MAIN
+?C0003 . . . . . .  C ADDR   0018H   R   SEG=?PR?_DELAY1MS?MAIN
+?C0004 . . . . . .  C ADDR   000DH   R   SEG=?PR?_DELAY1MS?MAIN
+?C0007 . . . . . .  C ADDR   001FH   R   SEG=?PR?_DELAY1MS?MAIN
+?C0008 . . . . . .  C ADDR   0003H   R   SEG=?PR?MAIN?MAIN
+?C0010 . . . . . .  C ADDR   0020H   R   SEG=?PR?MAIN?MAIN
+?C0011 . . . . . .  C ADDR   0033H   R   SEG=?PR?MAIN?MAIN
+?C0012 . . . . . .  C ADDR   0040H   R   SEG=?PR?MAIN?MAIN
+?C0015 . . . . . .  C ADDR   0012H   R   SEG=?PR?_DELAY1MS?MAIN
+?C0016 . . . . . .  C ADDR   001DH   R   SEG=?PR?_DELAY1MS?MAIN
+?CO?MAIN . . . . .  C SEG    0023H       REL=UNIT
+?C_STARTUP . . . .  C ADDR   -----       EXT
+?DT?MAIN?MAIN. . .  D SEG    001CH       REL=UNIT
+?MAIN?BYTE . . . .  D ADDR   0000H   R   SEG=?DT?MAIN?MAIN
+?PR?MAIN?MAIN. . .  C SEG    0070H       REL=UNIT
+?PR?_DELAY1MS?MAIN  C SEG    0020H       REL=UNIT
+?SC_0. . . . . . .  C ADDR   0000H   R   SEG=?CO?MAIN
+?SC_24 . . . . . .  C ADDR   0018H   R   SEG=?CO?MAIN
+?_PARSEARGS?BYTE .  D ADDR   -----       EXT
+AC . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . .  D ADDR   00E0H   A   
+ARGC?143 . . . . .  D ADDR   0000H   R   SEG=?DT?MAIN?MAIN
+ARGV?144 . . . . .  D ADDR   0001H   R   SEG=?DT?MAIN?MAIN
+B. . . . . . . . .  D ADDR   00F0H   A   
+CURSORPOSION . . .  I ADDR   -----       EXT
+CY . . . . . . . .  B ADDR   00D0H.7 A   
+DPH. . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . .  B ADDR   00A8H.7 A   
+ES . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . .  B ADDR   00A8H.3 A   
+ET2. . . . . . . .  B ADDR   00A8H.5 A   
+EX0. . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . .  B ADDR   00A8H.2 A   
+F0 . . . . . . . .  B ADDR   00D0H.5 A   
+FL . . . . . . . .  B ADDR   00D0H.1 A   
+FLAG . . . . . . .  D ADDR   -----       EXT
+IE . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . .  B ADDR   0088H.3 A   
+INITHYPERTERMINAL.  C ADDR   -----       EXT
+INT0 . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . .  B ADDR   00B0H.3 A   
+IP . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . .  B ADDR   0088H.2 A   
+MAIN . . . . . . .  C ADDR   0000H   R   SEG=?PR?MAIN?MAIN
+OV . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P0_0 . . . . . . .  B ADDR   0080H.0 A   
+P0_1 . . . . . . .  B ADDR   0080H.1 A   
+P0_2 . . . . . . .  B ADDR   0080H.2 A   
+P0_3 . . . . . . .  B ADDR   0080H.3 A   
+P0_4 . . . . . . .  B ADDR   0080H.4 A   
+P0_5 . . . . . . .  B ADDR   0080H.5 A   
+P0_6 . . . . . . .  B ADDR   0080H.6 A   
+P0_7 . . . . . . .  B ADDR   0080H.7 A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     8
+
+P1_0 . . . . . . .  B ADDR   0090H.0 A   
+P1_1 . . . . . . .  B ADDR   0090H.1 A   
+P1_2 . . . . . . .  B ADDR   0090H.2 A   
+P1_3 . . . . . . .  B ADDR   0090H.3 A   
+P1_4 . . . . . . .  B ADDR   0090H.4 A   
+P1_5 . . . . . . .  B ADDR   0090H.5 A   
+P1_6 . . . . . . .  B ADDR   0090H.6 A   
+P1_7 . . . . . . .  B ADDR   0090H.7 A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P2_0 . . . . . . .  B ADDR   00A0H.0 A   
+P2_1 . . . . . . .  B ADDR   00A0H.1 A   
+P2_2 . . . . . . .  B ADDR   00A0H.2 A   
+P2_3 . . . . . . .  B ADDR   00A0H.3 A   
+P2_4 . . . . . . .  B ADDR   00A0H.4 A   
+P2_5 . . . . . . .  B ADDR   00A0H.5 A   
+P2_6 . . . . . . .  B ADDR   00A0H.6 A   
+P2_7 . . . . . . .  B ADDR   00A0H.7 A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+P3_0 . . . . . . .  B ADDR   00B0H.0 A   
+P3_1 . . . . . . .  B ADDR   00B0H.1 A   
+P3_2 . . . . . . .  B ADDR   00B0H.2 A   
+P3_3 . . . . . . .  B ADDR   00B0H.3 A   
+P3_4 . . . . . . .  B ADDR   00B0H.4 A   
+P3_5 . . . . . . .  B ADDR   00B0H.5 A   
+P3_6 . . . . . . .  B ADDR   00B0H.6 A   
+P3_7 . . . . . . .  B ADDR   00B0H.7 A   
+PCON . . . . . . .  D ADDR   0087H   A   
+PROMPTBUFFER . . .  I ADDR   -----       EXT
+PS . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . .  B ADDR   00B8H.3 A   
+PT2. . . . . . . .  B ADDR   00B8H.5 A   
+PX0. . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . .  B ADDR   00B8H.2 A   
+RB8. . . . . . . .  B ADDR   0098H.2 A   
+RD . . . . . . . .  B ADDR   00B0H.7 A   
+REN. . . . . . . .  B ADDR   0098H.4 A   
+RESID?145. . . . .  D ADDR   0019H   R   SEG=?DT?MAIN?MAIN
+RI . . . . . . . .  B ADDR   0098H.0 A   
+RS0. . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . .  B ADDR   00D0H.4 A   
+RXD. . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . .  D ADDR   0098H   A   
+SERIALBUFFER . . .  I ADDR   -----       EXT
+SM0. . . . . . . .  B ADDR   0098H.7 A   
+SM1. . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . .  D ADDR   0081H   A   
+T0 . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . .  B ADDR   00B0H.5 A   
+TB8. . . . . . . .  B ADDR   0098H.3 A   
+TCON . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . .  D ADDR   008BH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+TXD. . . . . . . .  B ADDR   00B0H.1 A   
+WR . . . . . . . .  B ADDR   00B0H.6 A   
+A51 MACRO ASSEMBLER  MAIN                                                                 04/10/2006 23:10:46 PAGE     9
+
+_DELAY1MS. . . . .  C ADDR   0000H   R   SEG=?PR?_DELAY1MS?MAIN
+_EXECCOMMAND . . .  C ADDR   -----       EXT
+_PARSEARGS . . . .  C ADDR   -----       EXT
+_SERIALSENDSTR . .  C ADDR   -----       EXT
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

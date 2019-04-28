@@ -1,0 +1,153 @@
+BL51 BANKED LINKER/LOCATER V5.03                                                        09/19/2005  22:15:57  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.03, INVOKED BY:
+C:\PROGRAM FILES\KEIL\C51\BIN\BL51.EXE Max7221.obj TO Max7221 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  Max7221.obj (MAX7221)
+  C:\PROGRAM FILES\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\PROGRAM FILES\KEIL\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  C:\PROGRAM FILES\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  Max7221 (MAX7221)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         ?DT?MAX7221
+            DATA    0010H     0004H     UNIT         _DATA_GROUP_
+            IDATA   0014H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     005FH     UNIT         ?PR?_WRITEMAX7221?MAX7221
+            CODE    00EEH     002DH     UNIT         ?C?LIB_CODE
+            CODE    011BH     002AH     UNIT         ?PR?_MAX7221DISPLAY?MAX7221
+            CODE    0145H     001AH     UNIT         ?PR?INITIALMAX7221?MAX7221
+            CODE    015FH     000EH     UNIT         ?PR?MAIN?MAX7221
+            CODE    016DH     000BH     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   Max7221 (MAX7221)
+
+
+SEGMENT                               DATA_GROUP 
+  +--> CALLED SEGMENT               START    LENGTH
+---------------------------------------------------
+?C_C51STARTUP                       -----    -----
+  +--> ?PR?MAIN?MAX7221
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAX7221                    -----    -----
+  +--> ?PR?INITIALMAX7221?MAX7221
+  +--> ?PR?_MAX7221DISPLAY?MAX7221
+
+?PR?INITIALMAX7221?MAX7221          -----    -----
+  +--> ?PR?_WRITEMAX7221?MAX7221
+
+?PR?_MAX7221DISPLAY?MAX7221         0010H    0004H
+  +--> ?PR?_WRITEMAX7221?MAX7221
+
+BL51 BANKED LINKER/LOCATER V5.03                                                      09/19/2005  22:15:57  PAGE 2
+
+
+
+
+SYMBOL TABLE OF MODULE:  Max7221 (MAX7221)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAX7221
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00B0H         PUBLIC        P3
+  B:00B0H.1       PUBLIC        Max7221CS
+  C:015FH         PUBLIC        main
+  C:011BH         PUBLIC        _Max7221Display
+  D:0008H         PUBLIC        DisplayBuffer
+  C:0145H         PUBLIC        InitialMax7221
+  B:00B0H.2       PUBLIC        Max7221CLK
+  B:00B0H.0       PUBLIC        Max7221DIN
+  C:008FH         PUBLIC        _WriteMax7221
+  -------         PROC          _WRITEMAX7221
+  D:0001H         SYMBOL        Address
+  D:0005H         SYMBOL        Data
+  -------         DO            
+  D:0004H         SYMBOL        i
+  -------         ENDDO         
+  C:008FH         LINE#         24
+  C:0091H         LINE#         25
+  C:0091H         LINE#         27
+  C:0093H         LINE#         28
+  C:0095H         LINE#         29
+  C:0095H         LINE#         30
+  C:0097H         LINE#         31
+  C:00B5H         LINE#         32
+  C:00B6H         LINE#         33
+  C:00B7H         LINE#         34
+  C:00B9H         LINE#         35
+  C:00BAH         LINE#         36
+  C:00BBH         LINE#         37
+  C:00BFH         LINE#         38
+  C:00C1H         LINE#         39
+  C:00C1H         LINE#         40
+  C:00C3H         LINE#         41
+  C:00E1H         LINE#         42
+  C:00E2H         LINE#         43
+  C:00E3H         LINE#         44
+  C:00E5H         LINE#         45
+  C:00E6H         LINE#         46
+  C:00E7H         LINE#         47
+  C:00EBH         LINE#         48
+  C:00EDH         LINE#         49
+  -------         ENDPROC       _WRITEMAX7221
+  -------         PROC          INITIALMAX7221
+  C:0145H         LINE#         51
+  C:0145H         LINE#         52
+  C:0145H         LINE#         53
+  C:014CH         LINE#         54
+  C:0151H         LINE#         55
+  C:0158H         LINE#         56
+BL51 BANKED LINKER/LOCATER V5.03                                                      09/19/2005  22:15:57  PAGE 3
+
+
+  -------         ENDPROC       INITIALMAX7221
+  -------         PROC          _MAX7221DISPLAY
+  D:0010H         SYMBOL        buffer
+  -------         DO            
+  D:0013H         SYMBOL        i
+  -------         ENDDO         
+  C:011BH         LINE#         59
+  C:0121H         LINE#         60
+  C:0121H         LINE#         62
+  C:0124H         LINE#         63
+  C:0124H         LINE#         64
+  C:013BH         LINE#         65
+  C:0144H         LINE#         66
+  -------         ENDPROC       _MAX7221DISPLAY
+  -------         PROC          MAIN
+  C:015FH         LINE#         6
+  C:015FH         LINE#         7
+  C:015FH         LINE#         8
+  C:0162H         LINE#         9
+  C:016BH         LINE#         10
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAX7221
+
+  -------         MODULE        ?C?CLDOPTR
+  C:00EEH         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+Program Size: data=21.0 xdata=0 code=376
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

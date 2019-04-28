@@ -1,0 +1,157 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        03/20/2011  20:39:00  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, chengxu.obj TO chengxu RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  chengxu.obj (CHENGXU)
+
+
+LINK MAP OF MODULE:  chengxu (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000CH     UNIT         ?DT?CHENGXU
+            DATA    0014H     0002H     UNIT         _DATA_GROUP_
+            IDATA   0016H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00C0H     UNIT         ?CO?CHENGXU
+            CODE    00C3H     0076H     UNIT         ?PR?MAIN?CHENGXU
+            CODE    0139H     0017H     UNIT         ?PR?ALINE?CHENGXU
+            CODE    0150H     000CH     UNIT         ?C_C51STARTUP
+            CODE    015CH     000BH     UNIT         ?PR?_DEL?CHENGXU
+
+
+
+OVERLAY MAP OF MODULE:   chengxu (?C_STARTUP)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?CHENGXU
+
+?PR?MAIN?CHENGXU               0014H    0002H
+  +--> ?CO?CHENGXU
+  +--> ?PR?ALINE?CHENGXU
+  +--> ?PR?_DEL?CHENGXU
+
+
+
+SYMBOL TABLE OF MODULE:  chengxu (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0150H         SEGMENT       ?C_C51STARTUP
+  I:0016H         SEGMENT       ?STACK
+BL51 BANKED LINKER/LOCATER V6.00                                                      03/20/2011  20:39:00  PAGE 2
+
+
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0153H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0150H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0150H         LINE#         133
+  C:0152H         LINE#         134
+  C:0153H         LINE#         135
+  C:0154H         LINE#         136
+  C:0156H         LINE#         185
+  C:0159H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        CHENGXU
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:0008H         PUBLIC        cashe
+  C:0139H         PUBLIC        aline
+  B:0098H.1       PUBLIC        TI
+  C:00C3H         PUBLIC        main
+  B:00B0H.5       PUBLIC        ST
+  D:0099H         PUBLIC        SBUF
+  C:015CH         PUBLIC        _del
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  C:0003H         PUBLIC        wd
+  B:00B0H.4       PUBLIC        E1
+  -------         PROC          _DEL
+  D:0006H         SYMBOL        i
+  C:015CH         LINE#         42
+  C:015CH         LINE#         43
+  -------         ENDPROC       _DEL
+  -------         PROC          ALINE
+  -------         DO            
+  D:0007H         SYMBOL        i
+  -------         ENDDO         
+  C:0139H         LINE#         45
+  C:0139H         LINE#         46
+BL51 BANKED LINKER/LOCATER V6.00                                                      03/20/2011  20:39:00  PAGE 3
+
+
+  C:0139H         LINE#         47
+  C:013BH         LINE#         48
+  C:013DH         LINE#         49
+  C:013DH         LINE#         50
+  C:014FH         LINE#         51
+  -------         ENDPROC       ALINE
+  -------         PROC          MAIN
+  -------         DO            
+  D:0014H         SYMBOL        m
+  D:0002H         SYMBOL        n
+  -------         ENDDO         
+  C:00C3H         LINE#         55
+  C:00C3H         LINE#         56
+  C:00C3H         LINE#         57
+  C:00C8H         LINE#         58
+  C:00CAH         LINE#         59
+  C:00CCH         LINE#         60
+  C:00CEH         LINE#         61
+  C:00D0H         LINE#         62
+  C:00D0H         LINE#         63
+  C:00D5H         LINE#         64
+  C:00D5H         LINE#         66
+  C:00D8H         LINE#         67
+  C:0113H         LINE#         68
+  C:0116H         LINE#         69
+  C:011AH         LINE#         70
+  C:011DH         LINE#         72
+  C:0124H         LINE#         74
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        CHENGXU
+
+Program Size: data=23.0 xdata=0 code=359
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,85 @@
+A51 MACRO ASSEMBLER  DC_MOTOR                                                             08/07/2006 08:35:08 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.00
+OBJECT MODULE PLACED IN DC Motor.OBJ
+ASSEMBLER INVOKED BY: e:\Program Files\Keil\C51\BIN\A51.EXE DC Motor.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+  0035                 1     ADC             EQU             35H
+  00A4                 2     CLOCK   BIT             P2.4                    ;定义ADC0808时钟位
+  00A5                 3     ST              BIT     P2.5
+  00A6                 4     EOC     BIT     P2.6
+  00A7                 5     OE              BIT     P2.7
+  00B7                 6     PWM             BIT             P3.7
+0000                   7                     ORG     00H
+0000 800C              8                     SJMP    START
+000B                   9                     ORG             0BH
+000B 02003E           10                     LJMP    INT_T0
+                      11     
+000E 758902           12     START:  MOV             TMOD,#02H               ;
+0011 758C14           13                     MOV             TH0,#20
+0014 758A00           14                     MOV             TL0,#00H
+0017 75A882           15                     MOV             IE,#82H
+001A D28C             16                     SETB    TR0
+                      17     
+001C C2A5             18     WAIT:   CLR     ST                              
+001E D2A5             19                     SETB    ST
+0020 C2A5             20                     CLR     ST                              ;启动AD转换
+0022 30A6FD           21                     JNB     EOC,$                   ;等待转换结束
+0025 D2A7             22                     SETB    OE 
+0027 859035           23                     MOV     ADC,P1                  ;读取AD转换结果
+002A C2A7             24                     CLR     OE
+002C D2B7             25                     SETB    PWM                             ;PWM输出
+002E E535             26                     MOV     A,ADC
+0030 120041           27                     LCALL   DELAY
+0033 C2B7             28                     CLR             PWM
+0035 74FF             29                     MOV             A,#255
+0037 9535             30                     SUBB    A,ADC
+0039 120041           31                     LCALL   DELAY
+003C 80DE             32                     SJMP    WAIT
+                      33     
+003E B2A4             34     INT_T0: CPL             CLOCK                   ;提供ADC0808时钟信号
+0040 32               35                     RETI
+                      36     
+0041 7E01             37     DELAY:  MOV             R6,#1
+0043 DEFE             38     D1:             DJNZ    R6,D1
+0045 D5E0FB           39                     DJNZ    ACC,D1
+0048 22               40                     RET
+                      41     
+                      42                     END
+A51 MACRO ASSEMBLER  DC_MOTOR                                                             08/07/2006 08:35:08 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . . . . . .  D ADDR   00E0H   A   
+ADC. . . . . . . .  N NUMB   0035H   A   
+CLOCK. . . . . . .  B ADDR   00A0H.4 A   
+D1 . . . . . . . .  C ADDR   0043H   A   
+DELAY. . . . . . .  C ADDR   0041H   A   
+EOC. . . . . . . .  B ADDR   00A0H.6 A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+INT_T0 . . . . . .  C ADDR   003EH   A   
+OE . . . . . . . .  B ADDR   00A0H.7 A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PWM. . . . . . . .  B ADDR   00B0H.7 A   
+ST . . . . . . . .  B ADDR   00A0H.5 A   
+START. . . . . . .  C ADDR   000EH   A   
+TH0. . . . . . . .  D ADDR   008CH   A   
+TL0. . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . .  B ADDR   0088H.4 A   
+WAIT . . . . . . .  C ADDR   001CH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

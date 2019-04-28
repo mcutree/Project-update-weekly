@@ -1,0 +1,18 @@
+/**************************************************************************
+  
+                   		THE MAX7221 LED DRIVER LIB
+  
+             		COPYRIGHT (c)   2005 BY JJJ.
+                       		--  ALL RIGHTS RESERVED  --
+  
+   File Name:       DS1302.h
+   Author:          Jiang Jian Jun
+   Created:         2003/7/21
+   Modified:		NO
+   Revision: 		1.0
+  
+***************************************************************************/
+#ifndef _REAL_TIMER_DS1302_2003_7_21_
+#define _REAL_TIMER_DS1302_2003_7_21_
+
+#endif

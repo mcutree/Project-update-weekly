@@ -1,0 +1,408 @@
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE CHENGXU
+OBJECT MODULE PLACED IN chengxu.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE chengxu.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #ifndef _PWLOCK_H               // 防止PWLock.h被重复引用
+   2          
+   3          #define _PWLOCK_H
+   4          
+   5          #include <reg52.h>
+   6          #include <absacc.h>
+   7          #include <stdio.h>      
+   8          #include <math.h>
+   9          
+  10          #define uchar unsigned char
+  11          #define uint unsigned int
+  12          
+  13          uchar px;
+  14          uint a;
+  15          uint b;
+  16          uint c;                          //为0XFF
+  17          uint i;
+  18          uchar digbit;                    // 字位
+  19          uchar dy;                               
+  20          uchar wordbuf[2];                               // 字型码缓冲区
+  21          uchar count;                                    // 位计数
+  22          uchar pwbuf[2];                                 // 输入数字存储区
+  23          bit enterflag;                                  // 确认键按下与否标志
+  24          bit lh;
+  25          bit pwflag;                                             // 密码正确与否标志
+  26          bit showflag;                                   // 数码管显示与否标志
+  27          
+  28          sbit P20=P2^0;
+  29          sbit P21=P2^1;
+  30          
+  31          void display(void);                             // 显示函数
+  32          
+  33          #endif
+  34          
+  35          //#include "PWLock.h"
+  36          
+  37          /* 键消抖延时函数 */
+  38          void delay(void)
+  39          {
+  40   1              uint i;
+  41   1              for (i=4000;i>0;i--);
+  42   1      }
+  43          
+  44          
+  45          /* 键扫描函数 */
+  46          uchar keyscan(void)
+  47          {
+  48   1              uchar scancode,tmpcode;
+  49   1              P1 = 0xf0;                                                              // 发全0行扫描码
+  50   1              if ((P1&0xf0)!=0xf0)                                    // 若有键按下
+  51   1              {
+  52   2                      delay();                                                        // 延时去抖动
+  53   2                      if ((P1&0xf0)!=0xf0)                            // 延时后再判断一次，去除抖动影响
+  54   2                      {  
+  55   3                              scancode = 0xfe;
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 2   
+
+  56   3                              while((scancode&0x10)!=0)               // 逐行扫描
+  57   3                              {
+  58   4                                      P1 = scancode;                          // 输出行扫描码
+  59   4                                      if ((P1&0xf0)!=0xf0)            // 本行有键按下
+  60   4                                      {
+  61   5                                              tmpcode = (P1&0xf0)|0x0f;
+  62   5      
+  63   5                                              /* 返回特征字节码，为1的位即对应于行和列 */
+  64   5                                              return((~scancode)+(~tmpcode));
+  65   5                                      }
+  66   4                                      else scancode = (scancode<<1)|0x01;             // 行扫描码左移一位
+  67   4                              }
+  68   3                      }
+  69   2              }
+  70   1              return(0);                                                              // 无键按下，返回值为0  
+  71   1      }
+  72          
+  73          /* 定时器0中断服务子程序，2ms定时动态扫描显示 */
+  74          void time0_int(void) interrupt 1 
+  75          {
+  76   1              /* 重置2ms定时 */
+  77   1              TH0 = -2000/256;
+  78   1              TL0 = -2000%256;
+  79   1      
+  80   1               px++;                  //片选
+  81   1              if (showflag==1)
+  82   1                      display();                              // 调用显示函数
+  83   1      }
+  84          
+  85          
+  86          /* 根据共阴极字型编码表获取0~9，A~B字型代码 */
+  87          uchar getcode(uchar i)
+  88          {
+  89   1              uchar p;
+  90   1              switch (i)
+  91   1              {
+  92   2                      case 0:  p=0x3f;        break;                  /* 0 */
+  93   2                      case 1:  p=0x06;        break;                  /* 1 */
+  94   2                      case 2:  p=0x5B;        break;                  /* 2 */
+  95   2                      case 3:  p=0x4F;        break;                  /* 3 */
+  96   2                      case 4:  p=0x66;        break;                  /* 4 */
+  97   2                      case 5:  p=0x6D;        break;                  /* 5 */
+  98   2                      case 6:  p=0x7D;        break;                  /* 6 */
+  99   2                      case 7:  p=0x07;        break;                  /* 7 */
+ 100   2                      case 8:  p=0x7F;        break;                  /* 8 */
+ 101   2                      case 9:  p=0x67;        break;                  /* 9 */
+ 102   2                      default:                        break;
+ 103   2              }
+ 104   1              return(p);
+ 105   1      }
+ 106          
+ 107          void Display(void)   //LED数值显示
+ 108          { 
+ 109   1       switch (px%2)
+ 110   1        {
+ 111   2      case 0:
+ 112   2              P20 = 1;P21 = 0; P0 = getcode(wordbuf[0]);break;
+ 113   2      case 1:
+ 114   2              P21 = 1;P20 = 0; P0 = getcode(wordbuf[1]);break;
+ 115   2      default:  return;
+ 116   2       }
+ 117   1      }
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 3   
+
+ 118          
+ 119          /* 显示函数 */
+ 120          /*void display(void)
+ 121          {
+ 122                  uchar i;
+ 123                  switch (digbit)
+ 124                  {
+ 125                          case 1:         i=0;    break;
+ 126                          case 2:         i=1;    break;
+ 127                          default:        break;
+ 128                  }
+ 129          
+ 130                  P2 = 0x0;                                               // 关闭显示
+ 131          //      P20=0;
+ 132          //      P21=0;
+ 133                  P0 = getcode(wordbuf[i]);               // 送字型码
+ 134                  P2=digbit;                      // 送字位码
+ 135                  digbit=1;
+ 136                  if(digbit==1)
+ 137              {   
+ 138              digbit=2;
+ 139                  P20 = 1;                                
+ 140                  P21 = 0;
+ 141              }
+ 142                  digbit=2;
+ 143                  P21 = 1;
+ 144                  P20 = 0;
+ 145                  if (digbit<0x02)                                // 共2位
+ 146                          digbit = digbit*2;                      // 左移一位
+ 147                  else
+ 148                      digbit = 0x01;
+ 149          }
+ 150          */
+ 151          /* 主程序 */
+ 152          void main()
+ 153          {
+ 154   1              uchar j,key;
+ 155   1          uint temp;
+ 156   1      
+ 157   1              P20 = 1;
+ 158   1              P21 = 1;                                                        // 关闭数码管显示
+ 159   1              
+ 160   1              TMOD = 0x11;                                            // T0，T1工作方式1
+ 161   1      
+ 162   1              /* 2ms 定时设置 */
+ 163   1              TH0 = -2000/256;
+ 164   1              TL0 = 2000%256;
+ 165   1              
+ 166   1              /* 启动计数器0，关闭计数器1 */
+ 167   1              TR0 = 1;
+ 168   1              ET0 = 1;
+ 169   1              TR1 = 0;
+ 170   1              ET1 = 1;
+ 171   1              EA = 1;
+ 172   1      
+ 173   1              count = 0;                                              // 初始计数器设为0
+ 174   1              enterflag = 0;                                  // 没有按下确认键
+ 175   1              lh = 0;
+ 176   1              pwflag = 0;                                             // 标志先置为0
+ 177   1              
+ 178   1              digbit = 0x01;                                  // 从第一位数码管开始动态扫描
+ 179   1      
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 4   
+
+ 180   1              /* 刚加电时，bu显示*/
+ 181   1              for (j=0;j<2;j++)
+ 182   1                      wordbuf[j] = 17;
+ 183   1      
+ 184   1              showflag = 1;                                   // 打开数码管显 
+ 185   1      
+ 186   1              while(1)
+ 187   1      
+ 188   1          {
+ 189   2                      key = keyscan();                                        // 调用键盘扫描函数
+ 190   2              switch(key)
+ 191   2                      {
+ 192   3                      case 0x11:                                              // 1行1列，数字1
+ 193   3                                      if (count<2)
+ 194   3                                      {
+ 195   4                                              wordbuf[count] = 1;     // 对应位上显示“1”
+ 196   4                                              pwbuf[count] = 1;
+ 197   4                                              if(count==0)
+ 198   4                          {a=1;
+ 199   5                          }
+ 200   4                                              if(count==1)
+ 201   4                          {b=1;
+ 202   5                          }
+ 203   4                                              count++;
+ 204   4                                              
+ 205   4                                      }
+ 206   3                                      break;
+ 207   3                              case 0x21:                                              // 1行2列，数字3
+ 208   3                                      if (count<2)
+ 209   3                                      {
+ 210   4                                              wordbuf[count] = 2;     // 对应位上显示“2"
+ 211   4                                              pwbuf[count] = 2;
+ 212   4                                              if(count==0)
+ 213   4                          {a=2;
+ 214   5                          }   
+ 215   4                                              if(count==1)
+ 216   4                          {b=2;
+ 217   5                          }
+ 218   4                                              count++;
+ 219   4                                      }
+ 220   3                                      break;                  
+ 221   3                              case 0x41:                                              // 1行3列，数字3
+ 222   3                                      if (count<2)
+ 223   3                                      {
+ 224   4                                              wordbuf[count] = 3;     // 对应位上显示“3"
+ 225   4                                              pwbuf[count] = 3;
+ 226   4                                              if(count==0)
+ 227   4                          {a=3;
+ 228   5                          }
+ 229   4                                              if(count==1)
+ 230   4                          {b=3;
+ 231   5                          }
+ 232   4                                              count++;
+ 233   4                                      }
+ 234   3                                      break;
+ 235   3          
+ 236   3                              case 0x12:                                              // 2行1列，数字4
+ 237   3                                      if (count<2)
+ 238   3                                      {
+ 239   4                                              wordbuf[count] = 4;     // 对应位上显示“4"
+ 240   4                                              pwbuf[count] = 4;
+ 241   4                                              if(count==0)
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 5   
+
+ 242   4                          {a=4;
+ 243   5                          }   
+ 244   4                                              if(count==1)
+ 245   4                          {b=4;
+ 246   5                          }
+ 247   4                                              count++;
+ 248   4                                      }
+ 249   3                                      break;
+ 250   3                              case 0x22:                                              // 2行2列，数字5
+ 251   3                                      if (count<2)
+ 252   3                                      {
+ 253   4                                              wordbuf[count] = 5;     // 对应位上显示“5"
+ 254   4                                              pwbuf[count] = 5;
+ 255   4                                              if(count==0)
+ 256   4                          {a=5;
+ 257   5                          }
+ 258   4                                              if(count==1)
+ 259   4                          {b=5;
+ 260   5                          }
+ 261   4                                              count++;
+ 262   4                                      }
+ 263   3                                      break;
+ 264   3                              case 0x42:                                              // 2行3列，数字6
+ 265   3                                      if (count<2)
+ 266   3                                      {
+ 267   4                                              wordbuf[count] = 6;     // 对应位上显示“6"
+ 268   4                                              pwbuf[count] = 6;
+ 269   4                                      if(count==0)
+ 270   4                          {a=6;
+ 271   5                          }   
+ 272   4                                              if(count==1)
+ 273   4                          {b=6;
+ 274   5                          }
+ 275   4                                              count++;
+ 276   4                                      }
+ 277   3                                      break;
+ 278   3              
+ 279   3                              case 0x14:                                              // 3行1列，数字7
+ 280   3                                      if (count<2)
+ 281   3                                      {
+ 282   4                                              wordbuf[count] = 7;     // 对应位上显示“7"
+ 283   4                                              pwbuf[count] = 7;
+ 284   4                                              if(count==0)
+ 285   4                          {a=7;
+ 286   5                          }
+ 287   4                                              if(count==1)
+ 288   4                          {b=7;
+ 289   5                          }
+ 290   4                                              count++;
+ 291   4                                      }
+ 292   3                                      break;
+ 293   3                              case 0x24:                                              // 3行2列，数字8
+ 294   3                                      if (count<2)
+ 295   3                                      {
+ 296   4                                              wordbuf[count] = 8;     // 对应位上显示“8"
+ 297   4                                              pwbuf[count] = 8;
+ 298   4                                              if(count==0)
+ 299   4                          {a=8;
+ 300   5                          }
+ 301   4                                              if(count==1)
+ 302   4                          {b=8;
+ 303   5                          }
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 6   
+
+ 304   4                                              count++;
+ 305   4                                      }
+ 306   3                                      break;
+ 307   3                              case 0x44:                                              // 3行3列，数字9
+ 308   3                                      if (count<2)
+ 309   3                                      {
+ 310   4                                              wordbuf[count] = 9;     // 对应位上显示“9"
+ 311   4                                              pwbuf[count] = 9;
+ 312   4                                              if(count==0)
+ 313   4                          {a=9;
+ 314   5                          }   
+ 315   4                                              if(count==1)
+ 316   4                          {b=9;
+ 317   5                          }
+ 318   4                                              count++;
+ 319   4                                      }
+ 320   3                                      break;  
+ 321   3                      
+ 322   3                               case 0x18:                                             // 4行1列，数字*
+ 323   3                                      count = 0;
+ 324   3                                      P3=0;
+ 325   3                                      px=0;                                   // 显示清零
+ 326   3                                      for (j=0;j<2;j++)
+ 327   3                                      {
+ 328   4                                              wordbuf[j] = 17;                        // 数码管不显示
+ 329   4                                              pwbuf[j] = 0;           // 用FFFFFF清除已经输入的密码
+ 330   4                                      }
+ 331   3                                      break;  
+ 332   3                              case 0x28:                      // 4行2列，数字0
+ 333   3                                      if (count<2)
+ 334   3                                      {
+ 335   4                                              wordbuf[count] = 0;     // 对应位上显示“0"
+ 336   4                                              pwbuf[count] = 0;
+ 337   4                                              if(count==0)
+ 338   4                          {a=0;
+ 339   5                          
+ 340   5                          }   
+ 341   4                                              if(count==1)
+ 342   4                          {b=0;
+ 343   5                          }
+ 344   4                                              count++;
+ 345   4                                      }
+ 346   3                                      break;
+ 347   3                              case 0x48:                                              // 4行3列，数字#
+ 348   3                                       enterflag = 1;                         // 确认键按下   
+ 349   3                                       if (count==2)                          // 只有输入2个数后按确认键才有效输出
+ 350   3                                      pwflag = 1;      
+ 351   3                                      break;
+ 352   3                      
+ 353   3                              default:break;
+ 354   3                      }
+ 355   2      
+ 356   2                      if (enterflag==1)                                       // 如果按下确认键
+ 357   2                      {
+ 358   3                              enterflag = 0;                                  // 标志位置回0
+ 359   3                              count = 0;                      // 计数器清零
+ 360   3                              c=0xff/6;                                               
+ 361   3                              if (pwflag==1)                  
+ 362   3                  {
+ 363   4                   P3=a*c+b*c/10+12*c/100;
+ 364   4                   temp=a*c+b*c/10+12*c/100;
+ 365   4                     if(temp>=0xff)
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 14:04:18 PAGE 7   
+
+ 366   4                     {
+ 367   5                        P3=0xff;
+ 368   5                     }
+ 369   4                  }
+ 370   3                                              
+ 371   3                      }
+ 372   2              }    
+ 373   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1028    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     16       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,156 @@
+BL51 BANKED LINKER/LOCATER V4.13                                                        01/25/2008  09:37:11  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V4.13, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE rxd.obj TO 2
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  rxd.obj (RXD)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  2 (RXD)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     001FH     UNIT         ?PR?CSH?RXD
+                    0022H     0001H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+            CODE    0026H     0012H     UNIT         ?PR?INTRR?RXD
+            CODE    0038H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0044H     0005H     UNIT         ?PR?MAIN?RXD
+
+
+
+OVERLAY MAP OF MODULE:   2 (RXD)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?RXD
+
+?PR?MAIN?RXD
+  +--> ?PR?CSH?RXD
+
+
+
+SYMBOL TABLE OF MODULE:  2 (RXD)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        RXD
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+  B:00B0H.5       PUBLIC        T1
+BL51 BANKED LINKER/LOCATER V4.13                                                      01/25/2008  09:37:11  PAGE 2
+
+
+  B:00A8H.7       PUBLIC        EA
+  B:00B0H.7       PUBLIC        RD
+  B:00A8H.4       PUBLIC        ES
+  B:0098H.0       PUBLIC        RI
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:00B8H.4       PUBLIC        PS
+  B:00D0H.2       PUBLIC        OV
+  C:0044H         PUBLIC        main
+  B:00B0H.6       PUBLIC        WR
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  C:0026H         PUBLIC        intrr
+  D:0089H         PUBLIC        TMOD
+  B:0088H.1       PUBLIC        IE0
+  C:0003H         PUBLIC        csh
+  B:0088H.3       PUBLIC        IE1
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:0088H.7       PUBLIC        TF1
+  B:0098H.2       PUBLIC        RB8
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  D:008DH         PUBLIC        TH1
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  D:008BH         PUBLIC        TL1
+  B:0098H.5       PUBLIC        SM2
+  B:00B8H.1       PUBLIC        PT0
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00B8H.0       PUBLIC        PX0
+  B:00B8H.2       PUBLIC        PX1
+  B:0098H.4       PUBLIC        REN
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  B:00D0H.5       PUBLIC        F0
+  -------         PROC          CSH
+  C:0003H         LINE#         4
+  C:0003H         LINE#         5
+  C:0003H         LINE#         6
+  C:0005H         LINE#         7
+  C:0007H         LINE#         8
+  C:0009H         LINE#         9
+  C:000BH         LINE#         10
+  C:000DH         LINE#         11
+  C:0010H         LINE#         12
+BL51 BANKED LINKER/LOCATER V4.13                                                      01/25/2008  09:37:11  PAGE 3
+
+
+  C:0013H         LINE#         13
+  C:0016H         LINE#         14
+  C:0019H         LINE#         15
+  C:001BH         LINE#         16
+  C:001DH         LINE#         17
+  C:001FH         LINE#         18
+  C:0021H         LINE#         19
+  -------         ENDPROC       CSH
+  -------         PROC          MAIN
+  C:0044H         LINE#         21
+  C:0044H         LINE#         22
+  C:0044H         LINE#         23
+  C:0047H         LINE#         24
+  C:0047H         LINE#         25
+  -------         ENDPROC       MAIN
+  -------         PROC          INTRR
+  -------         DO            INTRR
+  D:0007H         SYMBOL        temp
+  -------         ENDDO         temp
+  C:0026H         LINE#         28
+  C:002DH         LINE#         31
+  C:002FH         LINE#         32
+  C:0031H         LINE#         33
+  C:0033H         LINE#         34
+  -------         ENDPROC       INTRR
+  -------         ENDMOD        RXD
+
+******************************************************************************
+* RESTRICTED VERSION WITH FFFFH BYTE CODE SIZE LIMIT; USED: 003FH BYTE ( 0%) *
+******************************************************************************
+
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

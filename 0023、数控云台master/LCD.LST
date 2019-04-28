@@ -1,0 +1,181 @@
+C51 COMPILER V7.10   LCD                                                                   12/05/2006 15:38:55 PAGE 1   
+
+
+C51 COMPILER V7.10, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN LCD.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LCD.C BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <absacc.h>
+   2          #include <intrins.h>
+   3          #include <reg51.h>
+   4          #include <stdio.h>
+   5          #include "HZcode.h"
+   6          #include "circlecode.h"
+   7          #include "DegreePoint.h"
+   8          #include "LCD.h"
+*** WARNING C280 IN LINE 223 OF LCD.H: 'column': unreferenced local variable
+   9          #include "lcd_show.h"
+  10          #include "adc0831.h"
+  11          //#include "1302.h"
+  12          //#include "key.h"
+  13          
+  14          
+  15          uchar time0_count;      //time0计数器
+  16          uchar ucInputValue;
+  17          uchar ucLastADValue;
+  18          uchar ucInputParam0,ucInputParam1,ucInputParam2;
+  19          uchar ucSig10ms,ucPWMZKCnt;
+  20          bit bInputChange,bPWMK,bMotorHSpeed;
+  21          sbit PWMOut=P2^7;
+  22          void DelaySecond(uchar i);
+  23          void inputdeal(void);
+  24          //time0初始化
+  25          void time0_init(void)
+  26          {
+  27   1              EA = 1;
+  28   1              ET0 = 1;
+  29   1              TMOD = 0x01;
+  30   1              
+  31   1              PT0 = 1;
+  32   1              //TH0 = 0x3C;
+  33   1              //TL0 = 0xB0;   //12m晶振 则定时50ms
+  34   1              TH0=0XD8;
+  35   1              TL0=0XF0;       //12M晶振 定时10ms 
+  36   1              TR0 = 1;
+  37   1      }
+  38          void Serial_init(void)
+  39          {
+  40   1              TMOD|=0x20;     //定时器1模式2
+  41   1              TH1=0xe8;       //11.0592 MHz 1200bps baud rate 
+  42   1              TL1=0xe8;
+  43   1              TR1=1;
+  44   1              SCON = 0x50;    //串行模式1 接受允许
+  45   1              TI=1;
+  46   1      }
+  47          void main(void)
+  48          {
+  49   1              
+  50   1              //uint tmp,tmp2;
+  51   1      //      I_init();
+  52   1              /*
+  53   1              char conv[32];
+  54   1              for (i=0;i<32;i++)
+C51 COMPILER V7.10   LCD                                                                   12/05/2006 15:38:55 PAGE 2   
+
+  55   1              conv[i]=HZcode[0][i];
+  56   1              */
+  57   1              InitLCD();
+  58   1              time0_init();
+  59   1              Serial_init();
+  60   1              
+  61   1              Show_Circle();
+  62   1              Show_HalfCircle();
+  63   1              Show_hanzi();
+  64   1              
+  65   1      
+  66   1              
+  67   1              while(1)
+  68   1              {
+  69   2                      inputdeal();
+  70   2                      if (ucSig10ms!=0)
+  71   2                      {
+  72   3                              uchar tmp;
+  73   3                              ucSig10ms--;
+  74   3                              //20ms H 30ms L
+  75   3                              //40ms H 10ms L
+  76   3                              //if (bMotorHSpeed) tmp=4;
+  77   3                              //else  tmp=2;
+  78   3                              if (!bPWMK) 
+  79   3                              {
+  80   4                                      if (ucPWMZKCnt++==1)    
+  81   4                                      {
+  82   5                                              ucPWMZKCnt=0;
+  83   5                                              bPWMK=1;
+  84   5                                      }
+  85   4                                      PWMOut=1;
+  86   4                              }
+  87   3                              else    
+  88   3                              {
+  89   4                                      if (ucPWMZKCnt++==2)    
+  90   4                                      {       
+  91   5                                              ucPWMZKCnt=0;
+  92   5                                              bPWMK=0;
+  93   5                                      }
+  94   4                                      PWMOut=0;
+  95   4                              }
+  96   3                              
+  97   3                              
+  98   3                      }
+  99   2                      //judge_key();
+ 100   2                      //PaintDegree(i);
+ 101   2                      //if (i++==23) i=0;
+ 102   2                      //DelaySecond(10);
+ 103   2                      
+ 104   2              }               
+ 105   1      }
+*** WARNING C280 IN LINE 72 OF LCD.C: 'tmp': unreferenced local variable
+ 106          void inputdeal(void)
+ 107          {
+ 108   1              if (!bInputChange) return;
+ 109   1              bInputChange=0;
+ 110   1              switch (ucInputValue)
+ 111   1              {
+ 112   2              case 0x01:
+ 113   2                      //printf("%bu,%bu,%bu\n",ucInputParam0,ucInputParam1,ucInputParam2);
+ 114   2                      PaintDegree(ucInputParam0,0);
+ 115   2                      break;
+C51 COMPILER V7.10   LCD                                                                   12/05/2006 15:38:55 PAGE 3   
+
+ 116   2              default:
+ 117   2                      break;
+ 118   2              }
+ 119   1      }
+ 120          void DelaySecond(uchar i)
+ 121          {
+ 122   1              int k;
+ 123   1              k=i*10000;
+ 124   1              while(k--);
+ 125   1      }
+ 126          void time0_interrupt(void)interrupt 1
+ 127          {
+ 128   1              uchar tmp;
+ 129   1              //TH0 = 0x3c;
+ 130   1              //TL0 = 0xb0;           
+ 131   1              TH0=0XD8;
+ 132   1              TL0=0XF0;
+ 133   1              time0_count++;
+ 134   1              ucSig10ms++;
+ 135   1              if(time0_count==5)
+ 136   1              {
+ 137   2                      //printf("hello");
+ 138   2                      time0_count=0;
+ 139   2                      tmp = readadc();
+ 140   2                      if (ucLastADValue!=tmp)
+ 141   2                      {
+ 142   3                      ucLastADValue=tmp;
+ 143   3                      ucInputParam0=ucLastADValue/12;
+ 144   3                      //ucInputParam0 = tmp/100;
+ 145   3                      //ucInputParam1 = (tmp%100)/10;
+ 146   3                      //ucInputParam2 = (tmp%100)%10;
+ 147   3                      bInputChange=1;
+ 148   3                      ucInputValue=0x01;
+ 149   3                      }
+ 150   2              }
+ 151   1      
+ 152   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1016    ----
+   CONSTANT SIZE    =   3584    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      9      14
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      3       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,125 @@
+C51 COMPILER V7.06   TEXT1                                                                 11/25/2007 13:51:58 PAGE 1   
+
+
+C51 COMPILER V7.06, COMPILATION OF MODULE TEXT1
+OBJECT MODULE PLACED IN Text1.OBJ
+COMPILER INVOKED BY: E:\Èí¼þ\KeiluVision3\C51\BIN\C51.EXE Text1.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include<reg51.h>
+   2          #include<absacc.h>
+   3          #define  dac0832 XBYTE[0X7fff]
+   4          unsigned char code shu[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+   5          float s;
+   6          sbit ALE=P3^0;
+   7          sbit START=P3^1;
+   8          sbit EOC=P3^2;
+   9          sbit OE=P3^3;
+  10          sbit SHCP=P2^0;
+  11          sbit DS=P2^1;
+  12          sbit STCP=P2^2;
+  13          sbit P11=P3^5;
+  14          sbit P12=P3^7;
+  15          sbit clk=P2^6;
+  16          unsigned char j,k,m,n,i,a;
+  17          unsigned int b;
+  18          void delay(unsigned char t)
+  19          {  while(t--); 
+  20   1         }
+  21          void display()
+  22          { 
+  23   1        
+  24   1        j=0x01;
+  25   1        for(i=0;i<8;i++)
+  26   1        { if((shu[m]&j)==0)
+  27   2             { DS=0;}
+  28   2           else {DS=1;}
+  29   2          SHCP=1;
+  30   2          SHCP=0;
+  31   2            j<<=1;
+  32   2          }   
+  33   1              P12=0;
+  34   1          P11=1;
+  35   1      
+  36   1         
+  37   1              
+  38   1         
+  39   1      
+  40   1          STCP=0;
+  41   1          STCP=1;
+  42   1          delay(200);
+  43   1         j=0x01;
+  44   1          for(i=0;i<8;i++)
+  45   1           { if((shu[n]&j)==0)
+  46   2             { DS=0;}
+  47   2         else {DS=1;}
+  48   2           SHCP=1;
+  49   2         SHCP=0;
+  50   2           j<<=1;
+  51   2          } 
+  52   1              P11=0;
+  53   1          P12=1;
+  54   1        
+  55   1          
+C51 COMPILER V7.06   TEXT1                                                                 11/25/2007 13:51:58 PAGE 2   
+
+  56   1              
+  57   1            STCP=0;
+  58   1         STCP=1;
+  59   1         delay(200);
+  60   1           }
+  61            
+  62          
+  63          void main()
+  64          {
+  65   1       P2=0X87;
+  66   1      TMOD=0X20;
+  67   1      TH1=0X06;
+  68   1      TL1=0X06;
+  69   1      EA=1;
+  70   1      ET1=1;
+  71   1      TR1=1;
+  72   1      
+  73   1       while(1)
+  74   1       {
+  75   2         ALE=1;
+  76   2         ALE=0;
+  77   2         START=1;
+  78   2         START=0;
+  79   2         while(EOC==0);
+  80   2         OE=1;
+  81   2         k=P1;
+  82   2         a=P1;
+  83   2         b=a*6;
+  84   2         m=b/1000;
+  85   2         n=b%1000/100;
+  86   2         
+  87   2         dac0832=k;
+  88   2        
+  89   2       display();
+  90   2       
+  91   2         }
+  92   1         }
+  93             void  time() interrupt 3
+  94            {
+  95   1           clk=!clk;
+  96   1          }
+  97          
+  98          
+  99          
+ 100           
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    211    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

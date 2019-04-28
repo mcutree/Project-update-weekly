@@ -1,0 +1,210 @@
+C51 COMPILER V8.05a   接收                                                                 12/17/2008 10:36:17 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE 接收
+OBJECT MODULE PLACED IN 接收.OBJ
+COMPILER INVOKED BY: C:\Program Files\keil\C51\BIN\C51.EXE 接收.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <AT89X52.h>
+   2          
+   3          #define JINGZHEN 24
+   4          #define TIME0TH ((65536-50*JINGZHEN/12)&0xff00)>>8 // 50us
+   5          #define TIME0TL ((65536-50*JINGZHEN/12)&0xff)
+   6          #define TIME1TH ((65536-3000*JINGZHEN/12)&0xff00)>>8   
+   7          #define TIME1TL ((65536-3000*JINGZHEN/12)&0xff)
+   8          
+   9          
+  10          sbit CodingsWitch_A1=P1^0;
+  11          sbit CodingsWitch_B1=P1^1;
+  12          sbit CodingsWitch_A2=P1^2;
+  13          sbit CodingsWitch_B2=P1^3;
+  14          sbit CodingsWitch_A3=P1^4;
+  15          sbit CodingsWitch_B3=P1^5;
+  16          sbit CodingsWitch_A4=P1^6;
+  17          sbit CodingsWitch_B4=P1^7;
+  18          
+  19          void CodingsWitchPolling1(); 
+  20          void CodingsWitchPolling2(); 
+  21          void CodingsWitchPolling3(); 
+  22          void CodingsWitchPolling4(); 
+  23          
+  24          code char num[10]={0x03,0x9f,0x25,0x0d,0x99,0x49,0x41,0x1f,0x01,0x09,};
+  25          
+  26           unsigned char dat[4];
+  27          void timer1int (void)  interrupt 1  using 0{     //定时器0
+  28   1              EA=0;
+  29   1              TH0 = TIME0TH;  
+  30   1              TL0 = TIME0TL;
+  31   1              CodingsWitchPolling1();
+  32   1              CodingsWitchPolling2();
+  33   1              CodingsWitchPolling3();
+  34   1              CodingsWitchPolling4();
+  35   1              EA=1;
+  36   1      }
+  37          main()
+  38          {
+  39   1       unsigned char i,c,b;
+  40   1       unsigned int a;
+  41   1       P1=0xff;
+  42   1       P3=0;
+  43   1       TH0 = TIME0TH;
+  44   1       TL0 = TIME0TL;
+  45   1       TMOD  |= 0x11;
+  46   1       ET0=1;
+  47   1       ET1=1;
+  48   1       TR1=0;
+  49   1       TR0=1;
+  50   1       EA=1;
+  51   1       dat[0]=dat[1]=dat[2]=dat[3]=23;
+  52   1       while(1)
+  53   1       {
+  54   2              b=0x80;
+  55   2              
+C51 COMPILER V8.05a   接收                                                                 12/17/2008 10:36:17 PAGE 2   
+
+  56   2              for(i=0;i<8;i++)
+  57   2              {
+  58   3                      P2=b;
+  59   3                      if((i%2)==0)c=dat[i/2]%10;else c=dat[i/2]/10;
+  60   3                      P0=~num[c];
+  61   3                      for(a=0;a<10;a++) ;
+  62   3                      b>>=1;P0=0;
+  63   3                      //if(i==7) for(a=0;a<10000;a++) ;
+  64   3              }
+  65   2       }
+  66   1      }
+  67          
+  68          void CodingsWitchPolling1()// 
+  69          { 
+  70   1         static char st;         //定义了一个变量用来储蓄以前是否出现了两个引脚都为高电平的状态 
+  71   1         if(CodingsWitch_A1&&CodingsWitch_B1) 
+  72   1         {st = 1;}      // 
+  73   1         if(CodingsWitch_A1==0&&CodingsWitch_B1==0) 
+  74   1         {st = 2;}      // 
+  75   1         if(st)               //如果st为1执行下面的步骤 
+  76   1         { 
+  77   2            if(CodingsWitch_A1!=CodingsWitch_B1)      //如果当前编码开关的两个引脚都为底电平执行下面的步骤 
+  78   2            { 
+  79   3               if(CodingsWitch_A1)      //为高说明编码开关在向加大的方向转 
+  80   3               { 
+  81   4                  if(dat[0]>0&&st==1)dat[0]--;      // 
+  82   4                  if(dat[0]<64&&st==2)dat[0]++;      // 
+  83   4                  st = 0;       
+  84   4                              return;
+  85   4               } 
+  86   3               if(CodingsWitch_B1)      //为高说明编码开关在向减小的方向转 
+  87   3               { 
+  88   4                              if(dat[0]<64&&st==1)dat[0]++;
+  89   4                              if(dat[0]>0&&st==2)dat[0]--;
+  90   4                  st = 0; 
+  91   4                              return;
+  92   4               } 
+  93   3            } 
+  94   2         } 
+  95   1      } 
+  96           
+  97          
+  98          void CodingsWitchPolling2()// 
+  99          { 
+ 100   1         static char st;         //定义了一个变量用来储蓄以前是否出现了两个引脚都为高电平的状态 
+ 101   1         if(CodingsWitch_A2&&CodingsWitch_B2) 
+ 102   1         {st = 1;}      // 
+ 103   1         if(CodingsWitch_A2==0&&CodingsWitch_B2==0) 
+ 104   1         {st = 2;}      // 
+ 105   1         if(st)               //如果st为1执行下面的步骤 
+ 106   1         { 
+ 107   2            if(CodingsWitch_A2!=CodingsWitch_B2)      //如果当前编码开关的两个引脚都为底电平执行下面的步骤 
+ 108   2            { 
+ 109   3               if(CodingsWitch_A2)      //为高说明编码开关在向加大的方向转 
+ 110   3               { 
+ 111   4                  if(dat[1]>0&&st==1)dat[1]--;      // 
+ 112   4                  if(dat[1]<64&&st==2)dat[1]++;      // 
+ 113   4                  st = 0;       
+ 114   4                              return;
+ 115   4               } 
+ 116   3               if(CodingsWitch_B2)      //为高说明编码开关在向减小的方向转 
+ 117   3               { 
+C51 COMPILER V8.05a   接收                                                                 12/17/2008 10:36:17 PAGE 3   
+
+ 118   4                              if(dat[1]<64&&st==1)dat[1]++;
+ 119   4                              if(dat[1]>0&&st==2)dat[1]--;
+ 120   4                  st = 0; 
+ 121   4                              return;
+ 122   4               } 
+ 123   3            } 
+ 124   2         } 
+ 125   1      } 
+ 126          void CodingsWitchPolling3()// 
+ 127          { 
+ 128   1         static char st;         //定义了一个变量用来储蓄以前是否出现了两个引脚都为高电平的状态 
+ 129   1         if(CodingsWitch_A3&&CodingsWitch_B3) 
+ 130   1         {st = 1;}      // 
+ 131   1         if(CodingsWitch_A3==0&&CodingsWitch_B3==0) 
+ 132   1         {st = 2;}      // 
+ 133   1         if(st)               //如果st为1执行下面的步骤 
+ 134   1         { 
+ 135   2            if(CodingsWitch_A3!=CodingsWitch_B3)      //如果当前编码开关的两个引脚都为底电平执行下面的步骤 
+ 136   2            { 
+ 137   3               if(CodingsWitch_A3)      //为高说明编码开关在向加大的方向转 
+ 138   3               { 
+ 139   4                  if(dat[2]>0&&st==1)dat[2]--;      // 
+ 140   4                  if(dat[2]<64&&st==2)dat[2]++;      // 
+ 141   4                  st = 0;       
+ 142   4                              return;
+ 143   4               } 
+ 144   3               if(CodingsWitch_B3)      //为高说明编码开关在向减小的方向转 
+ 145   3               { 
+ 146   4                              if(dat[2]<64&&st==1)dat[2]++;
+ 147   4                              if(dat[2]>0&&st==2)dat[2]--;
+ 148   4                  st = 0; 
+ 149   4                              return;
+ 150   4               } 
+ 151   3            } 
+ 152   2         } 
+ 153   1      } 
+ 154          void CodingsWitchPolling4()// 
+ 155          { 
+ 156   1         static char st;         //定义了一个变量用来储蓄以前是否出现了两个引脚都为高电平的状态 
+ 157   1         if(CodingsWitch_A4&&CodingsWitch_B4) 
+ 158   1         {st = 1;}      // 
+ 159   1         if(CodingsWitch_A4==0&&CodingsWitch_B4==0) 
+ 160   1         {st = 2;}      // 
+ 161   1         if(st)               //如果st为1执行下面的步骤 
+ 162   1         { 
+ 163   2            if(CodingsWitch_A4!=CodingsWitch_B4)      //如果当前编码开关的两个引脚都为底电平执行下面的步骤 
+ 164   2            { 
+ 165   3               if(CodingsWitch_A4)      //为高说明编码开关在向加大的方向转 
+ 166   3               { 
+ 167   4                  if(dat[3]>0&&st==1)dat[3]--;      // 
+ 168   4                  if(dat[3]<64&&st==2)dat[3]++;      // 
+ 169   4                  st = 0;       
+ 170   4                              return;
+ 171   4               } 
+ 172   3               if(CodingsWitch_B4)      //为高说明编码开关在向减小的方向转 
+ 173   3               { 
+ 174   4                              if(dat[3]<64&&st==1)dat[3]++;
+ 175   4                              if(dat[3]>0&&st==2)dat[3]--;
+ 176   4                  st = 0; 
+ 177   4                              return;
+ 178   4               } 
+ 179   3            } 
+C51 COMPILER V8.05a   接收                                                                 12/17/2008 10:36:17 PAGE 4   
+
+ 180   2         } 
+ 181   1      } 
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    542    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

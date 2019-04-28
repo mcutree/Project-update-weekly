@@ -1,0 +1,87 @@
+C51 COMPILER V8.02   GAMEGRAPH                                                             08/24/2008 10:50:54 PAGE 1   
+
+
+C51 COMPILER V8.02, COMPILATION OF MODULE GAMEGRAPH
+OBJECT MODULE PLACED IN GameGraph.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE sources\GameGraph.c BROWSE INCDIR(.\include) DEBUG OBJECTEXTEND PRINT(.\Gam
+                    -eGraph.lst) OBJECT(GameGraph.obj)
+
+line level    source
+
+   1          //*************************************************************************************************
+   2          //*                                                                                                                                                                                               *
+   3          //*                      ******************************ÓÎÏ·Í¼Ïñ´¦Àí³ÌÐò**************************                         *
+   4          //*                                                                                                                                                                                               *
+   5          //*************************************************************************************************
+   6          #include "at89x51.h"
+   7          #include "LCD12864.h"
+   8          
+   9          #define FRAMELEFT 38                               //±ß¿ò·¶Î§£ºucLine£º36~127¡£
+  10                                                                                  
+  11          
+  12          
+  13          //*************************************************************************************************
+  14          //*                                                                                                                                                                                               *
+  15          //*                      ******************************ÓÎÏ·ÇøÓò±ß¿ò»æÖÆº¯Êý**************************             *
+  16          //*                                                                                                                                                                                               *
+  17          //*************************************************************************************************
+  18          void vShowFrame()
+  19          {
+  20   1              unsigned char ucCount;
+  21   1      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<»æÖÆ×ó°ëÆÁ>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  22   1              CS1=1;
+  23   1              CS2=0;
+  24   1              vWriteCMD(LCDPAGE);
+  25   1              vWriteCMD(LCDLINE+FRAMELEFT);
+  26   1              for(ucCount=FRAMELEFT;ucCount<64;ucCount++)
+  27   1                      vWriteData(0xC0);
+  28   1      
+  29   1              for(ucCount=1;ucCount<7;ucCount++)
+  30   1                      {
+  31   2                      vWriteCMD(LCDPAGE+ucCount);
+  32   2                      vWriteCMD(LCDLINE+FRAMELEFT);
+  33   2                      vWriteData(0xFF);
+  34   2                      vWriteData(0xFF);
+  35   2                      }
+  36   1      
+  37   1              vWriteCMD(LCDPAGE+7);
+  38   1              vWriteCMD(LCDLINE+FRAMELEFT);
+  39   1              for(ucCount=FRAMELEFT;ucCount<64;ucCount++)
+  40   1                      vWriteData(0x03);
+  41   1      //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<»æÖÆÓÒ°ëÆÁ>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  42   1              CS1=0;
+  43   1              CS2=1;
+  44   1              vWriteCMD(LCDPAGE);
+  45   1              vWriteCMD(LCDLINE);
+  46   1              for(ucCount=0;ucCount<62;ucCount++)
+  47   1                      vWriteData(0xC0);
+  48   1      
+  49   1              for(ucCount=1;ucCount<7;ucCount++)
+  50   1                      {
+  51   2                      vWriteCMD(LCDPAGE+ucCount);
+  52   2                      vWriteCMD(LCDLINE+60);
+  53   2                      vWriteData(0xFF);
+  54   2                      vWriteData(0xFF);
+C51 COMPILER V8.02   GAMEGRAPH                                                             08/24/2008 10:50:54 PAGE 2   
+
+  55   2                      }
+  56   1      
+  57   1              vWriteCMD(LCDPAGE+7);
+  58   1              vWriteCMD(LCDLINE);
+  59   1              for(ucCount=0;ucCount<62;ucCount++)
+  60   1                      vWriteData(0x03);
+  61   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    187    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

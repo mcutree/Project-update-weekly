@@ -1,0 +1,419 @@
+<html>
+<body>
+<pre>
+<h1>µVision2 Build Log</h1>
+<h2>Project:</h2>
+C:\Documents and Settings\Li Junlin\×ÀÃæ\DS18B20\DS18B20\DS18B20.uv2
+Project File Date:  10/21/2006
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling 18b20.asm...
+18b20.asm(150): error A51: TARGET OUT OF RANGE
+18b20.asm(241): error A8: ATTEMPT TO DEFINE AN ALREADY DEFINED LABEL
+18b20.asm(242): error A45: UNDEFINED SYMBOL (PASS-2)
+Target not created
+Build target 'Target 1'
+assembling 18b20.asm...
+18b20.asm(241): error A8: ATTEMPT TO DEFINE AN ALREADY DEFINED LABEL
+18b20.asm(242): error A45: UNDEFINED SYMBOL (PASS-2)
+Target not created
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0261H
+Program Size: data=9.0 xdata=0 code=614
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0294H
+Program Size: data=9.0 xdata=0 code=665
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 029FH
+Program Size: data=9.0 xdata=0 code=676
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 02ABH
+Program Size: data=9.0 xdata=0 code=688
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 02B7H
+Program Size: data=9.0 xdata=0 code=700
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 036BH
+Program Size: data=9.0 xdata=0 code=880
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 03AAH
+Program Size: data=9.0 xdata=0 code=943
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 035AH
+Program Size: data=9.0 xdata=0 code=863
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+18b20.asm(393): error A51: TARGET OUT OF RANGE
+Target not created
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 040EH
+Program Size: data=9.0 xdata=0 code=1043
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0426H
+Program Size: data=9.0 xdata=0 code=1067
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+18b20.asm(520): error A45: UNDEFINED SYMBOL (PASS-2)
+18b20.asm(522): error A8: ATTEMPT TO DEFINE AN ALREADY DEFINED LABEL
+Target not created
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 04D7H
+Program Size: data=9.0 xdata=0 code=1244
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 04ECH
+Program Size: data=9.0 xdata=0 code=1265
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 04F2H
+Program Size: data=9.0 xdata=0 code=1271
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 05A6H
+Program Size: data=9.0 xdata=0 code=1451
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 05BBH
+Program Size: data=9.0 xdata=0 code=1472
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 066FH
+Program Size: data=9.0 xdata=0 code=1652
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0684H
+Program Size: data=9.0 xdata=0 code=1673
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0684H
+Program Size: data=9.0 xdata=0 code=1673
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0738H
+Program Size: data=9.0 xdata=0 code=1853
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 074DH
+Program Size: data=9.0 xdata=0 code=1874
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 074DH
+Program Size: data=9.0 xdata=0 code=1874
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 074DH
+Program Size: data=9.0 xdata=0 code=1874
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+"DS18B20" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling 18b20.asm...
+linking...
+*** WARNING L5: CODE SPACE MEMORY OVERLAP
+    FROM:    0000H
+    TO:      0002H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?C_START
+    MODULE:  STARTUP.obj (?C_STARTUP)
+    ADDRESS: 0765H
+Program Size: data=9.0 xdata=0 code=1898
+creating hex file from "DS18B20"...
+"DS18B20" - 0 Error(s), 3 Warning(s).

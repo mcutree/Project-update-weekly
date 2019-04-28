@@ -1,0 +1,3 @@
+"DS1302.obj" 
+TO "DS1302" 
+RAMSIZE(256) 

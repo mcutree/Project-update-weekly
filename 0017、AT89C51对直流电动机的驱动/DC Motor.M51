@@ -1,0 +1,86 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        08/07/2006  08:35:08  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+E:\PROGRAM FILES\KEIL\C51\BIN\BL51.EXE DC Motor.obj TO DC Motor
+
+
+INPUT MODULES INCLUDED:
+  DC Motor.obj (DC_MOTOR)
+
+
+LINK MAP OF MODULE:  DC Motor (DC_MOTOR)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0049H     ABSOLUTE     
+
+
+
+SYMBOL TABLE OF MODULE:  DC Motor (DC_MOTOR)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        DC_MOTOR
+  D:00E0H         SYMBOL        ACC
+  N:0035H         SYMBOL        ADC
+  B:00A0H.4       SYMBOL        CLOCK
+  C:0043H         SYMBOL        D1
+  C:0041H         SYMBOL        DELAY
+  B:00A0H.6       SYMBOL        EOC
+  D:00A8H         SYMBOL        IE
+  C:003EH         SYMBOL        INT_T0
+  B:00A0H.7       SYMBOL        OE
+  D:0090H         SYMBOL        P1
+  D:00A0H         SYMBOL        P2
+  D:00B0H         SYMBOL        P3
+  B:00B0H.7       SYMBOL        PWM
+  B:00A0H.5       SYMBOL        ST
+  C:000EH         SYMBOL        START
+  D:008CH         SYMBOL        TH0
+  D:008AH         SYMBOL        TL0
+  D:0089H         SYMBOL        TMOD
+  B:0088H.4       SYMBOL        TR0
+  C:001CH         SYMBOL        WAIT
+  C:0000H         LINE#         8
+  C:000BH         LINE#         10
+  C:000EH         LINE#         12
+  C:0011H         LINE#         13
+  C:0014H         LINE#         14
+  C:0017H         LINE#         15
+  C:001AH         LINE#         16
+  C:001CH         LINE#         18
+  C:001EH         LINE#         19
+  C:0020H         LINE#         20
+BL51 BANKED LINKER/LOCATER V6.00                                                      08/07/2006  08:35:08  PAGE 2
+
+
+  C:0022H         LINE#         21
+  C:0025H         LINE#         22
+  C:0027H         LINE#         23
+  C:002AH         LINE#         24
+  C:002CH         LINE#         25
+  C:002EH         LINE#         26
+  C:0030H         LINE#         27
+  C:0033H         LINE#         28
+  C:0035H         LINE#         29
+  C:0037H         LINE#         30
+  C:0039H         LINE#         31
+  C:003CH         LINE#         32
+  C:003EH         LINE#         34
+  C:0040H         LINE#         35
+  C:0041H         LINE#         37
+  C:0043H         LINE#         38
+  C:0045H         LINE#         39
+  C:0048H         LINE#         40
+  -------         ENDMOD        DC_MOTOR
+
+Program Size: data=8.0 xdata=0 code=73
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

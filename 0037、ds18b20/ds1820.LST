@@ -1,0 +1,216 @@
+C51 COMPILER V7.00  DS1820                                                                 12/05/2007 20:19:08 PAGE 1   
+
+
+C51 COMPILER V7.00, COMPILATION OF MODULE DS1820
+OBJECT MODULE PLACED IN ds1820.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ds1820.c DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include<reg51.h>
+   2          
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          
+   6          sbit DQ=P3^7;//ds18b20与单片机连接口
+   7          sbit RS=P3^0;
+   8          sbit RW=P3^1;
+   9          sbit EN=P3^2;
+  10          
+  11          unsigned char code str1[]={"temperature:  "};
+  12          unsigned char code str2[]={"              "}; 
+  13          
+  14          uchar data disdata[5];
+  15          uint tvalue;//温度值
+  16          uchar tflag;//温度正负标志
+  17          
+  18          /*************************lcd1602程序**************************/
+  19           void delay1ms(unsigned int ms)//延时1毫秒（不够精确的）
+  20           {unsigned int i,j;
+  21   1         for(i=0;i<ms;i++)
+  22   1          for(j=0;j<100;j++);
+  23   1       }
+  24          
+  25          void wr_com(unsigned char com)//写指令//
+  26           {  delay1ms(1);
+  27   1         RS=0;
+  28   1         RW=0;
+  29   1         EN=0;
+  30   1         P2=com;
+  31   1         delay1ms(1);
+  32   1         EN=1;
+  33   1         delay1ms(1);
+  34   1         EN=0;
+  35   1        }
+  36          
+  37          void wr_dat(unsigned char dat)//写数据//
+  38          {  delay1ms(1);;
+  39   1         RS=1;
+  40   1         RW=0;
+  41   1         EN=0;
+  42   1         P2=dat;
+  43   1         delay1ms(1);
+  44   1         EN=1;
+  45   1         delay1ms(1);
+  46   1         EN=0;
+  47   1      }
+  48          
+  49           void lcd_init()//初始化设置//
+  50          {delay1ms(15);
+  51   1        wr_com(0x38);delay1ms(5);
+  52   1         wr_com(0x08);delay1ms(5);
+  53   1          wr_com(0x01);delay1ms(5);
+  54   1           wr_com(0x06);delay1ms(5);
+  55   1            wr_com(0x0c);delay1ms(5);
+C51 COMPILER V7.00  DS1820                                                                 12/05/2007 20:19:08 PAGE 2   
+
+  56   1      }
+  57          
+  58          
+  59           void display(unsigned char *p)//显示//
+  60          {
+  61   1      while(*p!='\0')
+  62   1      {
+  63   2      wr_dat(*p);
+  64   2      p++;
+  65   2      delay1ms(1);
+  66   2      }
+  67   1      }
+  68          
+  69            init_play()//初始化显示
+  70            { lcd_init();
+  71   1          wr_com(0x80);
+  72   1               display(str1);
+  73   1               wr_com(0xc0);
+  74   1               display(str2);
+  75   1         }
+  76          
+  77          /******************************ds1820程序***************************************/
+  78           void delay_18B20(unsigned int i)//延时1微秒
+  79          {
+  80   1              while(i--);
+  81   1      }
+  82          
+  83          void ds1820rst()/*ds1820复位*/
+  84           {  unsigned char x=0;
+  85   1               DQ = 1;          //DQ复位
+  86   1               delay_18B20(4);  //延时
+  87   1               DQ = 0;          //DQ拉低
+  88   1               delay_18B20(100); //精确延时大于480us
+  89   1               DQ = 1;          //拉高
+  90   1               delay_18B20(40);        
+  91   1         }  
+  92            
+  93             uchar ds1820rd()/*读数据*/
+  94            { unsigned char i=0;
+  95   1               unsigned char dat = 0;
+  96   1               for (i=8;i>0;i--)
+  97   1               {   DQ = 0; //给脉冲信号
+  98   2                        dat>>=1;
+  99   2                        DQ = 1; //给脉冲信号
+ 100   2                        if(DQ)
+ 101   2                        dat|=0x80;
+ 102   2                        delay_18B20(10);
+ 103   2               }
+ 104   1              return(dat);
+ 105   1        }
+ 106          
+ 107            void ds1820wr(uchar wdata)/*写数据*/
+ 108            {unsigned char i=0;
+ 109   1          for (i=8; i>0; i--)
+ 110   1         { DQ = 0;
+ 111   2           DQ = wdata&0x01;
+ 112   2           delay_18B20(10);
+ 113   2           DQ = 1;
+ 114   2           wdata>>=1;
+ 115   2         }
+ 116   1       }
+ 117            
+C51 COMPILER V7.00  DS1820                                                                 12/05/2007 20:19:08 PAGE 3   
+
+ 118           
+ 119          
+ 120            read_temp()/*读取温度值并转换*/
+ 121           {uchar a,b;
+ 122   1        ds1820rst();    
+ 123   1        ds1820wr(0xcc);//*跳过读序列号*/
+ 124   1        ds1820wr(0x44);//*启动温度转换*/
+ 125   1        ds1820rst();    
+ 126   1        ds1820wr(0xcc);//*跳过读序列号*/ 
+ 127   1        ds1820wr(0xbe);//*读取温度*/ 
+ 128   1        a=ds1820rd();
+ 129   1        b=ds1820rd();
+ 130   1        tvalue=b;
+ 131   1        tvalue<<=8;
+ 132   1        tvalue=tvalue|a;
+ 133   1          if(tvalue<0x0fff)
+ 134   1         tflag=0;
+ 135   1          else
+ 136   1         {tvalue=~tvalue+1;
+ 137   2               tflag=1;
+ 138   2         }
+ 139   1        tvalue=tvalue*(0.625);//温度值扩大10倍，精确到1位小数
+ 140   1              return(tvalue);
+ 141   1        }
+ 142          
+ 143          /*******************************************************************/
+ 144             void ds1820disp()//温度值显示
+ 145                  { uchar flagdat;
+ 146   1                disdata[0]=tvalue/1000+0x30;//百位数
+ 147   1           disdata[1]=tvalue%1000/100+0x30;//十位数
+ 148   1           disdata[2]=tvalue%100/10+0x30;//个位数
+ 149   1           disdata[3]=tvalue%10+0x30;//小数位
+ 150   1          
+ 151   1           if(tflag==0)
+ 152   1                  flagdat=0x20;//正温度不显示符号
+ 153   1           else
+ 154   1             flagdat=0x2d;//负温度显示负号:-
+ 155   1      
+ 156   1           if(disdata[0]==0x30)
+ 157   1                 {disdata[0]=0x20;//如果百位为0，不显示
+ 158   2                       if(disdata[1]==0x30)
+ 159   2                        {disdata[1]=0x20;//如果百位为0，十位为0也不显示
+ 160   3                        }
+ 161   2                      }
+ 162   1      
+ 163   1                 wr_com(0xc0);
+ 164   1                      wr_dat(flagdat);//显示符号位
+ 165   1                 wr_com(0xc1);
+ 166   1                 wr_dat(disdata[0]);//显示百位
+ 167   1                 wr_com(0xc2);
+ 168   1                 wr_dat(disdata[1]);//显示十位        
+ 169   1                 wr_com(0xc3);
+ 170   1                 wr_dat(disdata[2]);//显示个位        
+ 171   1                 wr_com(0xc4);
+ 172   1                 wr_dat(0x2e);//显示小数点    
+ 173   1                 wr_com(0xc5);
+ 174   1                 wr_dat(disdata[3]);//显示小数位
+ 175   1         }
+ 176          /********************主程序***********************************/
+ 177           void main()
+ 178           { init_play();//初始化显示
+ 179   1         while(1)
+C51 COMPILER V7.00  DS1820                                                                 12/05/2007 20:19:08 PAGE 4   
+
+ 180   1              {read_temp();//读取温度
+ 181   2          ds1820disp();//显示
+ 182   2               }
+ 183   1        }
+ 184          
+ 185          
+ 186          
+ 187          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    604    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

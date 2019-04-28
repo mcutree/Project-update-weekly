@@ -1,0 +1,237 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        11/01/2006  20:56:43  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE temperature.obj TO temperature
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  temperature.obj (TEMPERATURE)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?IMUL)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  temperature (TEMPERATURE)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0016H     UNIT         ?DT?TEMPERATURE
+            DATA    001EH     0003H     UNIT         _DATA_GROUP_
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0095H     UNIT         ?PR?MAIN?TEMPERATURE
+            CODE    0098H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0124H     0067H     UNIT         ?C?LIB_CODE
+            CODE    018BH     0049H     UNIT         ?PR?READTEMPERATURE?TEMPERATURE
+            CODE    01D4H     0024H     UNIT         ?PR?INIT_DS18B20?TEMPERATURE
+            CODE    01F8H     0020H     UNIT         ?PR?READONECHAR?TEMPERATURE
+            CODE    0218H     001BH     UNIT         ?C_INITSEG
+            CODE    0233H     001AH     UNIT         ?PR?_WRITEONECHAR?TEMPERATURE
+            CODE    024DH     000FH     UNIT         ?PR?_DELAY_18B20?TEMPERATURE
+
+
+
+OVERLAY MAP OF MODULE:   temperature (TEMPERATURE)
+
+
+SEGMENT                                   DATA_GROUP 
+  +--> CALLED SEGMENT                   START    LENGTH
+-------------------------------------------------------
+?C_C51STARTUP                           -----    -----
+  +--> ?PR?MAIN?TEMPERATURE
+  +--> ?C_INITSEG
+
+?PR?MAIN?TEMPERATURE                    001EH    0003H
+  +--> ?PR?READTEMPERATURE?TEMPERATURE
+  +--> ?PR?_DELAY_18B20?TEMPERATURE
+
+?PR?READTEMPERATURE?TEMPERATURE         -----    -----
+  +--> ?PR?INIT_DS18B20?TEMPERATURE
+  +--> ?PR?_WRITEONECHAR?TEMPERATURE
+BL51 BANKED LINKER/LOCATER V6.00                                                      11/01/2006  20:56:43  PAGE 2
+
+
+  +--> ?PR?_DELAY_18B20?TEMPERATURE
+  +--> ?PR?READONECHAR?TEMPERATURE
+
+?PR?INIT_DS18B20?TEMPERATURE            -----    -----
+  +--> ?PR?_DELAY_18B20?TEMPERATURE
+
+?PR?_WRITEONECHAR?TEMPERATURE           -----    -----
+  +--> ?PR?_DELAY_18B20?TEMPERATURE
+
+?PR?READONECHAR?TEMPERATURE             -----    -----
+  +--> ?PR?_DELAY_18B20?TEMPERATURE
+
+
+
+SYMBOL TABLE OF MODULE:  temperature (TEMPERATURE)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TEMPERATURE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  C:0233H         PUBLIC        _WriteOneChar
+  C:018BH         PUBLIC        ReadTemperature
+  B:0090H.3       PUBLIC        DQ
+  C:01D4H         PUBLIC        Init_DS18B20
+  C:01F8H         PUBLIC        ReadOneChar
+  C:0003H         PUBLIC        main
+  D:0008H         PUBLIC        disp
+  D:0013H         PUBLIC        disp_dot
+  C:0251H         PUBLIC        _delay_18B20
+  C:024DH         SYMBOL        L?0022
+  -------         PROC          L?0021
+  -------         ENDPROC       L?0021
+  C:024DH         SYMBOL        L?0022
+  -------         PROC          _DELAY_18B20
+  D:0006H         SYMBOL        i
+  C:0251H         LINE#         9
+  C:0251H         LINE#         10
+  C:0251H         LINE#         11
+  C:025BH         LINE#         12
+  -------         ENDPROC       _DELAY_18B20
+  -------         PROC          INIT_DS18B20
+  -------         DO            
+  D:0007H         SYMBOL        x
+  -------         ENDDO         
+  C:01D4H         LINE#         15
+  C:01D4H         LINE#         16
+  C:01D4H         LINE#         17
+  C:01D5H         LINE#         18
+  C:01D7H         LINE#         19
+  C:01DDH         LINE#         20
+  C:01DFH         LINE#         21
+  C:01E6H         LINE#         22
+  C:01E8H         LINE#         23
+BL51 BANKED LINKER/LOCATER V6.00                                                      11/01/2006  20:56:43  PAGE 3
+
+
+  C:01EFH         LINE#         24
+  C:01F1H         LINE#         25
+  -------         ENDPROC       INIT_DS18B20
+  -------         PROC          READONECHAR
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0003H         SYMBOL        dat
+  -------         ENDDO         
+  C:01F8H         LINE#         30
+  C:01F8H         LINE#         31
+  C:01F8H         LINE#         32
+  C:01F9H         LINE#         33
+  C:01FAH         LINE#         34
+  C:01FCH         LINE#         35
+  C:01FCH         LINE#         36
+  C:01FEH         LINE#         37
+  C:0202H         LINE#         38
+  C:0204H         LINE#         39
+  C:0207H         LINE#         40
+  C:020AH         LINE#         41
+  C:0211H         LINE#         42
+  C:0213H         LINE#         43
+  C:0217H         LINE#         44
+  -------         ENDPROC       READONECHAR
+  -------         PROC          _WRITEONECHAR
+  D:0005H         SYMBOL        dat
+  -------         DO            
+  D:0003H         SYMBOL        i
+  -------         ENDDO         
+  C:0233H         LINE#         47
+  C:0235H         LINE#         48
+  C:0235H         LINE#         49
+  C:0235H         LINE#         50
+  C:0237H         LINE#         51
+  C:0237H         LINE#         52
+  C:0239H         LINE#         53
+  C:023DH         LINE#         54
+  C:0244H         LINE#         55
+  C:0246H         LINE#         56
+  C:024AH         LINE#         57
+  C:024CH         LINE#         58
+  -------         ENDPROC       _WRITEONECHAR
+  -------         PROC          READTEMPERATURE
+  -------         DO            
+  D:0002H         SYMBOL        a
+  D:0007H         SYMBOL        b
+  D:0004H         SYMBOL        t
+  -------         ENDDO         
+  C:018BH         LINE#         61
+  C:018BH         LINE#         62
+  C:018BH         LINE#         63
+  C:018DH         LINE#         64
+  C:018EH         LINE#         65
+  C:0190H         LINE#         67
+  C:0193H         LINE#         68
+  C:0198H         LINE#         69
+  C:019DH         LINE#         70
+BL51 BANKED LINKER/LOCATER V6.00                                                      11/01/2006  20:56:43  PAGE 4
+
+
+  C:01A4H         LINE#         71
+  C:01A7H         LINE#         72
+  C:01ACH         LINE#         73
+  C:01B1H         LINE#         74
+  C:01B6H         LINE#         75
+  C:01B9H         LINE#         81
+  C:01C8H         LINE#         82
+  C:01D3H         LINE#         83
+  -------         ENDPROC       READTEMPERATURE
+  -------         PROC          MAIN
+  -------         DO            
+  D:001EH         SYMBOL        tmp
+  D:0020H         SYMBOL        counter
+  -------         ENDDO         
+  C:0003H         LINE#         85
+  C:0003H         LINE#         86
+  C:0003H         LINE#         89
+  C:0003H         LINE#         90
+  C:0003H         LINE#         93
+  C:000AH         LINE#         94
+  C:000AH         LINE#         95
+  C:0011H         LINE#         96
+  C:0014H         LINE#         97
+  C:0014H         LINE#         99
+  C:0017H         LINE#         100
+  C:0029H         LINE#         101
+  C:002CH         LINE#         102
+  C:002FH         LINE#         103
+  C:0032H         LINE#         104
+  C:004BH         LINE#         105
+  C:004EH         LINE#         106
+  C:0051H         LINE#         107
+  C:0054H         LINE#         108
+  C:006DH         LINE#         109
+  C:0070H         LINE#         110
+  C:0073H         LINE#         111
+  C:0076H         LINE#         112
+  C:008FH         LINE#         113
+  C:0092H         LINE#         114
+  C:0095H         LINE#         115
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        TEMPERATURE
+
+  -------         MODULE        ?C?IMUL
+  C:0124H         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?UIDIV
+  C:0136H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+Program Size: data=34.0 xdata=0 code=604
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

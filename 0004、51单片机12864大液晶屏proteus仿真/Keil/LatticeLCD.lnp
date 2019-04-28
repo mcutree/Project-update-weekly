@@ -1,0 +1,7 @@
+"main.obj",
+"LCD12864.obj",
+"KeyScan.obj",
+"KeyProcess.obj",
+"LCDShoeMap.obj",
+"GameGraph.obj" 
+TO "LatticeLCD" 

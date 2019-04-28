@@ -1,0 +1,3 @@
+"LCD1602.obj" 
+TO "LCD1602" 
+RAMSIZE(256) 

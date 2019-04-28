@@ -1,0 +1,4 @@
+"HyperTerminal.obj",
+"main.obj" 
+TO "HyperTerminal" 
+RAMSIZE(256) 

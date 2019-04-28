@@ -1,0 +1,71 @@
+A51 MACRO ASSEMBLER  LOVE                                                                 04/13/2009 21:13:48 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.00
+OBJECT MODULE PLACED IN LOVE.OBJ
+ASSEMBLER INVOKED BY: C:\Keil\C51\BIN\A51.EXE LOVE.ASM SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1           ORG 0000H
+0000 020030            2           LJMP START
+0030                   3           ORG 0030H
+                       4     ;初始化
+0030 900057            5     START: MOV DPTR,#TAB
+0033 7800              6            MOV R0,#00H;从00开始计数
+0035 E8                7      MAIN: MOV A,R0
+0036 93                8            MOVC A,@A+DPTR
+0037 F580              9                MOV P0,A
+0039 F590             10                MOV P1,A
+003B 12004A           11                LCALL DELAY
+003E 12004A           12                LCALL DELAY
+0041 08               13                INC R0
+0042 B82EF0           14                CJNE R0,#46,MAIN
+0045 7800             15                MOV R0,#00H
+0047 020035           16                LJMP MAIN
+                      17     ;闪烁延时函数
+004A 7D14             18     DELAY:MOV R5,#20 
+004C 7E14             19        D1:MOV R6,#20 
+004E 7FF8             20        D2:MOV R7,#248 
+0050 DFFE             21           DJNZ R7,$ 
+0052 DEFA             22           DJNZ R6,D2 
+0054 DDF6             23           DJNZ R5,D1 
+0056 22               24           RET
+                      25     ;查表
+0057 FEFDFBF7         26     TAB:  DB 0FEH,0FDH,0FBH,0F7H,0EFH,0DFH,0BFH
+005B EFDFBF                  
+005E FF00FF00         27           DB 0FFH,00H,0FFH,00H,0FFH,00H,0FFH
+0062 FF00FF                  
+0065 BFDFEFF7         28               DB 0BFH,0DFH,0EFH,0F7H,0FBH,0FDH,0FEH
+0069 FBFDFE                  
+006C FF00FF00         29               DB 0FFH,00H,0FFH,00H,0FFH,00H,0FFH
+0070 FF00FF                  
+0073 FCF9F3E7         30               DB 0FCH,0F9H,0F3H,0E7H,0CFH,9FH
+0077 CF9F                    
+0079 FF00FF00         31               DB 0FFH,00H,0FFH,00H,0FFH,00H,0FFH
+007D FF00FF                  
+0080 9FCFE7F3         32               DB 9FH,0CFH,0E7H,0F3H,0F9H,0FCH
+0084 F9FC                    
+                      33               END
+A51 MACRO ASSEMBLER  LOVE                                                                 04/13/2009 21:13:48 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+D1 . . . . . . . .  C ADDR   004CH   A   
+D2 . . . . . . . .  C ADDR   004EH   A   
+DELAY. . . . . . .  C ADDR   004AH   A   
+MAIN . . . . . . .  C ADDR   0035H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+START. . . . . . .  C ADDR   0030H   A   
+TAB. . . . . . . .  C ADDR   0057H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,1402 @@
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.10
+OBJECT MODULE PLACED IN 18b20.OBJ
+ASSEMBLER INVOKED BY: d:\Keil\C51\BIN\A51.EXE 18b20.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000 C2B7              1          CLR P3.7
+0002 753800            2     MAIN:MOV 38H,#00H
+0005 753900            3          MOV 39H,#00H
+0008 753A00            4          MOV 3AH,#00H
+000B 753B00            5          MOV 3BH,#00H
+000E 1200C5            6          LCALL   GET_TEMPER 
+0011 12066A            7          LCALL   TEMPRRO
+0014 75A006            8          MOV P2,#06H
+0017 12070D            9          LCALL PRO
+                      10     ;------------------------------------------------------
+                      11     
+001A 753800           12          MOV 38H,#00H
+001D 753900           13          MOV 39H,#00H
+0020 753A00           14          MOV 3AH,#00H
+0023 753B00           15          MOV 3BH,#00H
+0026 120179           16          LCALL   GET_TEMPER2 
+0029 12066A           17          LCALL   TEMPRRO
+002C 75A05B           18          MOV P2,#5BH
+002F 12070D           19          LCALL PRO
+                      20     ;------------------------------------------------------
+                      21     
+0032 753800           22          MOV 38H,#00H
+0035 753900           23          MOV 39H,#00H
+0038 753A00           24          MOV 3AH,#00H
+003B 753B00           25          MOV 3BH,#00H
+003E 12022D           26          LCALL   GET_TEMPER3
+0041 12066A           27          LCALL   TEMPRRO
+0044 75A04F           28          MOV P2,#4FH
+0047 12070D           29          LCALL PRO
+                      30     
+                      31     ;------------------------------------------------------
+                      32     
+004A 753800           33          MOV 38H,#00H
+004D 753900           34          MOV 39H,#00H
+0050 753A00           35          MOV 3AH,#00H
+0053 753B00           36          MOV 3BH,#00H
+0056 1202E1           37          LCALL   GET_TEMPER4
+0059 12066A           38          LCALL   TEMPRRO
+005C 75A066           39          MOV P2,#66H
+005F 12070D           40          LCALL PRO
+                      41     ;------------------------------------------------------
+                      42     
+0062 753800           43          MOV 38H,#00H
+0065 753900           44          MOV 39H,#00H
+0068 753A00           45          MOV 3AH,#00H
+006B 753B00           46          MOV 3BH,#00H
+006E 120395           47          LCALL   GET_TEMPER5
+0071 12066A           48          LCALL   TEMPRRO
+0074 75A06D           49          MOV P2,#6DH
+0077 12070D           50          LCALL PRO
+                      51     ;------------------------------------------------------
+                      52     
+007A 753800           53          MOV 38H,#00H
+007D 753900           54          MOV 39H,#00H
+0080 753A00           55          MOV 3AH,#00H
+0083 753B00           56          MOV 3BH,#00H
+0086 120449           57          LCALL   GET_TEMPER6
+0089 12066A           58          LCALL   TEMPRRO
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     2
+
+008C 75A07D           59          MOV P2,#7DH
+008F 12070D           60          LCALL PRO
+                      61     ;------------------------------------------------------
+                      62     
+0092 753800           63          MOV 38H,#00H
+0095 753900           64          MOV 39H,#00H
+0098 753A00           65          MOV 3AH,#00H
+009B 753B00           66          MOV 3BH,#00H
+009E 1204FD           67          LCALL   GET_TEMPER7
+00A1 12066A           68          LCALL   TEMPRRO
+00A4 75A007           69          MOV P2,#07H
+00A7 12070D           70          LCALL PRO
+                      71     ;------------------------------------------------------
+                      72     
+00AA 753800           73          MOV 38H,#00H
+00AD 753900           74          MOV 39H,#00H
+00B0 753A00           75          MOV 3AH,#00H
+00B3 753B00           76          MOV 3BH,#00H
+00B6 1205B1           77          LCALL   GET_TEMPER8
+00B9 12066A           78          LCALL   TEMPRRO
+00BC 75A07F           79          MOV P2,#7FH
+00BF 12070D           80          LCALL PRO
+00C2 020002           81           LJMP  MAIN
+                      82         
+                      83     
+                      84     
+                      85     ;==============================================CHL1
+00C5                  86     GET_TEMPER: 
+00C5 D290             87               SETB      P1.0H ; 定时入口 
+00C7 120153           88     BCD:      LCALL     INIT_1820 
+00CA 200003           89               JB        00H,S22 
+00CD 0200C7           90               LJMP      BCD ; 若DS18B20不存在则返回 
+                      91     
+00D0 120665           92     S22:     LCALL     DELAY1 
+00D3 74CC             93              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+00D5 120117           94              LCALL     WRITE_1820 
+00D8 7444             95     MOV A,#44H ; 发出温度转换命令 
+00DA 120117           96     LCALL WRITE_1820 
+00DD 00               97     NOP 
+00DE 120665           98     LCALL DELAY1 
+00E1 120153           99     CBA:LCALL INIT_1820 
+00E4 200003          100     JB 00H,ABC 
+00E7 0200E1          101     LJMP CBA 
+00EA 120665          102     ABC:LCALL DELAY1 
+00ED 74CC            103     MOV A,#0CCH ; 跳过ROM匹配 
+00EF 120117          104     LCALL WRITE_1820 
+00F2 74BE            105     MOV A,#0BEH ; 发出读温度命令 
+00F4 120117          106     LCALL WRITE_1820 
+00F7 12012F          107     LCALL READ_18200 ;READ_1820 
+00FA 22              108     RET 
+                     109     ;==============================
+00FB                 110     READ_1820: 
+00FB 7A08            111     MOV R2,#8 
+00FD                 112     RE1: 
+00FD C3              113     CLR C 
+00FE D290            114     SETB P1.0H 
+0100 00              115     NOP 
+0101 00              116     NOP 
+0102 C290            117     CLR P1.0H 
+0104 00              118     NOP 
+0105 00              119     NOP 
+0106 00              120     NOP 
+0107 D290            121     SETB P1.0H 
+0109 7B07            122     MOV R3,#7 
+010B DBFE            123     DJNZ R3,$ 
+010D A290            124     MOV C,P1.0H 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     3
+
+010F 7B17            125     MOV R3,#23 
+0111 DBFE            126     DJNZ R3,$ 
+0113 13              127     RRC A 
+0114 DAE7            128     DJNZ R2,RE1 
+0116 22              129     RET 
+                     130     ;=============================
+0117                 131     WRITE_1820: 
+0117 7A08            132     MOV R2,#8 
+0119 C3              133     CLR C 
+011A                 134     WR1: 
+011A C290            135     CLR P1.0H 
+011C 7B06            136     MOV R3,#6 
+011E DBFE            137     DJNZ R3,$ 
+0120 13              138     RRC A 
+0121 9290            139     MOV P1.0H,C 
+0123 7B17            140     MOV R3,#23 
+0125 DBFE            141     DJNZ R3,$ 
+0127 D290            142     SETB P1.0H 
+0129 00              143     NOP 
+012A DAEE            144     DJNZ R2,WR1 
+012C D290            145     SETB P1.0H 
+012E 22              146     RET
+                     147     ;=======================================
+012F                 148     READ_18200: 
+012F 7C02            149     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+0131 7931            150     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+0133                 151     RE00: 
+0133 7A08            152     MOV R2,#8 
+0135                 153     RE01: 
+0135 C3              154     CLR C 
+0136 D290            155     SETB P1.0H 
+0138 00              156     NOP 
+0139 00              157     NOP 
+013A C290            158     CLR P1.0H 
+013C 00              159     NOP 
+013D 00              160     NOP 
+013E 00              161     NOP 
+013F D290            162     SETB P1.0H 
+0141 7B07            163     MOV R3,#7 
+0143 DBFE            164     DJNZ R3,$ 
+0145 A290            165     MOV C,P1.0H 
+0147 7B17            166     MOV R3,#23 
+0149 DBFE            167     DJNZ R3,$ 
+014B 13              168     RRC A 
+014C DAE7            169     DJNZ R2,RE01 
+014E F7              170     MOV @R1,A 
+014F 19              171     DEC R1 
+0150 DCE1            172     DJNZ R4,RE00 
+0152 22              173     RET 
+                     174     ;=======================================
+0153                 175     INIT_1820: 
+0153 D290            176     SETB P1.0H 
+0155 00              177     NOP 
+0156 C290            178     CLR P1.0H 
+0158 78FA            179     MOV R0,#250
+015A                 180     TSR1: 
+015A D8FE            181     DJNZ R0,TSR1 ; 延时520us 
+015C D290            182     SETB P1.0H 
+015E 7825            183     MOV R0,#25H ;96US-25H 
+0160                 184     TSR2: 
+0160 D8FE            185     DJNZ R0,TSR2 
+0162 309003          186     JNB P1.0H,TSR3;如D0为低则复位成功，DS18B20存在 
+0165 02016D          187     LJMP TSR4 ; 延时 
+0168                 188     TSR3: 
+0168 D200            189     SETB 00H ; 置标志位,表示DS1820存在 
+016A 020172          190     LJMP TSR5 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     4
+
+016D                 191     TSR4: 
+016D C200            192     CLR 00H ; 清标志位,表示DS1820不存在 
+016F 020176          193     LJMP TSR7 
+0172                 194     TSR5: 
+0172 786B            195     MOV R0,#06BH ;200US 
+0174                 196     TSR6: 
+0174 D8FE            197     DJNZ R0,TSR6 ; 延时 
+0176                 198     TSR7: 
+0176 D290            199     SETB P1.0H ;拉高总线
+0178 22              200     RET
+                     201     ;=============================== 
+0179                 202     GET_TEMPER2: 
+0179 D291            203               SETB      P1.1H ; 定时入口 
+017B 120207          204     BCD2:      LCALL     INIT_18202 
+017E 200003          205               JB        00H,S222 
+0181 02017B          206               LJMP      BCD2 ; 若DS18B20不存在则返回 
+                     207     
+0184 120665          208     S222:     LCALL     DELAY1 
+0187 74CC            209              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+0189 1201CB          210              LCALL     WRITE_18202 
+018C 7444            211     MOV A,#44H ; 发出温度转换命令 
+018E 1201CB          212     LCALL WRITE_18202 
+0191 00              213     NOP 
+0192 120665          214     LCALL DELAY1 
+0195 120207          215     CBA2:LCALL INIT_18202 
+0198 200003          216     JB 00H,ABC2 
+019B 020195          217     LJMP CBA2 
+019E 120665          218     ABC2:LCALL DELAY1 
+01A1 74CC            219     MOV A,#0CCH ; 跳过ROM匹配 
+01A3 1201CB          220     LCALL WRITE_18202 
+01A6 74BE            221     MOV A,#0BEH ; 发出读温度命令 
+01A8 1201CB          222     LCALL WRITE_18202 
+01AB 1201E3          223     LCALL READ_182002 ;READ_1820 
+01AE 22              224     RET 
+                     225     ;==============================
+01AF                 226     READ_18202: 
+01AF 7A08            227     MOV R2,#8 
+01B1                 228     RE12: 
+01B1 C3              229     CLR C 
+01B2 D291            230     SETB P1.1H 
+01B4 00              231     NOP 
+01B5 00              232     NOP 
+01B6 C291            233     CLR P1.1H 
+01B8 00              234     NOP 
+01B9 00              235     NOP 
+01BA 00              236     NOP 
+01BB D291            237     SETB P1.1H 
+01BD 7B07            238     MOV R3,#7 
+01BF DBFE            239     DJNZ R3,$ 
+01C1 A291            240     MOV C,P1.1H 
+01C3 7B17            241     MOV R3,#23 
+01C5 DBFE            242     DJNZ R3,$ 
+01C7 13              243     RRC A 
+01C8 DAE7            244     DJNZ R2,RE12 
+01CA 22              245     RET 
+                     246     ;=============================
+01CB                 247     WRITE_18202: 
+01CB 7A08            248     MOV R2,#8 
+01CD C3              249     CLR C 
+01CE                 250     WR12: 
+01CE C291            251     CLR P1.1H 
+01D0 7B06            252     MOV R3,#6 
+01D2 DBFE            253     DJNZ R3,$ 
+01D4 13              254     RRC A 
+01D5 9291            255     MOV P1.1H,C 
+01D7 7B17            256     MOV R3,#23 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     5
+
+01D9 DBFE            257     DJNZ R3,$ 
+01DB D291            258     SETB P1.1H 
+01DD 00              259     NOP 
+01DE DAEE            260     DJNZ R2,WR12 
+01E0 D291            261     SETB P1.1H 
+01E2 22              262     RET
+                     263     ;=======================================
+01E3                 264     READ_182002: 
+01E3 7C02            265     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+01E5 7931            266     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+01E7                 267     RE002: 
+01E7 7A08            268     MOV R2,#8 
+01E9                 269     RE012: 
+01E9 C3              270     CLR C 
+01EA D291            271     SETB P1.1H 
+01EC 00              272     NOP 
+01ED 00              273     NOP 
+01EE C291            274     CLR P1.1H 
+01F0 00              275     NOP 
+01F1 00              276     NOP 
+01F2 00              277     NOP 
+01F3 D291            278     SETB P1.1H 
+01F5 7B07            279     MOV R3,#7 
+01F7 DBFE            280     DJNZ R3,$ 
+01F9 A291            281     MOV C,P1.1H 
+01FB 7B17            282     MOV R3,#23 
+01FD DBFE            283     DJNZ R3,$ 
+01FF 13              284     RRC A 
+0200 DAE7            285     DJNZ R2,RE012 
+0202 F7              286     MOV @R1,A 
+0203 19              287     DEC R1 
+0204 DCE1            288     DJNZ R4,RE002 
+0206 22              289     RET 
+                     290     ;=======================================
+0207                 291     INIT_18202: 
+0207 D291            292     SETB P1.1H 
+0209 00              293     NOP 
+020A C291            294     CLR P1.1H 
+020C 78FA            295     MOV R0,#250
+020E                 296     TSR12: 
+020E D8FE            297     DJNZ R0,TSR12 ; 延时520us 
+0210 D291            298     SETB P1.1H 
+0212 7825            299     MOV R0,#25H ;96US-25H 
+0214                 300     TSR22: 
+0214 D8FE            301     DJNZ R0,TSR22 
+0216 309103          302     JNB P1.1H,TSR32;如D0为低则复位成功，DS18B20存在 
+0219 020221          303     LJMP TSR42 ; 延时 
+021C                 304     TSR32: 
+021C D200            305     SETB 00H ; 置标志位,表示DS1820存在 
+021E 020226          306     LJMP TSR52 
+0221                 307     TSR42: 
+0221 C200            308     CLR 00H ; 清标志位,表示DS1820不存在 
+0223 02022A          309     LJMP TSR72 
+0226                 310     TSR52: 
+0226 786B            311     MOV R0,#06BH ;200US 
+0228                 312     TSR62: 
+0228 D8FE            313     DJNZ R0,TSR62 ; 延时 
+022A                 314     TSR72: 
+022A D291            315     SETB P1.1H ;拉高总线
+022C 22              316     RET
+                     317     ;=============================== 
+022D                 318     GET_TEMPER3: 
+022D D292            319               SETB      P1.2H ; 定时入口 
+022F 1202BB          320     BCD3:      LCALL     INIT_18203 
+0232 200003          321               JB        00H,S223 
+0235 02022F          322               LJMP      BCD3 ; 若DS18B20不存在则返回 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     6
+
+                     323     
+0238 120665          324     S223:     LCALL     DELAY1 
+023B 74CC            325              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+023D 12027F          326              LCALL     WRITE_18203
+0240 7444            327     MOV A,#44H ; 发出温度转换命令 
+0242 12027F          328     LCALL WRITE_18203
+0245 00              329     NOP 
+0246 120665          330     LCALL DELAY1 
+0249 1202BB          331     CBA3:LCALL INIT_18203
+024C 200003          332     JB 00H,ABC3 
+024F 020249          333     LJMP CBA3
+0252 120665          334     ABC3:LCALL DELAY1 
+0255 74CC            335     MOV A,#0CCH ; 跳过ROM匹配 
+0257 12027F          336     LCALL WRITE_18203
+025A 74BE            337     MOV A,#0BEH ; 发出读温度命令 
+025C 12027F          338     LCALL WRITE_18203
+025F 120297          339     LCALL READ_182003 ;READ_1820 
+0262 22              340     RET 
+                     341     ;==============================
+0263                 342     READ_18203: 
+0263 7A08            343     MOV R2,#8 
+0265                 344     RE13: 
+0265 C3              345     CLR C 
+0266 D292            346     SETB P1.2H 
+0268 00              347     NOP 
+0269 00              348     NOP 
+026A C292            349     CLR P1.2H 
+026C 00              350     NOP 
+026D 00              351     NOP 
+026E 00              352     NOP 
+026F D292            353     SETB P1.2H 
+0271 7B07            354     MOV R3,#7 
+0273 DBFE            355     DJNZ R3,$ 
+0275 A292            356     MOV C,P1.2H 
+0277 7B17            357     MOV R3,#23 
+0279 DBFE            358     DJNZ R3,$ 
+027B 13              359     RRC A 
+027C DAE7            360     DJNZ R2,RE13
+027E 22              361     RET 
+                     362     ;=============================
+027F                 363     WRITE_18203: 
+027F 7A08            364     MOV R2,#8 
+0281 C3              365     CLR C 
+0282                 366     WR13: 
+0282 C292            367     CLR P1.2H 
+0284 7B06            368     MOV R3,#6 
+0286 DBFE            369     DJNZ R3,$ 
+0288 13              370     RRC A 
+0289 9292            371     MOV P1.2H,C 
+028B 7B17            372     MOV R3,#23 
+028D DBFE            373     DJNZ R3,$ 
+028F D292            374     SETB P1.2H 
+0291 00              375     NOP 
+0292 DAEE            376     DJNZ R2,WR13
+0294 D292            377     SETB P1.2H 
+0296 22              378     RET
+                     379     ;=======================================
+0297                 380     READ_182003: 
+0297 7C02            381     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+0299 7931            382     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+029B                 383     RE003: 
+029B 7A08            384     MOV R2,#8 
+029D                 385     RE013: 
+029D C3              386     CLR C 
+029E D292            387     SETB P1.2H 
+02A0 00              388     NOP 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     7
+
+02A1 00              389     NOP 
+02A2 C292            390     CLR P1.2H 
+02A4 00              391     NOP 
+02A5 00              392     NOP 
+02A6 00              393     NOP 
+02A7 D292            394     SETB P1.2H 
+02A9 7B07            395     MOV R3,#7 
+02AB DBFE            396     DJNZ R3,$ 
+02AD A292            397     MOV C,P1.2H 
+02AF 7B17            398     MOV R3,#23 
+02B1 DBFE            399     DJNZ R3,$ 
+02B3 13              400     RRC A 
+02B4 DAE7            401     DJNZ R2,RE013
+02B6 F7              402     MOV @R1,A 
+02B7 19              403     DEC R1 
+02B8 DCE1            404     DJNZ R4,RE003 
+02BA 22              405     RET 
+                     406     ;=======================================
+02BB                 407     INIT_18203: 
+02BB D292            408     SETB P1.2H 
+02BD 00              409     NOP 
+02BE C292            410     CLR P1.2H 
+02C0 78FA            411     MOV R0,#250
+02C2                 412     TSR13: 
+02C2 D8FE            413     DJNZ R0,TSR13 ; 延时520us 
+02C4 D292            414     SETB P1.2H 
+02C6 7825            415     MOV R0,#25H ;96US-25H 
+02C8                 416     TSR23: 
+02C8 D8FE            417     DJNZ R0,TSR23 
+02CA 309203          418     JNB P1.2H,TSR33;如D0为低则复位成功，DS18B20存在 
+02CD 0202D5          419     LJMP TSR43 ; 延时 
+02D0                 420     TSR33: 
+02D0 D200            421     SETB 00H ; 置标志位,表示DS1820存在 
+02D2 0202DA          422     LJMP TSR53 
+02D5                 423     TSR43: 
+02D5 C200            424     CLR 00H ; 清标志位,表示DS1820不存在 
+02D7 0202DE          425     LJMP TSR73
+02DA                 426     TSR53: 
+02DA 786B            427     MOV R0,#06BH ;200US 
+02DC                 428     TSR63: 
+02DC D8FE            429     DJNZ R0,TSR63 ; 延时 
+02DE                 430     TSR73: 
+02DE D292            431     SETB P1.2H ;拉高总线
+02E0 22              432     RET
+                     433     ;=============================== 
+02E1                 434     GET_TEMPER4: 
+02E1 D293            435               SETB      P1.3H ; 定时入口 
+02E3 12036F          436     BCD4:      LCALL     INIT_18204
+02E6 200003          437               JB        00H,S224 
+02E9 0202E3          438               LJMP      BCD4 ; 若DS18B20不存在则返回 
+                     439     
+02EC 120665          440     S224:     LCALL     DELAY1 
+02EF 74CC            441              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+02F1 120333          442              LCALL     WRITE_18204
+02F4 7444            443     MOV A,#44H ; 发出温度转换命令 
+02F6 120333          444     LCALL WRITE_18204
+02F9 00              445     NOP 
+02FA 120665          446     LCALL DELAY1 
+02FD 12036F          447     CBA4:LCALL INIT_18204
+0300 200003          448     JB 00H,ABC4
+0303 0202FD          449     LJMP CBA4
+0306 120665          450     ABC4:LCALL DELAY1 
+0309 74CC            451     MOV A,#0CCH ; 跳过ROM匹配 
+030B 120333          452     LCALL WRITE_18204
+030E 74BE            453     MOV A,#0BEH ; 发出读温度命令 
+0310 120333          454     LCALL WRITE_18204
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     8
+
+0313 12034B          455     LCALL READ_182004 ;READ_1820 
+0316 22              456     RET 
+                     457     ;==============================
+0317                 458     READ_18204: 
+0317 7A08            459     MOV R2,#8 
+0319                 460     RE14: 
+0319 C3              461     CLR C 
+031A D293            462     SETB P1.3H 
+031C 00              463     NOP 
+031D 00              464     NOP 
+031E C293            465     CLR P1.3H 
+0320 00              466     NOP 
+0321 00              467     NOP 
+0322 00              468     NOP 
+0323 D293            469     SETB P1.3H 
+0325 7B07            470     MOV R3,#7 
+0327 DBFE            471     DJNZ R3,$ 
+0329 A293            472     MOV C,P1.3H 
+032B 7B17            473     MOV R3,#23 
+032D DBFE            474     DJNZ R3,$ 
+032F 13              475     RRC A 
+0330 DAE7            476     DJNZ R2,RE14
+0332 22              477     RET 
+                     478     ;=============================
+0333                 479     WRITE_18204: 
+0333 7A08            480     MOV R2,#8 
+0335 C3              481     CLR C 
+0336                 482     WR14: 
+0336 C293            483     CLR P1.3H 
+0338 7B06            484     MOV R3,#6 
+033A DBFE            485     DJNZ R3,$ 
+033C 13              486     RRC A 
+033D 9293            487     MOV P1.3H,C 
+033F 7B17            488     MOV R3,#23 
+0341 DBFE            489     DJNZ R3,$ 
+0343 D293            490     SETB P1.3H 
+0345 00              491     NOP 
+0346 DAEE            492     DJNZ R2,WR14
+0348 D293            493     SETB P1.3H 
+034A 22              494     RET
+                     495     ;=======================================
+034B                 496     READ_182004: 
+034B 7C02            497     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+034D 7931            498     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+034F                 499     RE004: 
+034F 7A08            500     MOV R2,#8 
+0351                 501     RE014: 
+0351 C3              502     CLR C 
+0352 D293            503     SETB P1.3H 
+0354 00              504     NOP 
+0355 00              505     NOP 
+0356 C293            506     CLR P1.3H 
+0358 00              507     NOP 
+0359 00              508     NOP 
+035A 00              509     NOP 
+035B D293            510     SETB P1.3H 
+035D 7B07            511     MOV R3,#7 
+035F DBFE            512     DJNZ R3,$ 
+0361 A293            513     MOV C,P1.3H 
+0363 7B17            514     MOV R3,#23 
+0365 DBFE            515     DJNZ R3,$ 
+0367 13              516     RRC A 
+0368 DAE7            517     DJNZ R2,RE014
+036A F7              518     MOV @R1,A 
+036B 19              519     DEC R1 
+036C DCE1            520     DJNZ R4,RE004
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE     9
+
+036E 22              521     RET 
+                     522     ;=======================================
+036F                 523     INIT_18204: 
+036F D293            524     SETB P1.3H 
+0371 00              525     NOP 
+0372 C293            526     CLR P1.3H 
+0374 78FA            527     MOV R0,#250
+0376                 528     TSR14: 
+0376 D8FE            529     DJNZ R0,TSR14 ; 延时520us 
+0378 D293            530     SETB P1.3H 
+037A 7825            531     MOV R0,#25H ;96US-25H 
+037C                 532     TSR24: 
+037C D8FE            533     DJNZ R0,TSR24
+037E 309303          534     JNB P1.3H,TSR34;如D0为低则复位成功，DS18B20存在 
+0381 020389          535     LJMP TSR44 ; 延时 
+0384                 536     TSR34: 
+0384 D200            537     SETB 00H ; 置标志位,表示DS1820存在 
+0386 02038E          538     LJMP TSR54 
+0389                 539     TSR44: 
+0389 C200            540     CLR 00H ; 清标志位,表示DS1820不存在 
+038B 020392          541     LJMP TSR74
+038E                 542     TSR54: 
+038E 786B            543     MOV R0,#06BH ;200US 
+0390                 544     TSR64: 
+0390 D8FE            545     DJNZ R0,TSR64 ; 延时 
+0392                 546     TSR74: 
+0392 D293            547     SETB P1.3H ;拉高总线
+0394 22              548     RET
+                     549     ;=============================== 
+0395                 550     GET_TEMPER5: 
+0395 D294            551               SETB      P1.4H ; 定时入口 
+0397 120423          552     BCD5:      LCALL     INIT_18205
+039A 200003          553               JB        00H,S225
+039D 020397          554               LJMP      BCD5 ; 若DS18B20不存在则返回 
+                     555     
+03A0 120665          556     S225:     LCALL     DELAY1 
+03A3 74CC            557              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+03A5 1203E7          558              LCALL     WRITE_18205
+03A8 7444            559     MOV A,#44H ; 发出温度转换命令 
+03AA 1203E7          560     LCALL WRITE_18205
+03AD 00              561     NOP 
+03AE 120665          562     LCALL DELAY1 
+03B1 120423          563     CBA5:LCALL INIT_18205
+03B4 200003          564     JB 00H,ABC5
+03B7 0203B1          565     LJMP CBA5
+03BA 120665          566     ABC5:LCALL DELAY1 
+03BD 74CC            567     MOV A,#0CCH ; 跳过ROM匹配 
+03BF 1203E7          568     LCALL WRITE_18205
+03C2 74BE            569     MOV A,#0BEH ; 发出读温度命令 
+03C4 1203E7          570     LCALL WRITE_18205
+03C7 1203FF          571     LCALL READ_182005 ;READ_1820 
+03CA 22              572     RET 
+                     573     ;==============================
+03CB                 574     READ_18205: 
+03CB 7A08            575     MOV R2,#8 
+03CD                 576     RE15: 
+03CD C3              577     CLR C 
+03CE D294            578     SETB P1.4H 
+03D0 00              579     NOP 
+03D1 00              580     NOP 
+03D2 C294            581     CLR P1.4H 
+03D4 00              582     NOP 
+03D5 00              583     NOP 
+03D6 00              584     NOP 
+03D7 D294            585     SETB P1.4H 
+03D9 7B07            586     MOV R3,#7 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    10
+
+03DB DBFE            587     DJNZ R3,$ 
+03DD A294            588     MOV C,P1.4H 
+03DF 7B17            589     MOV R3,#23 
+03E1 DBFE            590     DJNZ R3,$ 
+03E3 13              591     RRC A 
+03E4 DAE7            592     DJNZ R2,RE15
+03E6 22              593     RET 
+                     594     ;=============================
+03E7                 595     WRITE_18205: 
+03E7 7A08            596     MOV R2,#8 
+03E9 C3              597     CLR C 
+03EA                 598     WR15: 
+03EA C294            599     CLR P1.4H 
+03EC 7B06            600     MOV R3,#6 
+03EE DBFE            601     DJNZ R3,$ 
+03F0 13              602     RRC A 
+03F1 9294            603     MOV P1.4H,C 
+03F3 7B17            604     MOV R3,#23 
+03F5 DBFE            605     DJNZ R3,$ 
+03F7 D294            606     SETB P1.4H 
+03F9 00              607     NOP 
+03FA DAEE            608     DJNZ R2,WR15
+03FC D294            609     SETB P1.4H 
+03FE 22              610     RET
+                     611     ;=======================================
+03FF                 612     READ_182005: 
+03FF 7C02            613     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+0401 7931            614     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+0403                 615     RE005: 
+0403 7A08            616     MOV R2,#8 
+0405                 617     RE015: 
+0405 C3              618     CLR C 
+0406 D294            619     SETB P1.4H 
+0408 00              620     NOP 
+0409 00              621     NOP 
+040A C294            622     CLR P1.4H 
+040C 00              623     NOP 
+040D 00              624     NOP 
+040E 00              625     NOP 
+040F D294            626     SETB P1.4H 
+0411 7B07            627     MOV R3,#7 
+0413 DBFE            628     DJNZ R3,$ 
+0415 A294            629     MOV C,P1.4H 
+0417 7B17            630     MOV R3,#23 
+0419 DBFE            631     DJNZ R3,$ 
+041B 13              632     RRC A 
+041C DAE7            633     DJNZ R2,RE015
+041E F7              634     MOV @R1,A 
+041F 19              635     DEC R1 
+0420 DCE1            636     DJNZ R4,RE005
+0422 22              637     RET 
+                     638     ;=======================================
+0423                 639     INIT_18205: 
+0423 D294            640     SETB P1.4H 
+0425 00              641     NOP 
+0426 C294            642     CLR P1.4H 
+0428 78FA            643     MOV R0,#250
+042A                 644     TSR15: 
+042A D8FE            645     DJNZ R0,TSR15 ; 延时520us 
+042C D294            646     SETB P1.4H 
+042E 7825            647     MOV R0,#25H ;96US-25H 
+0430                 648     TSR25: 
+0430 D8FE            649     DJNZ R0,TSR25
+0432 309403          650     JNB P1.4H,TSR35;如D0为低则复位成功，DS18B20存在 
+0435 02043D          651     LJMP TSR45 ; 延时 
+0438                 652     TSR35: 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    11
+
+0438 D200            653     SETB 00H ; 置标志位,表示DS1820存在 
+043A 020442          654     LJMP TSR55 
+043D                 655     TSR45: 
+043D C200            656     CLR 00H ; 清标志位,表示DS1820不存在 
+043F 020446          657     LJMP TSR75
+0442                 658     TSR55: 
+0442 786B            659     MOV R0,#06BH ;200US 
+0444                 660     TSR65: 
+0444 D8FE            661     DJNZ R0,TSR65 ; 延时 
+0446                 662     TSR75: 
+0446 D294            663     SETB P1.4H ;拉高总线
+0448 22              664     RET
+                     665     ;=============================== 
+0449                 666     GET_TEMPER6: 
+0449 D295            667               SETB      P1.5H ; 定时入口 
+044B 1204D7          668     BCD6:      LCALL     INIT_18206
+044E 200003          669               JB        00H,S226
+0451 02044B          670               LJMP      BCD6; 若DS18B20不存在则返回 
+                     671     
+0454 120665          672     S226:     LCALL     DELAY1 
+0457 74CC            673              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+0459 12049B          674              LCALL     WRITE_18206
+045C 7444            675     MOV A,#44H ; 发出温度转换命令 
+045E 12049B          676     LCALL WRITE_18206
+0461 00              677     NOP 
+0462 120665          678     LCALL DELAY1 
+0465 1204D7          679     CBA6:LCALL INIT_18206
+0468 200003          680     JB 00H,ABC6
+046B 020465          681     LJMP CBA6
+046E 120665          682     ABC6:LCALL DELAY1 
+0471 74CC            683     MOV A,#0CCH ; 跳过ROM匹配 
+0473 12049B          684     LCALL WRITE_18206
+0476 74BE            685     MOV A,#0BEH ; 发出读温度命令 
+0478 12049B          686     LCALL WRITE_18206
+047B 1204B3          687     LCALL READ_182006 ;READ_1820 
+047E 22              688     RET 
+                     689     ;==============================
+047F                 690     READ_18206: 
+047F 7A08            691     MOV R2,#8 
+0481                 692     RE16: 
+0481 C3              693     CLR C 
+0482 D295            694     SETB P1.5H 
+0484 00              695     NOP 
+0485 00              696     NOP 
+0486 C295            697     CLR P1.5H 
+0488 00              698     NOP 
+0489 00              699     NOP 
+048A 00              700     NOP 
+048B D295            701     SETB P1.5H 
+048D 7B07            702     MOV R3,#7 
+048F DBFE            703     DJNZ R3,$ 
+0491 A295            704     MOV C,P1.5H 
+0493 7B17            705     MOV R3,#23 
+0495 DBFE            706     DJNZ R3,$ 
+0497 13              707     RRC A 
+0498 DAE7            708     DJNZ R2,RE16
+049A 22              709     RET 
+                     710     ;=============================
+049B                 711     WRITE_18206: 
+049B 7A08            712     MOV R2,#8 
+049D C3              713     CLR C 
+049E                 714     WR16: 
+049E C295            715     CLR P1.5H 
+04A0 7B06            716     MOV R3,#6 
+04A2 DBFE            717     DJNZ R3,$ 
+04A4 13              718     RRC A 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    12
+
+04A5 9295            719     MOV P1.5H,C 
+04A7 7B17            720     MOV R3,#23 
+04A9 DBFE            721     DJNZ R3,$ 
+04AB D295            722     SETB P1.5H 
+04AD 00              723     NOP 
+04AE DAEE            724     DJNZ R2,WR16
+04B0 D295            725     SETB P1.5H 
+04B2 22              726     RET
+                     727     ;=======================================
+04B3                 728     READ_182006: 
+04B3 7C02            729     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+04B5 7931            730     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+04B7                 731     RE006: 
+04B7 7A08            732     MOV R2,#8 
+04B9                 733     RE016: 
+04B9 C3              734     CLR C 
+04BA D295            735     SETB P1.5H 
+04BC 00              736     NOP 
+04BD 00              737     NOP 
+04BE C295            738     CLR P1.5H 
+04C0 00              739     NOP 
+04C1 00              740     NOP 
+04C2 00              741     NOP 
+04C3 D295            742     SETB P1.5H 
+04C5 7B07            743     MOV R3,#7 
+04C7 DBFE            744     DJNZ R3,$ 
+04C9 A295            745     MOV C,P1.5H 
+04CB 7B17            746     MOV R3,#23 
+04CD DBFE            747     DJNZ R3,$ 
+04CF 13              748     RRC A 
+04D0 DAE7            749     DJNZ R2,RE016
+04D2 F7              750     MOV @R1,A 
+04D3 19              751     DEC R1 
+04D4 DCE1            752     DJNZ R4,RE006
+04D6 22              753     RET 
+                     754     ;=======================================
+04D7                 755     INIT_18206: 
+04D7 D295            756     SETB P1.5H 
+04D9 00              757     NOP 
+04DA C295            758     CLR P1.5H 
+04DC 78FA            759     MOV R0,#250
+04DE                 760     TSR16: 
+04DE D8FE            761     DJNZ R0,TSR16 ; 延时520us 
+04E0 D295            762     SETB P1.5H 
+04E2 7825            763     MOV R0,#25H ;96US-25H 
+04E4                 764     TSR26: 
+04E4 D8FE            765     DJNZ R0,TSR26
+04E6 309503          766     JNB P1.5H,TSR36;如D0为低则复位成功，DS18B20存在 
+04E9 0204F1          767     LJMP TSR46 ; 延时 
+04EC                 768     TSR36: 
+04EC D200            769     SETB 00H ; 置标志位,表示DS1820存在 
+04EE 0204F6          770     LJMP TSR56 
+04F1                 771     TSR46: 
+04F1 C200            772     CLR 00H ; 清标志位,表示DS1820不存在 
+04F3 0204FA          773     LJMP TSR76
+04F6                 774     TSR56: 
+04F6 786B            775     MOV R0,#06BH ;200US 
+04F8                 776     TSR66: 
+04F8 D8FE            777     DJNZ R0,TSR66 ; 延时 
+04FA                 778     TSR76: 
+04FA D295            779     SETB P1.5H ;拉高总线
+04FC 22              780     RET
+                     781     ;=============================== 
+04FD                 782     GET_TEMPER7: 
+04FD D296            783               SETB      P1.6H ; 定时入口 
+04FF 12058B          784     BCD7:      LCALL     INIT_18207
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    13
+
+0502 200003          785               JB        00H,S227
+0505 0204FF          786               LJMP      BCD7; 若DS18B20不存在则返回 
+                     787     
+0508 120665          788     S227:     LCALL     DELAY1 
+050B 74CC            789              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+050D 12054F          790              LCALL     WRITE_18207
+0510 7444            791     MOV A,#44H ; 发出温度转换命令 
+0512 12054F          792     LCALL WRITE_18207
+0515 00              793     NOP 
+0516 120665          794     LCALL DELAY1 
+0519 12058B          795     CBA7:LCALL INIT_18207
+051C 200003          796     JB 00H,ABC7
+051F 020519          797     LJMP CBA7
+0522 120665          798     ABC7:LCALL DELAY1 
+0525 74CC            799     MOV A,#0CCH ; 跳过ROM匹配 
+0527 12054F          800     LCALL WRITE_18207
+052A 74BE            801     MOV A,#0BEH ; 发出读温度命令 
+052C 12054F          802     LCALL WRITE_18207
+052F 120567          803     LCALL READ_182007 ;READ_1820 
+0532 22              804     RET 
+                     805     ;==============================
+0533                 806     READ_18207: 
+0533 7A08            807     MOV R2,#8 
+0535                 808     RE17: 
+0535 C3              809     CLR C 
+0536 D296            810     SETB P1.6H 
+0538 00              811     NOP 
+0539 00              812     NOP 
+053A C296            813     CLR P1.6H 
+053C 00              814     NOP 
+053D 00              815     NOP 
+053E 00              816     NOP 
+053F D296            817     SETB P1.6H 
+0541 7B07            818     MOV R3,#7 
+0543 DBFE            819     DJNZ R3,$ 
+0545 A296            820     MOV C,P1.6H 
+0547 7B17            821     MOV R3,#23 
+0549 DBFE            822     DJNZ R3,$ 
+054B 13              823     RRC A 
+054C DAE7            824     DJNZ R2,RE17
+054E 22              825     RET 
+                     826     ;=============================
+054F                 827     WRITE_18207: 
+054F 7A08            828     MOV R2,#8 
+0551 C3              829     CLR C 
+0552                 830     WR17: 
+0552 C296            831     CLR P1.6H 
+0554 7B06            832     MOV R3,#6 
+0556 DBFE            833     DJNZ R3,$ 
+0558 13              834     RRC A 
+0559 9296            835     MOV P1.6H,C 
+055B 7B17            836     MOV R3,#23 
+055D DBFE            837     DJNZ R3,$ 
+055F D296            838     SETB P1.6H 
+0561 00              839     NOP 
+0562 DAEE            840     DJNZ R2,WR17
+0564 D296            841     SETB P1.6H 
+0566 22              842     RET
+                     843     ;=======================================
+0567                 844     READ_182007: 
+0567 7C02            845     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+0569 7931            846     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+056B                 847     RE007: 
+056B 7A08            848     MOV R2,#8 
+056D                 849     RE017: 
+056D C3              850     CLR C 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    14
+
+056E D296            851     SETB P1.6H 
+0570 00              852     NOP 
+0571 00              853     NOP 
+0572 C296            854     CLR P1.6H 
+0574 00              855     NOP 
+0575 00              856     NOP 
+0576 00              857     NOP 
+0577 D296            858     SETB P1.6H 
+0579 7B07            859     MOV R3,#7 
+057B DBFE            860     DJNZ R3,$ 
+057D A296            861     MOV C,P1.6H 
+057F 7B17            862     MOV R3,#23 
+0581 DBFE            863     DJNZ R3,$ 
+0583 13              864     RRC A 
+0584 DAE7            865     DJNZ R2,RE017
+0586 F7              866     MOV @R1,A 
+0587 19              867     DEC R1 
+0588 DCE1            868     DJNZ R4,RE007
+058A 22              869     RET 
+                     870     ;=======================================
+058B                 871     INIT_18207: 
+058B D296            872     SETB P1.6H 
+058D 00              873     NOP 
+058E C296            874     CLR P1.6H 
+0590 78FA            875     MOV R0,#250
+0592                 876     TSR17: 
+0592 D8FE            877     DJNZ R0,TSR17 ; 延时520us 
+0594 D296            878     SETB P1.6H 
+0596 7825            879     MOV R0,#25H ;96US-25H 
+0598                 880     TSR27: 
+0598 D8FE            881     DJNZ R0,TSR27
+059A 309603          882     JNB P1.6H,TSR37;如D0为低则复位成功，DS18B20存在 
+059D 0205A5          883     LJMP TSR47; 延时 
+05A0                 884     TSR37: 
+05A0 D200            885     SETB 00H ; 置标志位,表示DS1820存在 
+05A2 0205AA          886     LJMP TSR57 
+05A5                 887     TSR47: 
+05A5 C200            888     CLR 00H ; 清标志位,表示DS1820不存在 
+05A7 0205AE          889     LJMP TSR77
+05AA                 890     TSR57: 
+05AA 786B            891     MOV R0,#06BH ;200US 
+05AC                 892     TSR67: 
+05AC D8FE            893     DJNZ R0,TSR67; 延时 
+05AE                 894     TSR77: 
+05AE D296            895     SETB P1.6H ;拉高总线
+05B0 22              896     RET
+                     897     ;=============================== 
+05B1                 898     GET_TEMPER8: 
+05B1 D297            899               SETB      P1.7H ; 定时入口 
+05B3 12063F          900     BCD8:      LCALL     INIT_18208
+05B6 200003          901               JB        00H,S228
+05B9 0205B3          902               LJMP      BCD8; 若DS18B20不存在则返回 
+                     903     
+05BC 120665          904     S228:     LCALL     DELAY1 
+05BF 74CC            905              MOV        A,#0CCH ; 跳过ROM匹配------0CC命令
+05C1 120603          906              LCALL     WRITE_18208
+05C4 7444            907     MOV A,#44H ; 发出温度转换命令 
+05C6 120603          908     LCALL WRITE_18208
+05C9 00              909     NOP 
+05CA 120665          910     LCALL DELAY1 
+05CD 12063F          911     CBA8:LCALL INIT_18208
+05D0 200003          912     JB 00H,ABC8
+05D3 0205CD          913     LJMP CBA8
+05D6 120665          914     ABC8:LCALL DELAY1 
+05D9 74CC            915     MOV A,#0CCH ; 跳过ROM匹配 
+05DB 120603          916     LCALL WRITE_18208
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    15
+
+05DE 74BE            917     MOV A,#0BEH ; 发出读温度命令 
+05E0 120603          918     LCALL WRITE_18208
+05E3 12061B          919     LCALL READ_182008 ;READ_1820 
+05E6 22              920     RET 
+                     921     ;==============================
+05E7                 922     READ_18208: 
+05E7 7A08            923     MOV R2,#8 
+05E9                 924     RE18: 
+05E9 C3              925     CLR C 
+05EA D297            926     SETB P1.7H 
+05EC 00              927     NOP 
+05ED 00              928     NOP 
+05EE C297            929     CLR P1.7H 
+05F0 00              930     NOP 
+05F1 00              931     NOP 
+05F2 00              932     NOP 
+05F3 D297            933     SETB P1.7H 
+05F5 7B07            934     MOV R3,#7 
+05F7 DBFE            935     DJNZ R3,$ 
+05F9 A297            936     MOV C,P1.7H 
+05FB 7B17            937     MOV R3,#23 
+05FD DBFE            938     DJNZ R3,$ 
+05FF 13              939     RRC A 
+0600 DAE7            940     DJNZ R2,RE18
+0602 22              941     RET 
+                     942     ;=============================
+0603                 943     WRITE_18208: 
+0603 7A08            944     MOV R2,#8 
+0605 C3              945     CLR C 
+0606                 946     WR18: 
+0606 C297            947     CLR P1.7H 
+0608 7B06            948     MOV R3,#6 
+060A DBFE            949     DJNZ R3,$ 
+060C 13              950     RRC A 
+060D 9297            951     MOV P1.7H,C 
+060F 7B17            952     MOV R3,#23 
+0611 DBFE            953     DJNZ R3,$ 
+0613 D297            954     SETB P1.7H 
+0615 00              955     NOP 
+0616 DAEE            956     DJNZ R2,WR18
+0618 D297            957     SETB P1.7H 
+061A 22              958     RET
+                     959     ;=======================================
+061B                 960     READ_182008: 
+061B 7C02            961     MOV R4,#2 ; 将温度高位和低位从DS18B20中读出 
+061D 7931            962     MOV R1,#31H ; 低位存入30H(TEMPER_L),高位存入31H(TEMPER_H) 
+061F                 963     RE008: 
+061F 7A08            964     MOV R2,#8 
+0621                 965     RE018: 
+0621 C3              966     CLR C 
+0622 D297            967     SETB P1.7H 
+0624 00              968     NOP 
+0625 00              969     NOP 
+0626 C297            970     CLR P1.7H 
+0628 00              971     NOP 
+0629 00              972     NOP 
+062A 00              973     NOP 
+062B D297            974     SETB P1.7H 
+062D 7B07            975     MOV R3,#7 
+062F DBFE            976     DJNZ R3,$ 
+0631 A297            977     MOV C,P1.7H 
+0633 7B17            978     MOV R3,#23 
+0635 DBFE            979     DJNZ R3,$ 
+0637 13              980     RRC A 
+0638 DAE7            981     DJNZ R2,RE018
+063A F7              982     MOV @R1,A 
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    16
+
+063B 19              983     DEC R1 
+063C DCE1            984     DJNZ R4,RE008
+063E 22              985     RET 
+                     986     ;=======================================
+063F                 987     INIT_18208: 
+063F D297            988     SETB P1.7H 
+0641 00              989     NOP 
+0642 C297            990     CLR P1.7H 
+0644 78FA            991     MOV R0,#250
+0646                 992     TSR18: 
+0646 D8FE            993     DJNZ R0,TSR18 ; 延时520us 
+0648 D297            994     SETB P1.7H 
+064A 7825            995     MOV R0,#25H ;96US-25H 
+064C                 996     TSR28: 
+064C D8FE            997     DJNZ R0,TSR28
+064E 309703          998     JNB P1.7H,TSR38;如D0为低则复位成功，DS18B20存在 
+0651 020659          999     LJMP TSR48; 延时 
+0654                1000     TSR38: 
+0654 D200           1001     SETB 00H ; 置标志位,表示DS1820存在 
+0656 02065E         1002     LJMP TSR58
+0659                1003     TSR48: 
+0659 C200           1004     CLR 00H ; 清标志位,表示DS1820不存在 
+065B 020662         1005     LJMP TSR78
+065E                1006     TSR58: 
+065E 786B           1007     MOV R0,#06BH ;200US 
+0660                1008     TSR68: 
+0660 D8FE           1009     DJNZ R0,TSR68; 延时 
+0662                1010     TSR78: 
+0662 D297           1011     SETB P1.7H ;拉高总线
+0664 22             1012     RET
+                    1013     ;=============================== 
+                    1014     ;======================================
+0665 7F20           1015     DELAY1:MOV R7,#20H 
+0667 DFFE           1016     DJNZ R7,$ 
+0669 22             1017     RET
+                    1018     
+                    1019     ;====================================
+066A 753300         1020     TEMPRRO:MOV 33H,#00H;初始化0
+066D E530           1021     MOV A,30H
+066F 540F           1022     ANL A,#0FH
+0671 C4             1023     SWAP A
+0672 F533           1024     MOV 33H,A
+0674 E531           1025     MOV A,31H
+0676 54F0           1026     ANL A,#0F0H
+0678 C4             1027     SWAP A
+0679 4233           1028     ORL 33H,A;重新组合成的带符号数据（整数部分）
+067B E533           1029     MOV A,33H
+067D 5480           1030     ANL A,#80H;判断符号
+                    1031     
+067F 6005           1032     JZ TEMPP
+0681 E533           1033     MOV A,33H
+0683 F4             1034     CPL A
+                    1035     ;ADD A,#01H
+0684 8013           1036     SJMP TEMPP1
+0686 E533           1037     TEMPP:MOV A,33H;正数处理程序
+0688 1206AE         1038           LCALL HBCD
+068B E531           1039           MOV A,31H
+068D 540F           1040           ANL A,#0FH
+068F 9006C0         1041           MOV DPTR,#TEMPTAB;小数查表
+0692 93             1042           MOVC A,@A+DPTR
+0693 F536           1043           MOV 36H,A
+0695 C2B7           1044           CLR P3.7;表示正数
+0697 8014           1045           SJMP EXIT
+0699 1206AE         1046     TEMPP1:LCALL HBCD;负数处理程序
+069C E531           1047            MOV A,31H
+069E 540F           1048            ANL A,#0FH
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    17
+
+06A0 44F0           1049            ORL A,#0F0H
+06A2 F4             1050            CPL A
+06A3 2401           1051            ADD A,#01H
+06A5 9006C0         1052            MOV DPTR,#TEMPTAB
+06A8 93             1053            MOVC A,@A+DPTR;小数查表
+06A9 F536           1054            MOV 36H,A
+06AB D2B7           1055            SETB P3.7;表示负数
+06AD 22             1056     EXIT:RET
+                    1057     
+06AE 75F064         1058     HBCD:   MOV     B,#100  ;分离出百位，存放在R3中
+06B1 84             1059             DIV     AB
+06B2 FB             1060             MOV     R3,A
+06B3 740A           1061             MOV     A,#10   ;余数继续分离十位和个位
+06B5 C5F0           1062             XCH     A,B
+06B7 84             1063             DIV     AB
+06B8 C4             1064             SWAP    A
+06B9 45F0           1065             ORL     A,B     ;将十位和个位拼装成ＢＣＤ码
+06BB 8B34           1066             MOV 34H,R3
+06BD F535           1067             MOV 35H,A
+06BF 22             1068             RET
+06C0 00010102       1069     TEMPTAB:DB 00H,01H,01H,02H,03H,03H,04H,04H
+06C4 03030404                
+06C8 05060607       1070             DB 05H,06H,06H,07H,08H,08H,09H,09H;0~16*0.0652
+06CC 08080909                
+                    1071     ;==================================================
+06D0                1072     CBCD:;MOV R2,#04H;5个待分离的BCD
+06D0 E7             1073     CL:MOV A,@R1     ;分离后将占10个单元
+06D1 F5F0           1074        MOV B,A
+06D3 54F0           1075        ANL A,#0F0H
+06D5 C4             1076        SWAP A
+06D6 F54C           1077        MOV 4CH,A
+06D8 E5F0           1078        MOV A,B
+06DA 540F           1079        ANL A,#0FH
+06DC F54D           1080        MOV 4DH,A
+06DE A64C           1081        MOV @R0,4CH
+06E0 08             1082        INC R0
+06E1 A64D           1083        MOV @R0,4DH
+06E3 08             1084        INC R0
+06E4 09             1085        INC R1
+06E5 DAE9           1086        DJNZ R2,CL
+06E7 22             1087        RET
+                    1088     ;===================================================
+06E8 7838           1089     DISPLAY:MOV R0,#38H;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;显示缓冲区首地址
+06EA 7A04           1090             MOV R2,#04
+06EC E6             1091     DISP_LOOP:MOV A,@R0
+06ED 1206FF         1092               LCALL DISP
+06F0 08             1093               INC R0
+06F1 DAF9           1094               DJNZ R2,DISP_LOOP
+06F3 C282           1095               CLR  P0.2
+06F5 00             1096               NOP
+06F6 00             1097               NOP
+06F7 D282           1098               SETB P0.2      ;上升沿将数据送到输出锁存器
+06F9 00             1099               NOP
+06FA 00             1100               NOP
+06FB 00             1101               NOP
+06FC C282           1102               CLR  P0.2
+06FE 22             1103               RET
+06FF 7C08           1104     DISP:MOV R4,#08H;移位寄存器接收数据
+0701 33             1105     WR_LOOP: RLC A
+0702 9281           1106              MOV P0.1,C
+0704 D280           1107              SETB P0.0        ;上升沿发生移位
+0706 00             1108              NOP
+0707 00             1109              NOP
+0708 C280           1110              CLR P0.0
+070A DCF5           1111              DJNZ R4,WR_LOOP
+070C 22             1112              RET
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    18
+
+                    1113     ;=============================
+070D 7A03           1114     PRO: MOV R2,#03H;N个待分离的BCD
+070F 7837           1115          MOV R0,#37H;分离后BCD首地址
+0711 7934           1116          MOV R1,#34H;待分离BCD首地址
+0713 1206D0         1117          LCALL CBCD;分离压缩的BCD码
+0716 853C3B         1118          MOV 3BH,3CH;小数处理
+                    1119     
+0719 7838           1120          MOV R0,#38H;显示数据首地址
+071B 7938           1121          MOV R1,#38H;显示缓冲区首地址
+071D 7A04           1122          MOV R2,#04;数据个数
+071F E6             1123     RES_LOOP:MOV A,@R0
+0720 120741         1124              LCALL RES
+0723 F7             1125              MOV @R1,A
+0724 08             1126              INC R0
+0725 09             1127              INC R1
+0726 DAF7           1128              DJNZ R2,RES_LOOP  
+0728 433A80         1129           ORL 3AH,#80H;小数点
+072B 1206E8         1130           LCALL DISPLAY
+072E 120750         1131     LCALL DELAYS
+0731 120750         1132     LCALL DELAYS
+0734 120750         1133     LCALL DELAYS
+0737 120750         1134     LCALL DELAYS
+073A 120750         1135     LCALL DELAYS
+073D 120750         1136     LCALL DELAYS
+0740 22             1137     RET
+                    1138     ;==============================
+0741 900746         1139     RES:MOV DPTR,#TAB
+0744 93             1140         MOVC A,@A+DPTR
+0745 22             1141         RET
+0746 3F065B4F       1142     TAB: DB 3FH,06H,5BH,4FH,66H,6DH,7DH,07H,7FH,6FH
+074A 666D7D07                
+074E 7F6F                    
+                    1143     ;======================================
+0750 7DFF           1144     DELAYS:MOV R5,#0FFH
+0752 7CFF           1145     LOOP2:MOV R4,#0FFH
+0754 00             1146     LOOP1:NOP
+0755 00             1147           NOP
+0756 DCFC           1148           DJNZ R4,LOOP1
+0758 DDF8           1149           DJNZ R5,LOOP2
+075A 22             1150           RET
+                    1151                     END
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    19
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ABC. . . . . . . .  C ADDR   00EAH   A   
+ABC2 . . . . . . .  C ADDR   019EH   A   
+ABC3 . . . . . . .  C ADDR   0252H   A   
+ABC4 . . . . . . .  C ADDR   0306H   A   
+ABC5 . . . . . . .  C ADDR   03BAH   A   
+ABC6 . . . . . . .  C ADDR   046EH   A   
+ABC7 . . . . . . .  C ADDR   0522H   A   
+ABC8 . . . . . . .  C ADDR   05D6H   A   
+B. . . . . . . . .  D ADDR   00F0H   A   
+BCD. . . . . . . .  C ADDR   00C7H   A   
+BCD2 . . . . . . .  C ADDR   017BH   A   
+BCD3 . . . . . . .  C ADDR   022FH   A   
+BCD4 . . . . . . .  C ADDR   02E3H   A   
+BCD5 . . . . . . .  C ADDR   0397H   A   
+BCD6 . . . . . . .  C ADDR   044BH   A   
+BCD7 . . . . . . .  C ADDR   04FFH   A   
+BCD8 . . . . . . .  C ADDR   05B3H   A   
+CBA. . . . . . . .  C ADDR   00E1H   A   
+CBA2 . . . . . . .  C ADDR   0195H   A   
+CBA3 . . . . . . .  C ADDR   0249H   A   
+CBA4 . . . . . . .  C ADDR   02FDH   A   
+CBA5 . . . . . . .  C ADDR   03B1H   A   
+CBA6 . . . . . . .  C ADDR   0465H   A   
+CBA7 . . . . . . .  C ADDR   0519H   A   
+CBA8 . . . . . . .  C ADDR   05CDH   A   
+CBCD . . . . . . .  C ADDR   06D0H   A   
+CL . . . . . . . .  C ADDR   06D0H   A   
+DELAY1 . . . . . .  C ADDR   0665H   A   
+DELAYS . . . . . .  C ADDR   0750H   A   
+DISP . . . . . . .  C ADDR   06FFH   A   
+DISPLAY. . . . . .  C ADDR   06E8H   A   
+DISP_LOOP. . . . .  C ADDR   06ECH   A   
+EXIT . . . . . . .  C ADDR   06ADH   A   
+GET_TEMPER . . . .  C ADDR   00C5H   A   
+GET_TEMPER2. . . .  C ADDR   0179H   A   
+GET_TEMPER3. . . .  C ADDR   022DH   A   
+GET_TEMPER4. . . .  C ADDR   02E1H   A   
+GET_TEMPER5. . . .  C ADDR   0395H   A   
+GET_TEMPER6. . . .  C ADDR   0449H   A   
+GET_TEMPER7. . . .  C ADDR   04FDH   A   
+GET_TEMPER8. . . .  C ADDR   05B1H   A   
+HBCD . . . . . . .  C ADDR   06AEH   A   
+INIT_1820. . . . .  C ADDR   0153H   A   
+INIT_18202 . . . .  C ADDR   0207H   A   
+INIT_18203 . . . .  C ADDR   02BBH   A   
+INIT_18204 . . . .  C ADDR   036FH   A   
+INIT_18205 . . . .  C ADDR   0423H   A   
+INIT_18206 . . . .  C ADDR   04D7H   A   
+INIT_18207 . . . .  C ADDR   058BH   A   
+INIT_18208 . . . .  C ADDR   063FH   A   
+LOOP1. . . . . . .  C ADDR   0754H   A   
+LOOP2. . . . . . .  C ADDR   0752H   A   
+MAIN . . . . . . .  C ADDR   0002H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . .  D ADDR   00B0H   A   
+PRO. . . . . . . .  C ADDR   070DH   A   
+RE00 . . . . . . .  C ADDR   0133H   A   
+RE002. . . . . . .  C ADDR   01E7H   A   
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    20
+
+RE003. . . . . . .  C ADDR   029BH   A   
+RE004. . . . . . .  C ADDR   034FH   A   
+RE005. . . . . . .  C ADDR   0403H   A   
+RE006. . . . . . .  C ADDR   04B7H   A   
+RE007. . . . . . .  C ADDR   056BH   A   
+RE008. . . . . . .  C ADDR   061FH   A   
+RE01 . . . . . . .  C ADDR   0135H   A   
+RE012. . . . . . .  C ADDR   01E9H   A   
+RE013. . . . . . .  C ADDR   029DH   A   
+RE014. . . . . . .  C ADDR   0351H   A   
+RE015. . . . . . .  C ADDR   0405H   A   
+RE016. . . . . . .  C ADDR   04B9H   A   
+RE017. . . . . . .  C ADDR   056DH   A   
+RE018. . . . . . .  C ADDR   0621H   A   
+RE1. . . . . . . .  C ADDR   00FDH   A   
+RE12 . . . . . . .  C ADDR   01B1H   A   
+RE13 . . . . . . .  C ADDR   0265H   A   
+RE14 . . . . . . .  C ADDR   0319H   A   
+RE15 . . . . . . .  C ADDR   03CDH   A   
+RE16 . . . . . . .  C ADDR   0481H   A   
+RE17 . . . . . . .  C ADDR   0535H   A   
+RE18 . . . . . . .  C ADDR   05E9H   A   
+READ_1820. . . . .  C ADDR   00FBH   A   
+READ_18200 . . . .  C ADDR   012FH   A   
+READ_182002. . . .  C ADDR   01E3H   A   
+READ_182003. . . .  C ADDR   0297H   A   
+READ_182004. . . .  C ADDR   034BH   A   
+READ_182005. . . .  C ADDR   03FFH   A   
+READ_182006. . . .  C ADDR   04B3H   A   
+READ_182007. . . .  C ADDR   0567H   A   
+READ_182008. . . .  C ADDR   061BH   A   
+READ_18202 . . . .  C ADDR   01AFH   A   
+READ_18203 . . . .  C ADDR   0263H   A   
+READ_18204 . . . .  C ADDR   0317H   A   
+READ_18205 . . . .  C ADDR   03CBH   A   
+READ_18206 . . . .  C ADDR   047FH   A   
+READ_18207 . . . .  C ADDR   0533H   A   
+READ_18208 . . . .  C ADDR   05E7H   A   
+RES. . . . . . . .  C ADDR   0741H   A   
+RES_LOOP . . . . .  C ADDR   071FH   A   
+S22. . . . . . . .  C ADDR   00D0H   A   
+S222 . . . . . . .  C ADDR   0184H   A   
+S223 . . . . . . .  C ADDR   0238H   A   
+S224 . . . . . . .  C ADDR   02ECH   A   
+S225 . . . . . . .  C ADDR   03A0H   A   
+S226 . . . . . . .  C ADDR   0454H   A   
+S227 . . . . . . .  C ADDR   0508H   A   
+S228 . . . . . . .  C ADDR   05BCH   A   
+TAB. . . . . . . .  C ADDR   0746H   A   
+TEMPP. . . . . . .  C ADDR   0686H   A   
+TEMPP1 . . . . . .  C ADDR   0699H   A   
+TEMPRRO. . . . . .  C ADDR   066AH   A   
+TEMPTAB. . . . . .  C ADDR   06C0H   A   
+TSR1 . . . . . . .  C ADDR   015AH   A   
+TSR12. . . . . . .  C ADDR   020EH   A   
+TSR13. . . . . . .  C ADDR   02C2H   A   
+TSR14. . . . . . .  C ADDR   0376H   A   
+TSR15. . . . . . .  C ADDR   042AH   A   
+TSR16. . . . . . .  C ADDR   04DEH   A   
+TSR17. . . . . . .  C ADDR   0592H   A   
+TSR18. . . . . . .  C ADDR   0646H   A   
+TSR2 . . . . . . .  C ADDR   0160H   A   
+TSR22. . . . . . .  C ADDR   0214H   A   
+TSR23. . . . . . .  C ADDR   02C8H   A   
+TSR24. . . . . . .  C ADDR   037CH   A   
+TSR25. . . . . . .  C ADDR   0430H   A   
+A51 MACRO ASSEMBLER  18B20                                                                02/16/2007 16:00:49 PAGE    21
+
+TSR26. . . . . . .  C ADDR   04E4H   A   
+TSR27. . . . . . .  C ADDR   0598H   A   
+TSR28. . . . . . .  C ADDR   064CH   A   
+TSR3 . . . . . . .  C ADDR   0168H   A   
+TSR32. . . . . . .  C ADDR   021CH   A   
+TSR33. . . . . . .  C ADDR   02D0H   A   
+TSR34. . . . . . .  C ADDR   0384H   A   
+TSR35. . . . . . .  C ADDR   0438H   A   
+TSR36. . . . . . .  C ADDR   04ECH   A   
+TSR37. . . . . . .  C ADDR   05A0H   A   
+TSR38. . . . . . .  C ADDR   0654H   A   
+TSR4 . . . . . . .  C ADDR   016DH   A   
+TSR42. . . . . . .  C ADDR   0221H   A   
+TSR43. . . . . . .  C ADDR   02D5H   A   
+TSR44. . . . . . .  C ADDR   0389H   A   
+TSR45. . . . . . .  C ADDR   043DH   A   
+TSR46. . . . . . .  C ADDR   04F1H   A   
+TSR47. . . . . . .  C ADDR   05A5H   A   
+TSR48. . . . . . .  C ADDR   0659H   A   
+TSR5 . . . . . . .  C ADDR   0172H   A   
+TSR52. . . . . . .  C ADDR   0226H   A   
+TSR53. . . . . . .  C ADDR   02DAH   A   
+TSR54. . . . . . .  C ADDR   038EH   A   
+TSR55. . . . . . .  C ADDR   0442H   A   
+TSR56. . . . . . .  C ADDR   04F6H   A   
+TSR57. . . . . . .  C ADDR   05AAH   A   
+TSR58. . . . . . .  C ADDR   065EH   A   
+TSR6 . . . . . . .  C ADDR   0174H   A   
+TSR62. . . . . . .  C ADDR   0228H   A   
+TSR63. . . . . . .  C ADDR   02DCH   A   
+TSR64. . . . . . .  C ADDR   0390H   A   
+TSR65. . . . . . .  C ADDR   0444H   A   
+TSR66. . . . . . .  C ADDR   04F8H   A   
+TSR67. . . . . . .  C ADDR   05ACH   A   
+TSR68. . . . . . .  C ADDR   0660H   A   
+TSR7 . . . . . . .  C ADDR   0176H   A   
+TSR72. . . . . . .  C ADDR   022AH   A   
+TSR73. . . . . . .  C ADDR   02DEH   A   
+TSR74. . . . . . .  C ADDR   0392H   A   
+TSR75. . . . . . .  C ADDR   0446H   A   
+TSR76. . . . . . .  C ADDR   04FAH   A   
+TSR77. . . . . . .  C ADDR   05AEH   A   
+TSR78. . . . . . .  C ADDR   0662H   A   
+WR1. . . . . . . .  C ADDR   011AH   A   
+WR12 . . . . . . .  C ADDR   01CEH   A   
+WR13 . . . . . . .  C ADDR   0282H   A   
+WR14 . . . . . . .  C ADDR   0336H   A   
+WR15 . . . . . . .  C ADDR   03EAH   A   
+WR16 . . . . . . .  C ADDR   049EH   A   
+WR17 . . . . . . .  C ADDR   0552H   A   
+WR18 . . . . . . .  C ADDR   0606H   A   
+WRITE_1820 . . . .  C ADDR   0117H   A   
+WRITE_18202. . . .  C ADDR   01CBH   A   
+WRITE_18203. . . .  C ADDR   027FH   A   
+WRITE_18204. . . .  C ADDR   0333H   A   
+WRITE_18205. . . .  C ADDR   03E7H   A   
+WRITE_18206. . . .  C ADDR   049BH   A   
+WRITE_18207. . . .  C ADDR   054FH   A   
+WRITE_18208. . . .  C ADDR   0603H   A   
+WR_LOOP. . . . . .  C ADDR   0701H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

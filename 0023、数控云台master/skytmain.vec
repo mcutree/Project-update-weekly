@@ -1,0 +1,22 @@
+
+;INTERRUPT VECTORS
+	RJMP __RESET
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP _timer0_ovf_isr
+	RJMP 0x00
+	RJMP _uart_rx_isr
+	RJMP 0x00
+	RJMP _uart_tx_isr
+	RJMP _adc_isr
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+	RJMP 0x00
+

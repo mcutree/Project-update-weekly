@@ -1,0 +1,51 @@
+<html>
+<body>
+<pre>
+<h1>µVision2 Build Log</h1>
+<h2>Project:</h2>
+E:\keil ¹¤³Ì\¹¤³§ÆÁ\test.uv2
+Project File Date:  04/02/2007
+
+<h2>Output:</h2>
+compiling [±à¼­]1.C...
+*** WARNING C318 IN LINE 1 OF D:\×ÀÃæ\[±à¼­]1.C: can't open file 'at89x51.h'
+D:\×ÀÃæ\[±à¼­]1.C(2): error C202: 'P1': undefined identifier
+D:\×ÀÃæ\[±à¼­]1.C(2): error C129: missing ';' before ':'
+D:\×ÀÃæ\[±à¼­]1.C - 3 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(3): error C129: missing ';' before ':'
+D:\×ÀÃæ\[±à¼­]1.C - 1 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(4): error C129: missing ';' before ':'
+D:\×ÀÃæ\[±à¼­]1.C - 1 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(8): error C129: missing ';' before ':'
+D:\×ÀÃæ\[±à¼­]1.C - 1 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(70): error C132: 'file': not in formal parameter list
+D:\×ÀÃæ\[±à¼­]1.C(70): error C141: syntax error near ':'
+D:\×ÀÃæ\[±à¼­]1.C(72): error C132: 'i': not in formal parameter list
+D:\×ÀÃæ\[±à¼­]1.C(73): error C141: syntax error near 'for'
+D:\×ÀÃæ\[±à¼­]1.C(73): error C141: syntax error near '=', expected ')'
+D:\×ÀÃæ\[±à¼­]1.C(73): error C129: missing ';' before '<'
+D:\×ÀÃæ\[±à¼­]1.C - 6 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(78): error C232: 'file': duplicate label
+D:\×ÀÃæ\[±à¼­]1.C(79): error C141: syntax error near '}'
+D:\×ÀÃæ\[±à¼­]1.C(136): error C141: syntax error near '}'
+D:\×ÀÃæ\[±à¼­]1.C - 3 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(133): error C232: 'file': duplicate label
+D:\×ÀÃæ\[±à¼­]1.C(136): error C141: syntax error near '}'
+D:\×ÀÃæ\[±à¼­]1.C - 2 Error(s), 0 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C(90): warning C280: 'file': unreferenced label
+D:\×ÀÃæ\[±à¼­]1.C - 0 Error(s), 1 Warning(s).
+compiling [±à¼­]1.C...
+D:\×ÀÃæ\[±à¼­]1.C - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling [±à¼­]1.C...
+linking...
+Program Size: data=9.0 xdata=0 code=1098
+creating hex file from "test"...
+"test" - 0 Error(s), 0 Warning(s).

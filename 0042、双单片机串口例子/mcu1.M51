@@ -1,0 +1,109 @@
+BL51 BANKED LINKER/LOCATER V5.03                                                        01/03/2000  14:00:38  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.03, INVOKED BY:
+D:\电子软件\KEIL\C51\BIN\BL51.EXE mcu1.obj TO mcu1 CODE (0X0000-0X0FFF)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  mcu1.obj (MCU1)
+  D:\电子软件\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  mcu1 (MCU1)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     000CH     INBLOCK      ?PR?GET_DISP?MCU1
+            CODE    000FH     000CH     UNIT         ?C_C51STARTUP
+                    001BH     0008H                  *** GAP ***
+            CODE    0023H     0002H     ABSOLUTE     
+            CODE    0025H     0021H     INBLOCK      ?PR?MAIN?MCU1
+
+
+
+OVERLAY MAP OF MODULE:   mcu1 (MCU1)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MCU1
+
+
+
+SYMBOL TABLE OF MODULE:  mcu1 (MCU1)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MCU1
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  B:00A8H.7       PUBLIC        EA
+  B:00A8H.4       PUBLIC        ES
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  C:0025H         PUBLIC        main
+  D:0099H         PUBLIC        SBUF
+BL51 BANKED LINKER/LOCATER V5.03                                                      01/03/2000  14:00:38  PAGE 2
+
+
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.3       PUBLIC        ET1
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  C:0003H         PUBLIC        get_disp
+  B:0088H.6       PUBLIC        TR1
+  -------         PROC          MAIN
+  -------         DO            
+  D:0007H         SYMBOL        key_in
+  -------         ENDDO         
+  C:0025H         LINE#         7
+  C:0025H         LINE#         8
+  C:0025H         LINE#         9
+  C:0027H         LINE#         10
+  C:002AH         LINE#         11
+  C:002DH         LINE#         12
+  C:0030H         LINE#         13
+  C:0033H         LINE#         14
+  C:0035H         LINE#         15
+  C:0037H         LINE#         17
+  C:0039H         LINE#         18
+  C:003BH         LINE#         19
+  C:003BH         LINE#         20
+  C:003BH         LINE#         21
+  C:0040H         LINE#         22
+  C:0040H         LINE#         23
+  C:0042H         LINE#         24
+  C:0044H         LINE#         26
+  C:0044H         LINE#         27
+  -------         ENDPROC       MAIN
+  -------         PROC          GET_DISP
+  C:0003H         LINE#         30
+  C:0003H         LINE#         32
+  C:0006H         LINE#         33
+  C:0006H         LINE#         34
+  C:0009H         LINE#         35
+  C:000BH         LINE#         36
+  C:000CH         LINE#         37
+  C:000EH         LINE#         38
+  -------         ENDPROC       GET_DISP
+  -------         ENDMOD        MCU1
+
+Program Size: data=9.0 xdata=0 code=62
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

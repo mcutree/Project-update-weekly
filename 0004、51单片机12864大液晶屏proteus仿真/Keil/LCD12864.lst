@@ -1,0 +1,210 @@
+C51 COMPILER V8.02   LCD12864                                                              08/24/2008 10:50:53 PAGE 1   
+
+
+C51 COMPILER V8.02, COMPILATION OF MODULE LCD12864
+OBJECT MODULE PLACED IN LCD12864.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE sources\LCD12864.c BROWSE INCDIR(.\include) DEBUG OBJECTEXTEND PRINT(.\LCD1
+                    -2864.lst) OBJECT(LCD12864.obj)
+
+line level    source
+
+   1          //*************************************************************************************************
+   2          //*                                                                                                                                                                                               *
+   3          //*                      ******************************LCD12864驱动程序**************************                         *
+   4          //*                                                                                                                                                                                               *
+   5          //*************************************************************************************************
+   6          
+   7          //*************************************************************************************************
+   8          //*                                                                                                                                                                                               *
+   9          //*                      ******************************头文件及宏定义**************************                           *
+  10          //*                                                                                                                                                                                               *
+  11          //*************************************************************************************************
+  12          #include <at89x51.h>
+  13          
+  14          #define RST P2_0
+  15          #define E P2_1
+  16          #define RW P2_2
+  17          #define DI P2_3
+  18          #define CS1 P2_5
+  19          #define CS2     P2_4
+  20          #define LCDPORT P0
+  21          
+  22          
+  23          #define BUSYSTATUS P0_7                           //忙状态位。
+  24          //#define DISONSTATUS P0_5                        //显示开关状态位。
+  25          //#define RSTSTATUS P0_4                          //复位状态位。
+  26          
+  27          
+  28          #define LCDSTARTROW 0xC0                          //设置起始行指令。
+  29          #define LCDPAGE 0xB8                              //设置页指令。
+  30          #define LCDLINE 0x40                              //设置列指令。
+  31          
+  32          
+  33          
+  34          
+  35          //*************************************************************************************************
+  36          //*                                                                                                                                                                                               *
+  37          //*                      ********************************读忙标志位*********************************              *
+  38          //*                                                                                                                                                                                               *
+  39          //*************************************************************************************************
+  40          bit bCheckBusy()
+  41          {
+  42   1              LCDPORT=0xFF;
+  43   1              RW=1;
+  44   1              DI=0;
+  45   1              E=1;
+  46   1              E=0;
+  47   1              return BUSYSTATUS; 
+  48   1      }
+  49          
+  50          //*************************************************************************************************
+  51          //*                                                                                                                                                                                               *
+  52          //*                      ********************************写数据*********************************                          *
+  53          //*                                                                                                                                                                                               *
+  54          //*************************************************************************************************
+C51 COMPILER V8.02   LCD12864                                                              08/24/2008 10:50:53 PAGE 2   
+
+  55          void vWriteData(unsigned char ucData)
+  56          {
+  57   1              while(bCheckBusy());
+  58   1              LCDPORT=0xFF;
+  59   1      
+  60   1              RW=0;
+  61   1              DI=1;
+  62   1              LCDPORT=ucData;
+  63   1              E=1;
+  64   1              E=0;
+  65   1      }
+  66          
+  67          //*************************************************************************************************
+  68          //*                                                                                                                                                                                               *
+  69          //*                      ********************************写指令*********************************                          *
+  70          //*                                                                                                                                                                                               *
+  71          //*************************************************************************************************
+  72          void vWriteCMD(unsigned char ucCMD)
+  73          {
+  74   1              while(bCheckBusy());
+  75   1              LCDPORT=0xFF;
+  76   1      
+  77   1              RW=0;
+  78   1              DI=0;
+  79   1              LCDPORT=ucCMD;
+  80   1              E=1;
+  81   1              E=0;
+  82   1      }
+  83          
+  84          //*************************************************************************************************
+  85          //*                                                                                                                                                                                               *
+  86          //*                      ********************************LCD初始化函数*******************************             *
+  87          //*                                                                                                                                                                                               *
+  88          //*************************************************************************************************
+  89          void vLCDInitialize()
+  90          {
+  91   1              CS1=1;
+  92   1              CS2=1;
+  93   1              vWriteCMD(0x38);                //8位形式，两行字符。
+  94   1              vWriteCMD(0x0F);                //开显示。
+  95   1              vWriteCMD(0x01);                //清屏。
+  96   1              vWriteCMD(0x06);                //画面不动，光标右移。
+  97   1              vWriteCMD(LCDSTARTROW); //设置起始行。
+  98   1      }
+  99          
+ 100          //*************************************************************************************************
+ 101          //*                                                                                                                                                                                               *
+ 102          //*                      ******************************显示自定义行*********************************              *
+ 103          //*                                                                                                                                                                                               *
+ 104          //*************************************************************************************************
+ 105          //在8×128的格子里显示自定义长度的一行
+ 106          void vShowCustomRow(unsigned char ucPage,unsigned char ucLine,unsigned char ucWidth,unsigned char *ucaRow)
+ 107          {
+ 108   1              unsigned char ucCount;                             //取值范围：ucPage:0～7；ucLine:0～127；
+ 109   1              if(ucLine<64)                                              //ucWidth:0～127；ucLine+ucWidth<1128。
+ 110   1                      {
+ 111   2                      CS1=1;
+ 112   2                      CS2=0;
+ 113   2                      vWriteCMD(LCDPAGE+ucPage);
+ 114   2                      vWriteCMD(LCDLINE+ucLine);
+ 115   2                      if((ucLine+ucWidth)<64)
+ 116   2                              {
+C51 COMPILER V8.02   LCD12864                                                              08/24/2008 10:50:53 PAGE 3   
+
+ 117   3                              for(ucCount=0;ucCount<ucWidth;ucCount++)
+ 118   3                                      vWriteData(*(ucaRow+ucCount));
+ 119   3                              }
+ 120   2                      else
+ 121   2                              {
+ 122   3                              for(ucCount=0;ucCount<64-ucLine;ucCount++)
+ 123   3                                      vWriteData(*(ucaRow+ucCount));
+ 124   3      
+ 125   3                              CS1=0;
+ 126   3                              CS2=1;
+ 127   3                              vWriteCMD(LCDPAGE+ucPage);
+ 128   3                              vWriteCMD(LCDLINE);
+ 129   3                              for(ucCount=64-ucLine;ucCount<ucWidth;ucCount++)
+ 130   3                                      vWriteData(*(ucaRow+ucCount));
+ 131   3                              }
+ 132   2                      }
+ 133   1              else
+ 134   1                      {
+ 135   2                      CS1=0;
+ 136   2                      CS2=1;
+ 137   2                      vWriteCMD(LCDPAGE+ucPage);
+ 138   2                      vWriteCMD(LCDLINE+ucLine-64);
+ 139   2                      for(ucCount=0;ucCount<ucWidth;ucCount++)
+ 140   2                              vWriteData(*(ucaRow+ucCount));
+ 141   2                      }
+ 142   1      }
+ 143          //*************************************************************************************************
+ 144          //*                                                                                                                                                                                               *
+ 145          //*                      *****************************汉字显示函数***********************************             *
+ 146          //*                                                                                                                                                                                               *
+ 147          //*************************************************************************************************
+ 148          //此函数将16×16汉字显示在8×128的格子里。
+ 149          void vShowOneChin(unsigned char ucPage,unsigned char ucLine,unsigned char *ucaChinMap)
+ 150          {
+ 151   1              vShowCustomRow(ucPage,ucLine,16,ucaChinMap);
+ 152   1              vShowCustomRow(ucPage+1,ucLine,16,ucaChinMap+16);
+ 153   1      
+ 154   1      }
+ 155          //*************************************************************************************************
+ 156          //*                                                                                                                                                                                               *
+ 157          //*                      *****************************字符显示函数***********************************             *
+ 158          //*                                                                                                                                                                                               *
+ 159          //*************************************************************************************************
+ 160          //此函数将8×16字符显示在8×128的格子里。
+ 161          void vShowOneChar(unsigned char ucPage,unsigned char ucLine,unsigned char *ucaCharMap)
+ 162          {
+ 163   1              vShowCustomRow(ucPage,ucLine,8,ucaCharMap);
+ 164   1              vShowCustomRow(ucPage+1,ucLine,8,ucaCharMap+8);
+ 165   1      
+ 166   1      }
+ 167          
+ 168          
+ 169          //*************************************************************************************************
+ 170          //*                                                                                                                                                                                               *
+ 171          //*                      **********************************显示图片***********************************            *
+ 172          //*                                                                                                                                                                                               *
+ 173          //*************************************************************************************************
+ 174          void vShowGraph(unsigned char ucPage,unsigned char ucLine,unsigned char ucWidth,unsigned char ucHigh,unsig
+             -ned char * ucaGraph)
+ 175          {
+ 176   1              unsigned char ucCount;
+ 177   1              for(ucCount=0;ucCount<ucHigh;ucCount++)
+C51 COMPILER V8.02   LCD12864                                                              08/24/2008 10:50:53 PAGE 4   
+
+ 178   1                      vShowCustomRow(ucPage+ucCount,ucLine,ucWidth,ucaGraph+ucCount*ucWidth);
+ 179   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    390    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      23
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,318 @@
+; .\main.SRC generated from: main.c
+; COMPILER INVOKED BY:
+;        C:\Program Files\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND SRC(.\main.SRC)
+
+$NOMOD51
+
+NAME	MAIN
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+AC	BIT	0D0H.6
+T0	BIT	0B0H.4
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+IE	DATA	0A8H
+P0_0	BIT	080H.0
+P1_0	BIT	090H.0
+P0_1	BIT	080H.1
+FL	BIT	0D0H.1
+P2_0	BIT	0A0H.0
+P1_1	BIT	090H.1
+P0_2	BIT	080H.2
+P3_0	BIT	0B0H.0
+P2_1	BIT	0A0H.1
+P1_2	BIT	090H.2
+P0_3	BIT	080H.3
+P3_1	BIT	0B0H.1
+P2_2	BIT	0A0H.2
+P1_3	BIT	090H.3
+P0_4	BIT	080H.4
+P3_2	BIT	0B0H.2
+P2_3	BIT	0A0H.3
+P1_4	BIT	090H.4
+P0_5	BIT	080H.5
+RD	BIT	0B0H.7
+P3_3	BIT	0B0H.3
+P2_4	BIT	0A0H.4
+P1_5	BIT	090H.5
+P0_6	BIT	080H.6
+P3_4	BIT	0B0H.4
+P2_5	BIT	0A0H.5
+P1_6	BIT	090H.6
+P0_7	BIT	080H.7
+P3_5	BIT	0B0H.5
+ES	BIT	0A8H.4
+P2_6	BIT	0A0H.6
+P1_7	BIT	090H.7
+P3_6	BIT	0B0H.6
+P2_7	BIT	0A0H.7
+IP	DATA	0B8H
+P3_7	BIT	0B0H.7
+RI	BIT	098H.0
+CY	BIT	0D0H.7
+INT0	BIT	0B0H.2
+INT1	BIT	0B0H.3
+TI	BIT	098H.1
+PS	BIT	0B8H.4
+SP	DATA	081H
+OV	BIT	0D0H.2
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+ACC	DATA	0E0H
+ET0	BIT	0A8H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+ET2	BIT	0A8H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+EX1	BIT	0A8H.2
+TB8	BIT	098H.3
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+RS0	BIT	0D0H.3
+PT1	BIT	0B8H.3
+RS1	BIT	0D0H.4
+PT2	BIT	0B8H.5
+TR0	BIT	088H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?_Delay1ms?MAIN   SEGMENT CODE 
+?PR?main?MAIN        SEGMENT CODE 
+?DT?main?MAIN        SEGMENT DATA OVERLAYABLE 
+?CO?MAIN             SEGMENT CODE 
+	EXTRN	IDATA (CursorPosion)
+	EXTRN	CODE (_SerialSendStr)
+	EXTRN	DATA (flag)
+	EXTRN	CODE (_ExecCommand)
+	EXTRN	IDATA (SerialBuffer)
+	EXTRN	IDATA (PromptBuffer)
+	EXTRN	CODE (InitHyperTerminal)
+	EXTRN	CODE (_ParseArgs)
+	EXTRN	DATA (?_ParseArgs?BYTE)
+	EXTRN	CODE (?C_STARTUP)
+	PUBLIC	main
+	PUBLIC	_Delay1ms
+
+	RSEG  ?DT?main?MAIN
+?main?BYTE:
+       argc?143:   DS   1
+       argv?144:   DS   24
+      resid?145:   DS   3
+
+	RSEG  ?CO?MAIN
+?SC_0:
+	DB  'h' ,'t' ,'t' ,'p' ,':' ,'/' ,'/' ,'w' ,'w' ,'w' 
+	DB  '.' ,'j' ,'j' ,'j' ,'b' ,'b' ,'s' ,'.' ,'c' ,'o' 
+	DB  'm' ,00DH,00AH,000H
+
+?SC_24:
+	DB  'm' ,'o' ,'v' ,'e' ,' ' ,'1' ,' ' ,'2' ,' ' ,'3' 
+	DB  000H
+
+; #include <REGX51.H>
+; #include "HyperTerminal.h"
+; 
+; extern char idata SerialBuffer[MAX_SERIAL_BUFFER_SIZE];
+; extern char idata PromptBuffer[MAX_PROMPT_BUFFER_SIZE];
+; extern unsigned char idata CursorPosion;
+; extern unsigned char flag;
+; 
+; void Delay1ms(unsigned int count)
+
+	RSEG  ?PR?_Delay1ms?MAIN
+_Delay1ms:
+	USING	0
+			; SOURCE LINE # 9
+;---- Variable 'count?040' assigned to Register 'R6/R7' ----
+; {
+			; SOURCE LINE # 10
+; 	unsigned int i,j;
+; 	for(i=0;i<count;i++)
+			; SOURCE LINE # 12
+;---- Variable 'i?041' assigned to Register 'R4/R5' ----
+	CLR  	A
+	MOV  	R5,A
+	MOV  	R4,A
+?C0001:
+	CLR  	C
+	MOV  	A,R5
+	SUBB 	A,R7
+	MOV  	A,R4
+	SUBB 	A,R6
+	JNC  	?C0007
+; 	for(j=0;j<120;j++);
+			; SOURCE LINE # 13
+;---- Variable 'j?042' assigned to Register 'R2/R3' ----
+	CLR  	A
+	MOV  	R3,A
+	MOV  	R2,A
+?C0004:
+	INC  	R3
+	CJNE 	R3,#00H,?C0015
+	INC  	R2
+?C0015:
+	MOV  	A,R3
+	XRL  	A,#078H
+	ORL  	A,R2
+	JNZ  	?C0004
+?C0003:
+	INC  	R5
+	CJNE 	R5,#00H,?C0016
+	INC  	R4
+?C0016:
+	SJMP 	?C0001
+; }
+			; SOURCE LINE # 14
+?C0007:
+	RET  	
+; END OF _Delay1ms
+
+; 
+; void main(void)
+
+	RSEG  ?PR?main?MAIN
+main:
+	USING	0
+			; SOURCE LINE # 16
+; {
+			; SOURCE LINE # 17
+; 	char argc;
+; 	char *argv[8];
+; 	char *resid;
+; 
+; 	InitHyperTerminal();
+			; SOURCE LINE # 22
+	LCALL	InitHyperTerminal
+?C0008:
+; 
+; 	while(1)
+			; SOURCE LINE # 24
+; 	{
+			; SOURCE LINE # 25
+; 		if(flag == 1)
+			; SOURCE LINE # 26
+	MOV  	A,flag
+	CJNE 	A,#01H,?C0010
+; 		{
+			; SOURCE LINE # 27
+; 			ExecCommand(&SerialBuffer[0]);
+			; SOURCE LINE # 28
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (SerialBuffer)
+	MOV  	R1,#LOW (SerialBuffer)
+	LCALL	_ExecCommand
+; 			SerialSendStr(&PromptBuffer[0]);
+			; SOURCE LINE # 29
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (PromptBuffer)
+	MOV  	R1,#LOW (PromptBuffer)
+	LCALL	_SerialSendStr
+; 			CursorPosion = 0;
+			; SOURCE LINE # 30
+	CLR  	A
+	MOV  	R0,#LOW (CursorPosion)
+	MOV  	@R0,A
+; 			flag = 0;
+			; SOURCE LINE # 31
+	MOV  	flag,A
+; 		}
+			; SOURCE LINE # 32
+?C0010:
+; 		if(P1_0 == 0)
+			; SOURCE LINE # 33
+	JB   	P1_0,?C0011
+; 		{
+			; SOURCE LINE # 34
+; 			SerialSendStr("http://www.jjjbbs.com\r\n");
+			; SOURCE LINE # 35
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_0)
+	MOV  	R1,#LOW (?SC_0)
+	LCALL	_SerialSendStr
+; 			Delay1ms(200);
+			; SOURCE LINE # 36
+	MOV  	R7,#0C8H
+	MOV  	R6,#00H
+	LCALL	_Delay1ms
+; 		}
+			; SOURCE LINE # 37
+?C0011:
+; 		if(P1_1 == 0)
+			; SOURCE LINE # 38
+	JB   	P1_1,?C0012
+; 		{
+			; SOURCE LINE # 39
+; 		//	(*(void(*)( ))0)(); 
+; 		#pragma ASM	
+; 		LJMP 0000H
+	  LJMP 0000H
+; 		#pragma ENDASM
+; 			Delay1ms(200);
+			; SOURCE LINE # 44
+	MOV  	R7,#0C8H
+	MOV  	R6,#00H
+	LCALL	_Delay1ms
+; 		}
+			; SOURCE LINE # 45
+?C0012:
+; 		if(P1_2 == 0)
+			; SOURCE LINE # 46
+	JB   	P1_2,?C0008
+; 		{
+			; SOURCE LINE # 47
+; 			ParseArgs("move 1 2 3",&argc, argv, &resid);
+			; SOURCE LINE # 48
+	MOV  	?_ParseArgs?BYTE+03H,#00H
+	MOV  	?_ParseArgs?BYTE+04H,#HIGH (argc?143)
+	MOV  	?_ParseArgs?BYTE+05H,#LOW (argc?143)
+	MOV  	?_ParseArgs?BYTE+06H,#00H
+	MOV  	?_ParseArgs?BYTE+07H,#HIGH (argv?144)
+	MOV  	?_ParseArgs?BYTE+08H,#LOW (argv?144)
+	MOV  	?_ParseArgs?BYTE+09H,#00H
+	MOV  	?_ParseArgs?BYTE+0AH,#HIGH (resid?145)
+	MOV  	?_ParseArgs?BYTE+0BH,#LOW (resid?145)
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_24)
+	MOV  	R1,#LOW (?SC_24)
+	LCALL	_ParseArgs
+; 			Delay1ms(100);
+			; SOURCE LINE # 49
+	MOV  	R7,#064H
+	MOV  	R6,#00H
+	LCALL	_Delay1ms
+; 		}
+			; SOURCE LINE # 50
+; 	}
+			; SOURCE LINE # 51
+	SJMP 	?C0008
+; END OF main
+
+	END

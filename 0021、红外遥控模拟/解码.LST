@@ -1,0 +1,221 @@
+C51 COMPILER V8.08   ½__ë                                                                  01/15/2008 20:25:59 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE ½__ë
+OBJECT MODULE PLACED IN ½âÂë.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ½âÂë.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "At89x51.h"
+   2          #include "stdio.h"
+   3          #include "stdlib.h"
+   4          #include "string.h"
+   5          
+   6          #define JINGZHEN 48
+   7          #define TIME0TH ((65536-100*JINGZHEN/12)&0xff00)>>8   //time0,100us,ºìÍâÒ£¿Ø
+   8          #define TIME0TL ((65536-100*JINGZHEN/12)&0xff)
+   9          #define TIME1TH ((65536-5000*JINGZHEN/12)&0xff00)>>8   
+  10          #define TIME1TL ((65536-5000*JINGZHEN/12)&0xff)
+  11          #define uchar unsigned char
+  12          #define uint  unsigned int
+  13          
+  14          code uchar  BitMsk[]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,};
+  15          
+  16          uint IrCount=0,Show=0,Cont=0;
+  17          uchar IRDATBUF[32],s[20];
+  18          uchar IrDat[5]={0,0,0,0,0};
+  19          uchar IrStart=0,IrDatCount=0;
+  20          extern void initLCM( void);                                                                                                     //LCD³õÊ¼»¯×Ó³ÌÐò
+  21          extern void DisplayListChar(uchar X,uchar Y, unsigned char *DData);                    //ÏÔÊ¾Ö¸¶¨×ø±êµÄÒ»´
+             -®×Ö·û×Óº¯Êý
+  22          
+  23          void timer1int (void)  interrupt 3  using 3{     //¶¨Ê±Æ÷1
+  24   1      EA=0;
+  25   1      TH1 = TIME1TH;  
+  26   1      TL1 = TIME1TL;
+  27   1      Cont++;
+  28   1      if(Cont>10)Show=1;
+  29   1      EA=1;
+  30   1      }
+  31          void timer0int (void)  interrupt 1  using 1{     //¶¨Ê±Æ÷0
+  32   1              uchar i,a,b,c,d;
+  33   1              EA=0;
+  34   1              TH0 = TIME0TH;  
+  35   1              TL0 = TIME0TL;
+  36   1              if(IrCount>500)IrCount=0;
+  37   1              if(IrCount>300&&IrStart>0){IrStart=0;IrDatCount=0;IrDat[0]=IrDat[1]=IrDat[2]=IrDat[3]=0;IrCount=0;}
+  38   1              if(IrStart==2)
+  39   1              {
+  40   2                      IrStart=3;
+  41   2                      for(i=0;i<IrDatCount;i++)
+  42   2                      {
+  43   3                              if(i<32)
+  44   3                              {
+  45   4                                      a=i/8;
+  46   4      
+  47   4                                      b=IRDATBUF[i];
+  48   4                                      c=IrDat[a];
+  49   4                                      d=BitMsk[i%8];
+  50   4                                      if(b>5&&b<14)c|=d;
+  51   4                                      if(b>16&&b<25)c&=~d;
+  52   4                                      IrDat[a]=c;
+  53   4                              }
+  54   3                      }
+C51 COMPILER V8.08   ½__ë                                                                  01/15/2008 20:25:59 PAGE 2   
+
+  55   2                      if(IrDat[2]!=~IrDat[3])
+  56   2                      {
+  57   3                       IrStart=0;IrDatCount=0;IrDat[0]=IrDat[1]=IrDat[2]=IrDat[3]=0;IrCount=0;
+  58   3                       
+  59   3                      }
+  60   2                      EA=1;
+  61   2                      return;
+  62   2              }
+  63   1              IrCount++; 
+  64   1              EA=1;
+  65   1      }
+  66          void int0() interrupt 0  using 0  {
+  67   1              EA=0;
+  68   1              if(IrStart==0)
+  69   1              {
+  70   2                IrStart=1;IrCount=0;TH0 = TIME0TH;TL0 = TIME0TL;
+  71   2                IrDatCount=0;EA=1;
+  72   2                return;
+  73   2              }
+  74   1              if(IrStart==1)
+  75   1              {
+  76   2               if(IrDatCount>0&&IrDatCount<33)
+  77   2                      IRDATBUF[IrDatCount-1]=IrCount;
+  78   2               if(IrDatCount>31)
+  79   2                      {IrStart=2;TH0 = TIME0TH;TL0 = TIME0TL;EA=1;return;}
+  80   2               if(IrCount>114&&IrCount<133&&IrDatCount==0)
+  81   2                      {IrDatCount=1;}else if(IrDatCount>0)IrDatCount++;
+  82   2              }                       
+  83   1              IrCount=0;TH0 = TIME0TH;TL0 = TIME0TL;
+  84   1              EA=1;
+  85   1      }
+  86          
+  87          main()
+  88          {
+  89   1              uchar *a,n;
+  90   1              TMOD  |= 0x011;
+  91   1              TH0 = TIME0TH;
+  92   1              TL0 = TIME0TL;
+  93   1              ET0=1;
+  94   1              TR0=1;                          
+  95   1              ET1=1;
+  96   1              TR1=1;                          
+  97   1              IT0 = 1;                                //ÏÂ½µÑØ
+  98   1              EX0 = 1;
+  99   1              initLCM();
+ 100   1              EA=1;
+ 101   1              for(;;)
+ 102   1              {
+ 103   2      
+ 104   2                      if(Show==1)
+ 105   2                      {
+ 106   3                              Show=0;
+ 107   3                              Cont=0;
+ 108   3                              DisplayListChar(0,1,"Please keys");
+ 109   3                              a="";
+ 110   3                              switch (IrDat[3])
+ 111   3                              {
+ 112   4                            case 0x12://ON/C
+ 113   4                                        a="ON/C";
+ 114   4                                        break;
+ 115   4                            case 0x0b://¡À
+ 116   4                                        a="+/-";
+C51 COMPILER V8.08   ½__ë                                                                  01/15/2008 20:25:59 PAGE 3   
+
+ 117   4                                        break;
+ 118   4                            case 0x1a://+
+ 119   4                                        a="+";
+ 120   4                                        break;
+ 121   4                            case 0x1e://-
+ 122   4                                        a="-";
+ 123   4                                        break;
+ 124   4                            case 0x0e://¡Â
+ 125   4                                        a="/";
+ 126   4                                        break;
+ 127   4                            case 0x1d://MRC
+ 128   4                                        a="MRC";
+ 129   4                                        break;
+ 130   4                      
+ 131   4                            case 0x1f://M-
+ 132   4                                        a="M-";
+ 133   4                                        break;
+ 134   4                            case 0x1b://M+
+ 135   4                                        a="M+";
+ 136   4                                        break;
+ 137   4                            case 0x00://0
+ 138   4                                        if(IrDat[2]==0xff)a="0";
+ 139   4                                        break;
+ 140   4                            case 0x01://1
+ 141   4                                        a="1";
+ 142   4                                        break;
+ 143   4                            case 0x02://2
+ 144   4                                        a="2";
+ 145   4                                        break;
+ 146   4                      
+ 147   4                            case 0x03://3
+ 148   4                                        a="3";
+ 149   4                                        break;
+ 150   4                            case 0x04://4
+ 151   4                                        a="4";
+ 152   4                                        break;
+ 153   4                            case 0x05://5
+ 154   4                                        a="5";
+ 155   4                                        break;
+ 156   4                            case 0x06://6
+ 157   4                                        a="6";
+ 158   4                                        break;
+ 159   4                            case 0x07://7
+ 160   4                                        a="7";
+ 161   4                                        break;
+ 162   4                            case 0x08://8
+ 163   4                                        a="8";
+ 164   4                                        break;
+ 165   4                      
+ 166   4                            case 0x09://9
+ 167   4                                        a="9";
+ 168   4                                        break;
+ 169   4                            case 0x2A://%
+ 170   4                                        a="%";
+ 171   4                                        break;
+ 172   4                            case 0x2B://X
+ 173   4                                        a="X";
+ 174   4                                        break;
+ 175   4                            case 0x2C://.
+ 176   4                                        a=".";
+ 177   4                                        break;
+ 178   4                            case 0x2D://=
+C51 COMPILER V8.08   ½__ë                                                                  01/15/2008 20:25:59 PAGE 4   
+
+ 179   4                                        a="=";
+ 180   4                                        break;
+ 181   4                            case 0x2E://¡õ
+ 182   4                                        a=" ";
+ 183   4                                        break;
+ 184   4      
+ 185   4                              }
+ 186   3                              n=strlen(a);
+ 187   3                              if(n>0)sprintf(s,"Key is [%s]",a);else sprintf(s,"Not Key         ",a);
+ 188   3                              DisplayListChar(0,0,s);
+ 189   3                      }
+ 190   2              }
+ 191   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    864    ----
+   CONSTANT SIZE    =    105    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     65       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

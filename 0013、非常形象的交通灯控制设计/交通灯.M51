@@ -1,0 +1,412 @@
+BL51 BANKED LINKER/LOCATER V5.00                                                        05/01/2007  13:06:50  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE 交通灯.obj TO 交通灯
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  交通灯.obj (交_ǖ_)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?SCDIV)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  交通灯 (交_ǖ_)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000BH     UNIT         ?DT?交_ǖ_
+                    0013H     000DH                  *** GAP ***
+            BIT     0020H.0   0000H.2   UNIT         ?BI?交_ǖ_
+                    0020H.2   0000H.6                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     0005H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     00ECH     UNIT         ?PR?MAIN?交_ǖ_
+            CODE    00FAH     00E6H     UNIT         ?PR?DISPLAY?交_ǖ_
+            CODE    01E0H     008CH     UNIT         ?C_C51STARTUP
+            CODE    026CH     007EH     UNIT         ?PR?EXINT0?交_ǖ_
+            CODE    02EAH     0036H     UNIT         ?PR?TIMER0?交_ǖ_
+            CODE    0320H     0022H     UNIT         ?C?LIB_CODE
+            CODE    0342H     0019H     UNIT         ?C_INITSEG
+            CODE    035BH     0012H     UNIT         ?CO?交_ǖ_
+            CODE    036DH     0007H     UNIT         ?PR?_DELAY?交_ǖ_
+
+
+
+OVERLAY MAP OF MODULE:   交通灯 (交_ǖ_)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?交_ǖ_
+  +--> ?C_INITSEG
+
+?PR?MAIN?交_ǖ_
+  +--> ?CO?交_ǖ_
+  +--> ?PR?DISPLAY?交_ǖ_
+BL51 BANKED LINKER/LOCATER V5.00                                                      05/01/2007  13:06:50  PAGE 2
+
+
+
+?PR?DISPLAY?交_ǖ_
+  +--> ?CO?交_ǖ_
+  +--> ?PR?_DELAY?交_ǖ_
+
+
+
+SYMBOL TABLE OF MODULE:  交通灯 (交_ǖ_)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        交_ǖ_
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  B:0090H.6       PUBLIC        SN_Yellow
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A0H.2       PUBLIC        EW_LED1
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+  B:00A0H.3       PUBLIC        EW_LED2
+  B:00B0H.5       PUBLIC        T1
+  B:0090H.0       PUBLIC        T2
+  B:00A8H.7       PUBLIC        EA
+  B:00A0H.0       PUBLIC        SN_LED1
+  B:00A0H.1       PUBLIC        SN_LED2
+  C:035BH         PUBLIC        table
+  D:0009H         PUBLIC        Time_EW
+  D:00A8H         PUBLIC        IE
+  B:00B0H.0       PUBLIC        EW_ManGreen
+  B:00B0H.6       PUBLIC        Busy_Btton
+  D:000AH         PUBLIC        Time_SN
+  B:00B0H.1       PUBLIC        SN_ManGreen
+  B:00C8H.6       PUBLIC        EXF2
+  B:00B0H.7       PUBLIC        RD
+  B:00A8H.4       PUBLIC        ES
+  B:0090H.3       PUBLIC        EW_Red
+  D:00B8H         PUBLIC        IP
+  D:000BH         PUBLIC        EWL1
+  B:0098H.0       PUBLIC        RI
+  D:000CH         PUBLIC        EW
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:0090H.7       PUBLIC        SN_Red
+  D:000DH         PUBLIC        SNL1
+  D:000EH         PUBLIC        SN
+  B:00B8H.4       PUBLIC        PS
+  B:0090H.1       PUBLIC        T2EX
+  B:00D0H.2       PUBLIC        OV
+  C:000EH         PUBLIC        main
+  B:00C8H.1       PUBLIC        C_T2
+  B:00B0H.6       PUBLIC        WR
+  B:00C8H.5       PUBLIC        RCLK
+BL51 BANKED LINKER/LOCATER V5.00                                                      05/01/2007  13:06:50  PAGE 3
+
+
+  B:00C8H.4       PUBLIC        TCLK
+  B:00B0H.4       PUBLIC        Reduces_Button
+  B:00B0H.7       PUBLIC        Special_Btton
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:026CH         PUBLIC        EXINT0
+  B:0088H.1       PUBLIC        IE0
+  B:0088H.3       PUBLIC        IE1
+  B:00C8H.0       PUBLIC        CP_RL2
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:00A8H.5       PUBLIC        ET2
+  B:0088H.7       PUBLIC        TF1
+  B:00C8H.7       PUBLIC        TF2
+  B:0098H.2       PUBLIC        RB8
+  D:008CH         PUBLIC        TH0
+  D:000FH         PUBLIC        EW1
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  D:008AH         PUBLIC        TL0
+  C:036DH         PUBLIC        _Delay
+  B:0098H.6       PUBLIC        SM1
+  C:0365H         PUBLIC        S
+  D:0010H         PUBLIC        SN1
+  B:0098H.5       PUBLIC        SM2
+  C:02EAH         PUBLIC        timer0
+  B:00B8H.1       PUBLIC        PT0
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:00B8H.5       PUBLIC        PT2
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00C8H.2       PUBLIC        TR2
+  B:00B8H.0       PUBLIC        PX0
+  B:0020H.0       PUBLIC        Flag_EW_Yellow
+  B:00B8H.2       PUBLIC        PX1
+  C:00FEH         PUBLIC        Display
+  B:00A0H.7       PUBLIC        Busy_LED
+  B:0020H.1       PUBLIC        Flag_SN_Yellow
+  B:00C8H.3       PUBLIC        EXEN2
+  B:0098H.4       PUBLIC        REN
+  D:00C8H         PUBLIC        T2CON
+  D:0011H         PUBLIC        EWL
+  B:00B0H.3       PUBLIC        Add_Button
+  D:0012H         PUBLIC        SNL
+  B:00B0H.5       PUBLIC        Nomor_Button
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  B:00D0H.5       PUBLIC        F0
+BL51 BANKED LINKER/LOCATER V5.00                                                      05/01/2007  13:06:50  PAGE 4
+
+
+  D:00D0H         PUBLIC        PSW
+  B:00A0H.6       PUBLIC        Special_LED
+  B:0090H.2       PUBLIC        EW_Yellow
+  B:00A0H.4       PUBLIC        Time_Show_LED1
+  B:00A0H.5       PUBLIC        Time_Show_LED2
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        a
+  -------         DO            
+  D:0007H         SYMBOL        i
+  -------         ENDDO         
+  C:036DH         LINE#         44
+  C:036DH         LINE#         45
+  C:036DH         LINE#         47
+  C:036DH         LINE#         48
+  C:0373H         LINE#         49
+  -------         ENDPROC       _DELAY
+  C:00FAH         SYMBOL        L?0040
+  -------         PROC          L?0039
+  -------         ENDPROC       L?0039
+  C:00FAH         SYMBOL        L?0040
+  -------         PROC          DISPLAY
+  -------         DO            
+  D:0005H         SYMBOL        h
+  D:0007H         SYMBOL        l
+  -------         ENDDO         
+  C:00FEH         LINE#         51
+  C:00FEH         LINE#         52
+  C:00FEH         LINE#         54
+  C:0107H         LINE#         55
+  C:0111H         LINE#         56
+  C:0124H         LINE#         57
+  C:0126H         LINE#         58
+  C:012BH         LINE#         59
+  C:012DH         LINE#         60
+  C:0141H         LINE#         61
+  C:0143H         LINE#         62
+  C:0148H         LINE#         63
+  C:014AH         LINE#         65
+  C:0153H         LINE#         66
+  C:015DH         LINE#         67
+  C:0170H         LINE#         68
+  C:0172H         LINE#         69
+  C:0177H         LINE#         70
+  C:0179H         LINE#         71
+  C:018DH         LINE#         72
+  C:018FH         LINE#         73
+  C:0194H         LINE#         74
+  C:0196H         LINE#         77
+  C:019DH         LINE#         78
+  C:01A5H         LINE#         79
+  C:01B8H         LINE#         80
+  C:01BAH         LINE#         81
+  C:01BFH         LINE#         82
+  C:01C1H         LINE#         83
+  C:01D6H         LINE#         84
+  C:01D8H         LINE#         85
+  C:01DDH         LINE#         86
+BL51 BANKED LINKER/LOCATER V5.00                                                      05/01/2007  13:06:50  PAGE 5
+
+
+  C:01DFH         LINE#         87
+  -------         ENDPROC       DISPLAY
+  -------         PROC          EXINT0
+  C:026CH         LINE#         90
+  C:0270H         LINE#         92
+  C:0272H         LINE#         94
+  C:0275H         LINE#         95
+  C:0275H         LINE#         96
+  C:027BH         LINE#         97
+  C:0281H         LINE#         98
+  C:0288H         LINE#         99
+  C:0288H         LINE#         100
+  C:028BH         LINE#         101
+  C:028EH         LINE#         102
+  C:028EH         LINE#         103
+  C:028EH         LINE#         104
+  C:0291H         LINE#         105
+  C:0291H         LINE#         106
+  C:0297H         LINE#         107
+  C:029DH         LINE#         108
+  C:02A4H         LINE#         109
+  C:02A4H         LINE#         110
+  C:02A7H         LINE#         111
+  C:02AAH         LINE#         112
+  C:02AAH         LINE#         114
+  C:02AAH         LINE#         116
+  C:02ADH         LINE#         117
+  C:02ADH         LINE#         118
+  C:02B0H         LINE#         119
+  C:02B3H         LINE#         120
+  C:02B6H         LINE#         121
+  C:02B9H         LINE#         122
+  C:02BBH         LINE#         123
+  C:02BDH         LINE#         124
+  C:02BDH         LINE#         125
+  C:02C0H         LINE#         126
+  C:02C0H         LINE#         127
+  C:02C3H         LINE#         128
+  C:02C6H         LINE#         129
+  C:02C9H         LINE#         130
+  C:02CCH         LINE#         131
+  C:02CEH         LINE#         132
+  C:02D0H         LINE#         134
+  C:02D0H         LINE#         135
+  C:02D3H         LINE#         136
+  C:02D3H         LINE#         137
+  C:02D6H         LINE#         138
+  C:02D9H         LINE#         139
+  C:02DCH         LINE#         140
+  C:02DFH         LINE#         141
+  C:02E1H         LINE#         142
+  C:02E3H         LINE#         144
+  C:02E3H         LINE#         145
+  C:02E5H         LINE#         146
+  -------         ENDPROC       EXINT0
+  -------         PROC          TIMER0
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V5.00                                                      05/01/2007  13:06:50  PAGE 6
+
+
+  D:0008H         SYMBOL        count
+  -------         ENDDO         
+  C:02EAH         LINE#         148
+  C:02EEH         LINE#         151
+  C:02F1H         LINE#         152
+  C:02F4H         LINE#         153
+  C:02F6H         LINE#         155
+  C:02FBH         LINE#         156
+  C:02FBH         LINE#         157
+  C:02FEH         LINE#         158
+  C:0300H         LINE#         159
+  C:0303H         LINE#         160
+  C:0305H         LINE#         161
+  C:0305H         LINE#         162
+  C:030AH         LINE#         163
+  C:030AH         LINE#         164
+  C:030CH         LINE#         165
+  C:030EH         LINE#         166
+  C:0311H         LINE#         167
+  C:0313H         LINE#         168
+  C:0316H         LINE#         169
+  C:0318H         LINE#         170
+  C:031BH         LINE#         171
+  C:031BH         LINE#         173
+  -------         ENDPROC       TIMER0
+  -------         PROC          MAIN
+  C:000EH         LINE#         175
+  C:000EH         LINE#         177
+  C:000EH         LINE#         178
+  C:0010H         LINE#         179
+  C:0012H         LINE#         180
+  C:0014H         LINE#         181
+  C:0017H         LINE#         182
+  C:001AH         LINE#         183
+  C:001DH         LINE#         184
+  C:001FH         LINE#         185
+  C:0021H         LINE#         186
+  C:0023H         LINE#         187
+  C:0025H         LINE#         189
+  C:0025H         LINE#         191
+  C:0025H         LINE#         192
+  C:0027H         LINE#         193
+  C:0029H         LINE#         194
+  C:002BH         LINE#         195
+  C:002EH         LINE#         196
+  C:0031H         LINE#         197
+  C:003AH         LINE#         198
+  C:003DH         LINE#         199
+  C:0042H         LINE#         201
+  C:0045H         LINE#         202
+  C:004EH         LINE#         203
+  C:0050H         LINE#         204
+  C:0052H         LINE#         206
+  C:0055H         LINE#         207
+  C:0057H         LINE#         209
+  C:0059H         LINE#         210
+  C:005CH         LINE#         211
+BL51 BANKED LINKER/LOCATER V5.00                                                      05/01/2007  13:06:50  PAGE 7
+
+
+  C:0065H         LINE#         212
+  C:0068H         LINE#         213
+  C:006DH         LINE#         216
+  C:0070H         LINE#         217
+  C:0079H         LINE#         218
+  C:007BH         LINE#         219
+  C:007DH         LINE#         221
+  C:0082H         LINE#         225
+  C:0085H         LINE#         226
+  C:0088H         LINE#         227
+  C:008BH         LINE#         228
+  C:008EH         LINE#         232
+  C:0090H         LINE#         233
+  C:0092H         LINE#         234
+  C:0094H         LINE#         235
+  C:0097H         LINE#         236
+  C:009AH         LINE#         237
+  C:00A3H         LINE#         238
+  C:00A6H         LINE#         239
+  C:00ABH         LINE#         241
+  C:00AEH         LINE#         242
+  C:00B7H         LINE#         243
+  C:00B9H         LINE#         244
+  C:00BBH         LINE#         245
+  C:00C0H         LINE#         247
+  C:00C2H         LINE#         248
+  C:00C5H         LINE#         249
+  C:00CEH         LINE#         250
+  C:00D1H         LINE#         251
+  C:00D6H         LINE#         254
+  C:00D9H         LINE#         255
+  C:00E2H         LINE#         256
+  C:00E4H         LINE#         257
+  C:00E6H         LINE#         258
+  C:00EBH         LINE#         261
+  C:00EEH         LINE#         262
+  C:00F1H         LINE#         263
+  C:00F4H         LINE#         264
+  C:00F7H         LINE#         265
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        交_ǖ_
+
+  -------         MODULE        ?C?SCDIV
+  C:0320H         PUBLIC        ?C?SCDIV
+  -------         ENDMOD        ?C?SCDIV
+
+Program Size: data=20.2 xdata=0 code=879
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

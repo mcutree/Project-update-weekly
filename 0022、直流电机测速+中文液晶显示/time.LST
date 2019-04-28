@@ -1,0 +1,38 @@
+C51 COMPILER V6.12  TIME                                                                   06/03/2007 00:30:00 PAGE 1   
+
+
+C51 COMPILER V6.12, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN .\time.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE .\time.c DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <intrins.h>
+   2          #include <at89x52.h>
+   3          
+   4          
+   5          extern uint c;
+*** ERROR C129 IN LINE 5 OF .\TIME.C: missing ';' before 'c'
+   6          
+   7          void delay(uchar i)
+   8          {  uchar j,k;
+   9             for(;i>0;i--)
+  10             for(j=0;j<10;j++)
+  11             for(k=0;k<10;k++);
+  12          }
+  13          
+  14          
+  15          /*void time()interrupt 1 using 3
+  16          {   
+  17              ET0=0;
+  18              ET1=0;
+  19              TH1=0x3c;
+  20              TL1=0xb0;
+  21              c=TL0;
+  22              TH0=0x00;
+  23              TL0=0x00;
+  24              ET0=1;
+  25              ET1=1;
+  26          }*/
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

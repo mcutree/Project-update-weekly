@@ -1,0 +1,237 @@
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 21:07:44 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE CHENGXU
+OBJECT MODULE PLACED IN chengxu.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE chengxu.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <intrins.h>
+   2          #include <reg52.h>
+   3          #include <stdio.h>
+   4          
+   5          #define ulong unsigned long
+   6          #define uint unsigned int
+   7          #define uchar unsigned char
+   8          uchar k,i,j;
+   9          float l;
+  10          sbit sw=P3^0;      //159选通开关
+  11          sbit ADCS =P3^1;  //ADC0832 chip seclect
+  12          sbit ADDI =P3^3;  //ADC0832 k in
+  13          sbit ADDO =P3^3;  //ADC0832 k out
+  14          sbit ADCLK =P3^2;  //ADC0832 clock signal
+  15          
+  16          uchar dsw[20];  //存放sprintf转换字符
+  17          uchar idata value[149]; //点阵字符储存
+  18          uchar code table[]={    //字符查表
+  19          0x00,0x00,0x00,0x30,0x00,0x30,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,/*".",0*/
+  20          
+  21          0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
+  22          
+  23          0x00,0x00,0xE0,0x0F,0x10,0x10,0x08,0x20,0x08,0x20,0x10,0x10,0xE0,0x0F,0x00,0x00,/*"0",1*/
+  24          
+  25          0x00,0x00,0x10,0x20,0x10,0x20,0xF8,0x3F,0x00,0x20,0x00,0x20,0x00,0x00,0x00,0x00,/*"1",2*/
+  26          
+  27          0x00,0x00,0x70,0x30,0x08,0x28,0x08,0x24,0x08,0x22,0x88,0x21,0x70,0x30,0x00,0x00,/*"2",3*/
+  28          
+  29          0x00,0x00,0x30,0x18,0x08,0x20,0x88,0x20,0x88,0x20,0x48,0x11,0x30,0x0E,0x00,0x00,/*"3",4*/
+  30          
+  31          0x00,0x00,0x00,0x07,0xC0,0x04,0x20,0x24,0x10,0x24,0xF8,0x3F,0x00,0x24,0x00,0x00,/*"4",5*/
+  32          
+  33          0x00,0x00,0xF8,0x19,0x08,0x21,0x88,0x20,0x88,0x20,0x08,0x11,0x08,0x0E,0x00,0x00,/*"5",6*/
+  34          
+  35          0x00,0x00,0xE0,0x0F,0x10,0x11,0x88,0x20,0x88,0x20,0x18,0x11,0x00,0x0E,0x00,0x00,/*"6",7*/
+  36          
+  37          0x00,0x00,0x38,0x00,0x08,0x00,0x08,0x3F,0xC8,0x00,0x38,0x00,0x08,0x00,0x00,0x00,/*"7",8*/
+  38          
+  39          0x00,0x00,0x70,0x1C,0x88,0x22,0x08,0x21,0x08,0x21,0x88,0x22,0x70,0x1C,0x00,0x00,/*"8",9*/
+  40          
+  41          0x00,0x00,0xE0,0x00,0x10,0x31,0x08,0x22,0x08,0x22,0x10,0x11,0xE0,0x0F,0x00,0x00,/*"9",10*/
+  42          
+  43          0x08,0x00,0x78,0x00,0x88,0x07,0x00,0x38,0x00,0x0E,0xC8,0x01,0x38,0x00,0x08,0x00,/*"V",11*/
+  44          };
+  45          
+  46          
+  47          void delay(int c)     //延时，C不能小于5
+  48              {
+  49   1          int i,j;
+  50   1          for(i=0;i<c;i++)
+  51   1              for(j=0;j<10;j++)
+  52   1                  ;
+  53   1           }
+  54          /************
+  55          读ADC0832函数
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 21:07:44 PAGE 2   
+
+  56          ************/
+  57          
+  58          //采集并返回
+  59          unsigned int Adc0832(unsigned char channel)     //AD转换，返回结果
+  60          {
+  61   1          uchar i=0;
+  62   1          uchar j;
+  63   1          uint dat=0;
+  64   1          uchar ndat=0;
+  65   1      
+  66   1          if(channel==0)channel=2;
+  67   1          if(channel==1)channel=3;
+  68   1          ADDI=1;
+  69   1          _nop_();
+  70   1          _nop_();
+  71   1          ADCS=0;//拉低CS端
+  72   1          _nop_();
+  73   1          _nop_();
+  74   1          ADCLK=1;//拉高CLK端
+  75   1          _nop_();
+  76   1          _nop_();
+  77   1          ADCLK=0;//拉低CLK端,形成下降沿1
+  78   1          _nop_();
+  79   1          _nop_();
+  80   1          ADCLK=1;//拉高CLK端
+  81   1          ADDI=channel&0x1;
+  82   1          _nop_();
+  83   1          _nop_();
+  84   1          ADCLK=0;//拉低CLK端,形成下降沿2
+  85   1          _nop_();
+  86   1          _nop_();
+  87   1          ADCLK=1;//拉高CLK端
+  88   1          ADDI=(channel>>1)&0x1;
+  89   1          _nop_();
+  90   1          _nop_();
+  91   1          ADCLK=0;//拉低CLK端,形成下降沿3
+  92   1          ADDI=1;//控制命令结束 
+  93   1          _nop_();
+  94   1          _nop_();
+  95   1          dat=0;
+  96   1          for(i=0;i<8;i++)
+  97   1          {
+  98   2              dat|=ADDO;//收数据
+  99   2              ADCLK=1;
+ 100   2              _nop_();
+ 101   2              _nop_();
+ 102   2              ADCLK=0;//形成一次时钟脉冲
+ 103   2              _nop_();
+ 104   2              _nop_();
+ 105   2              dat<<=1;
+ 106   2              if(i==7)dat|=ADDO;
+ 107   2          }  
+ 108   1          for(i=0;i<8;i++)
+ 109   1          {
+ 110   2              j=0;
+ 111   2              j=j|ADDO;//收数据
+ 112   2              ADCLK=1;
+ 113   2              _nop_();
+ 114   2              _nop_();
+ 115   2              ADCLK=0;//形成一次时钟脉冲
+ 116   2              _nop_();
+ 117   2              _nop_();
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 21:07:44 PAGE 3   
+
+ 118   2              j=j<<7;
+ 119   2              ndat=ndat|j;
+ 120   2              if(i<7)ndat>>=1;
+ 121   2          }
+ 122   1          ADCS=1;//拉低CS端
+ 123   1          ADCLK=0;//拉低CLK端
+ 124   1          ADDO=1;//拉高数据端,回到初始状态
+ 125   1          dat<<=8;
+ 126   1          dat|=ndat;
+ 127   1          return(dat);            //return ad k
+ 128   1      }
+ 129          /*************************************************
+ 130                      点阵字符采集函数
+ 131          **************************************************/
+ 132          
+ 133          void tra(uchar *p)    //数组dsp[]里面的字符查询后，再储储存到另一个显示数组value[]
+ 134          { for(i=0;i<5;i++)
+ 135   1        {
+ 136   2            if(i<4)        //i=2时查的是句号，其他3个是电压值
+ 137   2            {
+ 138   3              for(j=0;j<16;j++)
+ 139   3              { 
+ 140   4                value[(i+1)*16+j]=table[(*p-0x2e)*16+j];
+ 141   4              }
+ 142   3             }
+ 143   2            else
+ 144   2            {  for(j=0;j<16;j++)      //电压符号V
+ 145   3                value[(i+1)*16+j]=table[12*16+j];
+ 146   3            }
+ 147   2            
+ 148   2            p++;
+ 149   2        }
+ 150   1        for(i=0;i<16;i++)           //前16个和后21个消隐作用，不显示
+ 151   1        value[i]=0;
+ 152   1        for(i=128;i<149;i++)
+ 153   1        value[i]=0;
+ 154   1      }
+ 155          
+ 156          
+ 157          void main()
+ 158              {
+ 159   1      
+ 160   1          unsigned int b=0,i,j;
+ 161   1          unsigned char a;
+ 162   1      
+ 163   1      
+ 164   1      
+ 165   1          while(1)
+ 166   1          {
+ 167   2          k=Adc0832(0);   //AD转换结果
+ 168   2          l=k/255.0*5.0;
+ 169   2          sprintf(dsw,"%2.3f",l);  //电压值转换成字符方式储存，不明白的人上百度查一下sprintf函数的运用就清楚的，
+             -俺也是查的
+ 170   2          tra(dsw);
+ 171   2          j=0;
+ 172   2          if(a>2) //移动间隔时间；越大移动越慢
+ 173   2              {
+ 174   3              a=0;
+ 175   3              b+=2;
+ 176   3              if(b>=85)  //显示到最后一个字，回头显示
+ 177   3                  {
+ 178   4                  b=0;
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 21:07:44 PAGE 4   
+
+ 179   4                  }   
+ 180   3              }
+ 181   2           sw=1;   //显示字符，顺序是从左扫到右，有16列，数据电平是从左1到左16，由低到高
+ 182   2           for(i=0;i<16;i++)  //sw是154选通开关。
+ 183   2              {
+ 184   3              P1=i;
+ 185   3              P0=value[j+b];
+ 186   3              P2=value[j+b+1];
+ 187   3              delay(5);
+ 188   3              P0=0x00;
+ 189   3              P2=0x00;
+ 190   3              j+=2;
+ 191   3              }
+ 192   2           sw=0;
+ 193   2           for(i=0;i<16;i++)
+ 194   2              {
+ 195   3              P1=i;
+ 196   3              P0=value[j+b];
+ 197   3              P2=value[j+b+1];
+ 198   3              delay(5);
+ 199   3              P0=0x00;
+ 200   3              P2=0x00;
+ 201   3              j+=2;
+ 202   3              }
+ 203   2              a++;
+ 204   2           
+ 205   2          }
+ 206   1      }
+ 207          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    548    ----
+   CONSTANT SIZE    =    214    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     27       5
+   IDATA SIZE       =    149    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

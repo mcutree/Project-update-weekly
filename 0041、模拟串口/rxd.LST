@@ -1,0 +1,57 @@
+C51 COMPILER V6.12  RXD                                                                    01/25/2008 09:37:11 PAGE 1   
+
+
+C51 COMPILER V6.12, COMPILATION OF MODULE RXD
+OBJECT MODULE PLACED IN .\rxd.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE .\rxd.c DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <reg51.h>
+   2          
+   3          //初始化串行口
+   4          void csh()
+   5          	{
+   6   1      		SM0=0;
+   7   1      		SM1=1;
+   8   1      		REN=1;
+   9   1      		TI=0;
+  10   1      		RI=0;
+  11   1      		PCON=0;
+  12   1      		TH1=0xFD;
+  13   1      		TL1=0XFD;
+  14   1      		TMOD=0X20;
+  15   1      		EA=1;
+  16   1      		ET1=0;
+  17   1      		ES=1;
+  18   1      		TR1=1;
+  19   1      	}
+  20          
+  21          void main()
+  22          	{
+  23   1      		csh();
+  24   1      		while(1)
+  25   1      		{;}
+  26   1      }
+  27          
+  28          void intrr() interrupt 4
+  29          	{
+  30   1      		char temp;
+  31   1      		temp=SBUF;
+  32   1      		P1=temp;
+  33   1              RI=0;
+  34   1      	}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     54    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

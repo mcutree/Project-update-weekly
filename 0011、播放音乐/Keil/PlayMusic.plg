@@ -1,0 +1,221 @@
+<html>
+<body>
+<pre>
+<h1>礦ision2 Build Log</h1>
+<h2>Project:</h2>
+E:\软件备份\单片机软件\Proteus\JJJ仿真电路\播放音乐\Keil\PlayMusic.uv2
+Project File Date:  09/16/2005
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling PlayMusic.c...
+PLAYMUSIC.C(112): warning C206: 'SelectMusic': missing function-prototype
+PLAYMUSIC.C(112): error C267: 'SelectMusic': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  MUSICINDEX
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GETKEY
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _LEDSHOW
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _KEYDISPOSE
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LEDSHOW
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 052BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LEDSHOW
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 066EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GETKEY
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 0674H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LEDSHOW
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 06C5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GETKEY
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 06CBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _KEYDISPOSE
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 06D4H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  MUSICINDEX
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 071BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  MUSICINDEX
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 0723H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LEDSHOW
+    MODULE:  PlayMusic.obj (PLAYMUSIC)
+    ADDRESS: 0729H
+Program Size: data=69.0 xdata=0 code=2427
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 13 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+SOUNDPLAY.H(121): warning C206: 'LEDShow': missing function-prototype
+SOUNDPLAY.H(121): error C267: 'LEDShow': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling PlayMusic.c...
+SOUNDPLAY.H(156): warning C206: 'LEDShow': missing function-prototype
+SOUNDPLAY.H(156): error C267: 'LEDShow': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling PlayMusic.c...
+SOUNDPLAY.H(157): warning C206: 'GetKey': missing function-prototype
+SOUNDPLAY.H(160): warning C206: 'KeyDispose': missing function-prototype
+SOUNDPLAY.H(160): error C267: 'KeyDispose': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling PlayMusic.c...
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(15): error C231: 'P0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(16): error C231: 'SP': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(17): error C231: 'DPL': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(18): error C231: 'DPH': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(19): error C231: 'PCON': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(20): error C231: 'TCON': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(21): error C231: 'TMOD': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(22): error C231: 'TL0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(23): error C231: 'TL1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(24): error C231: 'TH0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(25): error C231: 'TH1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(26): error C231: 'P1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(27): error C231: 'SCON': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(28): error C231: 'SBUF': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(29): error C231: 'P2': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(30): error C231: 'IE': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(31): error C231: 'P3': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(32): error C231: 'IP': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(33): error C231: 'PSW': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(34): error C231: 'ACC': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(35): error C231: 'B': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(65): error C231: 'IT0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(66): error C231: 'IE0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(67): error C231: 'IT1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(68): error C231: 'IE1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(69): error C231: 'TR0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(70): error C231: 'TF0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(71): error C231: 'TR1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(72): error C231: 'TF1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(104): error C231: 'RI': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(105): error C231: 'TI': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(106): error C231: 'RB8': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(107): error C231: 'TB8': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(108): error C231: 'REN': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(109): error C231: 'SM2': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(110): error C231: 'SM1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(111): error C231: 'SM0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(128): error C231: 'EX0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(129): error C231: 'ET0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(130): error C231: 'EX1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(131): error C231: 'ET1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(132): error C231: 'ES': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(133): error C231: 'ET2': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(135): error C231: 'EA': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(149): error C231: 'RXD': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(150): error C231: 'TXD': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(151): error C231: 'INT0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(152): error C231: 'INT1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(153): error C231: 'T0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(154): error C231: 'T1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(155): error C231: 'WR': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(156): error C231: 'RD': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(161): error C231: 'PX0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(162): error C231: 'PT0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(163): error C231: 'PX1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(164): error C231: 'PT1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(165): error C231: 'PS': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(166): error C231: 'PT2': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(171): error C231: 'P': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(173): error C231: 'OV': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(174): error C231: 'RS0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(175): error C231: 'RS1': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(176): error C231: 'F0': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(177): error C231: 'AC': redefinition
+C:\PROGRAM FILES\KEIL\C51\INC\ATMEL\REGX51.H(178): error C231: 'CY': redefinition
+Target not created
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY1MS?PLAYMUSIC
+Program Size: data=64.0 xdata=0 code=2234
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY1MS?PLAYMUSIC
+Program Size: data=64.0 xdata=0 code=2234
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+PLAYMUSIC.C(112): warning C206: 'PlayMusic': missing function-prototype
+PLAYMUSIC.C(112): error C267: 'PlayMusic': requires ANSI-style prototype
+Target not created
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY?PLAYMUSIC
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY1MS?PLAYMUSIC
+Program Size: data=64.0 xdata=0 code=2211
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY1MS?PLAYMUSIC
+Program Size: data=64.0 xdata=0 code=2234
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+Program Size: data=64.0 xdata=0 code=2254
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+Program Size: data=64.0 xdata=0 code=2263
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+Program Size: data=64.0 xdata=0 code=2263
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+Program Size: data=64.0 xdata=0 code=2263
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling PlayMusic.c...
+linking...
+Program Size: data=64.0 xdata=0 code=2263
+creating hex file from "PlayMusic"...
+"PlayMusic" - 0 Error(s), 0 Warning(s).

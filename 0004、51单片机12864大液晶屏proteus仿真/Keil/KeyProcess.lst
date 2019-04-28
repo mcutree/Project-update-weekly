@@ -1,0 +1,65 @@
+C51 COMPILER V8.02   KEYPROCESS                                                            08/24/2008 10:50:53 PAGE 1   
+
+
+C51 COMPILER V8.02, COMPILATION OF MODULE KEYPROCESS
+OBJECT MODULE PLACED IN KeyProcess.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE sources\KeyProcess.c BROWSE INCDIR(.\include) DEBUG OBJECTEXTEND PRINT(.\Ke
+                    -yProcess.lst) OBJECT(KeyProcess.obj)
+
+line level    source
+
+   1          //*************************************************************************************************
+   2          //*                                                                                                                                                                                               *
+   3          //*                      ******************************¼üÂë´¦Àí³ÌÐò**************************                             *
+   4          //*                                                                                                                                                                                               *
+   5          //*************************************************************************************************
+   6          
+   7          #include "LCD12864.h"
+   8          #include "LCDShowMap.h"
+   9          
+  10          #define NUMROW 0
+  11          #define NUMLINE 20
+  12          void vKeyProcess(unsigned char ucKeyCode)
+  13          {       
+  14   1      
+  15   1              switch(ucKeyCode)
+  16   1                      {
+  17   2                      case 11:vShowOneChar(NUMROW,NUMLINE,uca_7);break;                                                         //'7'
+  18   2                      case 12:vShowOneChar(NUMROW,NUMLINE,uca_8);break;                                                         //'8'
+  19   2                      case 13:vShowOneChar(NUMROW,NUMLINE,uca_9);break;                                                         //'9'
+  20   2                      case 21:vShowOneChar(NUMROW,NUMLINE,uca_4);break;                                                         //'4'
+  21   2                      case 22:vShowOneChar(NUMROW,NUMLINE,uca_5);break;                                                         //'5'
+  22   2                      case 23:vShowOneChar(NUMROW,NUMLINE,uca_6);break;                                                         //'6'
+  23   2                      case 31:vShowOneChar(NUMROW,NUMLINE,uca_1);break;                                                         //'1'
+  24   2                      case 32:vShowOneChar(NUMROW,NUMLINE,uca_2);break;                                                         //'2'
+  25   2                      case 33:vShowOneChar(NUMROW,NUMLINE,uca_3);break;                                                         //'3'
+  26   2                      case 42:vShowOneChar(NUMROW,NUMLINE,uca_0);break;                                                         //'0'
+  27   2      
+  28   2                      case 14:vShowOneChar(NUMROW,NUMLINE,uca_CHU);break;                                                       //'/'
+  29   2                      case 24:vShowOneChar(NUMROW,NUMLINE,uca_CHENG);break;                                             //'*'
+  30   2                      case 34:vShowOneChar(NUMROW,NUMLINE,uca_JIAN);break;                                              //'-'
+  31   2                      case 44:vShowOneChar(NUMROW,NUMLINE,uca_JIA);break;                                                       //'+'
+  32   2                                                                
+  33   2                      case 43:vShowOneChar(NUMROW,NUMLINE,uca_DENG);break;                                                      //'='
+  34   2      
+  35   2                      case 41:vShowCustomRow(NUMROW,NUMLINE,8,uca_BLANK);
+  36   2                                      vShowCustomRow(NUMROW+1,NUMLINE,8,uca_BLANK);
+  37   2                                      break;                                                    //'ON/C'
+  38   2                      
+  39   2                      default:break;
+  40   2                      }
+  41   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    218    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

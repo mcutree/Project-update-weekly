@@ -1,0 +1,55 @@
+C51 COMPILER V8.05a   DS1302                                                               03/21/2011 11:16:05 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE DS1302
+OBJECT MODULE PLACED IN DS1302.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE DS1302.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          #include "DS1302.h"
+   4          
+   5          void Delay1ms(unsigned int count)
+   6          {
+   7   1              unsigned int i,j;
+   8   1              for(i=0;i<count;i++)
+   9   1              for(j=0;j<120;j++);
+  10   1      }
+  11          
+  12          main()
+  13          {
+  14   1              SYSTEMTIME CurrentTime;
+  15   1              LCD_Initial();
+  16   1              Initial_DS1302();
+  17   1      
+  18   1              GotoXY(0,0);
+  19   1              Print(" www.ourhc.cn");
+  20   1              GotoXY(0,1);
+  21   1              Print("Time: ");
+  22   1              
+  23   1              while(1)
+  24   1              {
+  25   2                      DS1302_GetTime(&CurrentTime);
+  26   2                      TimeToStr(&CurrentTime);
+  27   2                      GotoXY(6,1);
+  28   2                      Print(CurrentTime.TimeString);
+  29   2      
+  30   2                      Delay1ms(400);
+  31   2              }
+  32   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    830    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      26
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

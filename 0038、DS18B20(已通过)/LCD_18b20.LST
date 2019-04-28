@@ -1,0 +1,137 @@
+C51 COMPILER V7.08   LCD_18B20                                                             04/30/2007 21:28:33 PAGE 1   
+
+
+C51 COMPILER V7.08, COMPILATION OF MODULE LCD_18B20
+OBJECT MODULE PLACED IN LCD_18b20.OBJ
+COMPILER INVOKED BY: D:\Program Files\keil 7.08\C51\BIN\C51.EXE LCD_18b20.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <at89x51.h>//用AT89C51时就用这个头文件
+   2          //#include <reg52.h>//用华邦W78E58B时必须用这个头文件
+   3          #include <absacc.h>
+   4          #include <ctype.h>
+   5          #include <math.h>
+   6          #include <stdio.h>
+   7          #include <string.h>
+   8          #include <DS18B20.h>
+   9          #include "LCD1602.h"                    ////液晶显示头文件
+  10          //sbit DQ = P3^4;                                       //定义DQ引脚为P3.4
+  11          unsigned char t[2],*pt;                         //用来存放温度值,测温程序就是通过这个数组与主函数通信的
+  12          unsigned char  TempBuffer1[9]={0x2b,0x31,0x32,0x32,0x2e,0x30,0x30,0x43,'\0'};
+  13                                                                          //显示实时温度,上电时显示+125.00C
+  14          unsigned char  TempBuffer0[17]={0x54,0x48,0x3a,0x2b,0x31,0x32,0x35,0x20,
+  15                                                                          0x54,0x4c,0x3a,0x2b,0x31,0x32,0x34,0x43,'\0'};
+  16                                                                          //显示温度上下限,上电时显示TH:+125 TL:+124C                                                     
+  17          unsigned char code dotcode[4]={0,25,50,75};
+  18          /***因显示分辨率为0.25,但小数运算比较麻烦,故采用查表的方法*******
+  19          再将表值分离出十位和个位后送到十分位和百分位********************/
+  20          
+  21          
+  22          void covert0( unsigned char TH, unsigned char TL)       //将温度上下限转换为LCD显示的数据
+  23          { 
+  24   1         if(TH>0x7F)                    //判断正负,如果为负温,将其转化为其绝对值
+  25   1         {
+  26   2          TempBuffer0[3]=0x2d;             //0x2d为"-"的ASCII码
+  27   2              TH=~TH;
+  28   2              TH++;
+  29   2         }
+  30   1         else TempBuffer0[3]=0x2b;    //0x2B为"+"的ASCII码
+  31   1      
+  32   1         if(TL>0x7f)
+  33   1         {
+  34   2         TempBuffer0[11]=0x2d;             //0x2d为"-"的ASCII码
+  35   2         TL=~TL+1;
+  36   2         }
+  37   1         else TempBuffer0[11]=0x2b;   //0x2B为"+"的ASCII码
+  38   1      
+  39   1        TempBuffer0[4]=TH/100+0x30;                        //分离出TH的百十个位
+  40   1        if( TempBuffer0[4]==0x30) TempBuffer0[4]=0xfe; //百位数消隐
+  41   1        TempBuffer0[5]=(TH%100)/10+0x30;                              //分离出十位
+  42   1        TempBuffer0[6]=(TH%100)%10+0x30;                              //分离出个位
+  43   1        TempBuffer0[12]=TL/100+0x30;                       //分离出TL的百十个位
+  44   1        if( TempBuffer0[12]==0x30) TempBuffer0[12]=0xfe; //百位数消隐
+  45   1        TempBuffer0[13]=(TL%100)/10+0x30;                             //分离出十位
+  46   1        TempBuffer0[14]=(TL%100)%10+0x30;                             //分离出个位
+  47   1      }
+  48          
+  49          
+  50          void covert1(void)      //将温度转换为LCD显示的数据
+  51          {
+  52   1         unsigned char x=0x00,y=0x00;
+  53   1         t[0]=*pt;
+  54   1         pt++;
+  55   1         t[1]=*pt;
+C51 COMPILER V7.08   LCD_18B20                                                             04/30/2007 21:28:33 PAGE 2   
+
+  56   1         if(t[1]>0x07)                    //判断正负温度
+  57   1         {
+  58   2          TempBuffer1[0]=0x2d;             //0x2d为"-"的ASCII码
+  59   2              t[1]=~t[1];                      /*下面几句把负数的补码*/
+  60   2              t[0]=~t[0];              /* 换算成绝对值*********/
+  61   2              x=t[0]+1;                                /***********************/
+  62   2              t[0]=x;                                  /***********************/
+  63   2              if(x>255)                /**********************/
+  64   2              t[1]++;                          /*********************/
+  65   2         }
+  66   1         else TempBuffer1[0]=0x2b;    //0xfe为变"+"的ASCII码
+  67   1        t[1]<<=4;             //将高字节左移4位
+  68   1        t[1]=t[1]&0x70;               //取出高字节的3个有效数字位
+  69   1        x=t[0];                                       //将t[0]暂存到X,因为取小数部分还要用到它
+  70   1        x>>=4;                                        //右移4位
+  71   1        x=x&0x0f;                                     //和前面两句就是取出t[0]的高四位        
+  72   1        t[1]=t[1]|x;                  //将高低字节的有效值的整数部分拼成一个字节
+  73   1        TempBuffer1[1]=t[1]/100+0x30;                      //+0x30 为变 0~9 ASCII码
+  74   1         if( TempBuffer1[1]==0x30) TempBuffer1[1]=0xfe; //百位数消隐
+  75   1        TempBuffer1[2]=(t[1]%100)/10+0x30;                            //分离出十位
+  76   1        TempBuffer1[3]=(t[1]%100)%10+0x30;                            //分离出个位
+  77   1        t[0]=t[0]&0x0c;                                                       //取有效的两位小数
+  78   1        t[0]>>=2;                                                                     //左移两位,以便查表
+  79   1        x=t[0];                                                                               
+  80   1        y=dotcode[x];                                                                 //查表换算成实际的小数
+  81   1        TempBuffer1[5]=y/10+0x30;                                                     //分离出十分位
+  82   1        TempBuffer1[6]=y%10+0x30;                                                     //分离出百分位
+  83   1      }                       
+  84          
+  85          void delay(unsigned char i)
+  86          {
+  87   1              while(i--);
+  88   1      }
+  89          
+  90          main()
+  91          {
+  92   1       unsigned char TH=110,TL=-20;                                           //下一步扩展时可能通过这两个变量,调节上下限
+  93   1                                                                               //测温函数返回这个数组的头地址
+  94   1       while(1)
+  95   1       {      
+  96   2          pt=ReadTemperature(TH,TL,0x3f);              //上限温度-22,下限-24,分辨率10位,也就是0.25C
+  97   2                                                                                       //读取温度,温度值存放在一个两个字节的数组中,
+  98   2              delay(100); 
+  99   2              covert1();
+ 100   2              covert0(TH,TL);
+ 101   2              LCD_Initial();                                                  //第一个参数列号,第二个为行号,为0表示第一行
+ 102   2                                                                                              //为1表示第二行,第三个参数为显示数据的首地址
+ 103   2              LCD_Print(0,0,TempBuffer0);     
+ 104   2              LCD_Print(0,1,TempBuffer1);                             
+ 105   2       }
+ 106   1      }
+ 107            
+ 108          
+ 109          
+ 110          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    687    ----
+   CONSTANT SIZE    =      4    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V7.08   LCD_18B20                                                             04/30/2007 21:28:33 PAGE 3   
+
+   DATA SIZE        =     31       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

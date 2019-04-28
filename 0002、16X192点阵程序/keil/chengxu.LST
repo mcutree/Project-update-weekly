@@ -1,0 +1,114 @@
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 20:39:00 PAGE 1   
+
+
+C51 COMPILER V8.05a, COMPILATION OF MODULE CHENGXU
+OBJECT MODULE PLACED IN chengxu.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE chengxu.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<AT89X52.H>
+   2          sbit ST=P3^5;
+   3          sbit E1=P3^4;
+   4          sbit MR=P3^7;
+   5          char cashe[12];
+   6          char code wd[12][16]={
+   7          
+   8          
+   9          
+  10          
+  11          
+  12          
+  13          {0xFF,0xC0,0xFE,0xFE,0xFE,0xFE,0x80,0xFE,0xFD,0xFD,0xFB,0xF7,0xEF,0xDF,0x3F,0xFF},
+  14          {0xFF,0x03,0xFF,0xFF,0xFF,0xFF,0x01,0x7F,0x7F,0x7F,0x7F,0x7F,0x7D,0x7D,0x81,0xFF},/*"无",0*/
+  15          /* (16 X 16 , 宋体 )*/
+  16          
+  17          {0xDF,0xDF,0xDF,0xCF,0x57,0x58,0x5F,0xDF,0xDE,0xDE,0xDE,0xDD,0xDD,0xDB,0xDB,0xD7},
+  18          {0x7F,0x6F,0x73,0x77,0x7F,0x01,0x5F,0x5F,0xDF,0xDF,0xDF,0xDF,0xDD,0xDD,0xE1,0xFF},/*"忧",1*/
+  19          /* (16 X 16 , 宋体 )*/
+  20          
+  21          {0xFE,0xFE,0xFE,0xC0,0xDE,0xDE,0xC0,0xDE,0xDE,0xDE,0xC0,0xDE,0xFE,0xFE,0xFF,0xFF},
+  22          {0xFF,0xFF,0xFF,0x07,0xF7,0xF7,0x07,0xF7,0xF7,0xF7,0x07,0xF7,0xFD,0xFD,0x01,0xFF},/*"电",2*/
+  23          /* (16 X 16 , 宋体 )*/
+  24          
+  25          {0xFF,0xC0,0xFF,0xFF,0xFF,0xFE,0xFE,0xFE,0x00,0xFE,0xFE,0xFE,0xFE,0xFE,0xFA,0xFD},
+  26          {0xFF,0x0F,0xDF,0xBF,0x7F,0xFF,0xFF,0xFB,0x01,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},/*"子",3*/
+  27          /* (16 X 16 , 宋体 )*/
+  28          
+  29          {0xFF,0x83,0xBB,0xAB,0xAA,0xAA,0xA9,0xAB,0xAB,0xAA,0xEE,0xD7,0xDB,0xBB,0x7F,0xFF},
+  30          {0x7F,0x3F,0x7F,0x01,0xFD,0xFD,0xBD,0xBD,0x5D,0xED,0x05,0xED,0xFD,0xFD,0xEB,0xF7},/*"购",4*/
+  31          /* (16 X 16 , 宋体 )*/
+  32          
+  33          {0xEF,0xEF,0xAF,0xAE,0x82,0xAD,0x6B,0xEB,0xE6,0xCD,0x2B,0xEF,0xEE,0xED,0xEB,0xFF},
+  34          {0x7F,0x7F,0x7F,0x03,0xAB,0xAB,0x6B,0x6B,0xDB,0xDB,0xBB,0x7B,0xFB,0xFB,0xD7,0xEF},/*"物",5*/
+  35          /* (16 X 16 , 宋体 )*/
+  36          
+  37          
+  38          
+  39          };
+  40          
+  41          
+  42          void del(int i)//============================//延时程序
+  43          {while(i--);}
+  44          
+  45          aline() ////=======================发送一行的显示程序
+  46          {
+  47   1      char i=0;
+  48   1      TI=0;
+  49   1      for(i=0;i<12;i++)
+  50   1      {SBUF=cashe[i];while(~TI);TI=0;} //将缓存中的信息转存入595的存储器中，到此不显示
+  51   1      }
+  52          
+  53          
+  54          
+  55          main()
+C51 COMPILER V8.05a   CHENGXU                                                              03/20/2011 20:39:00 PAGE 2   
+
+  56          {
+  57   1      int m=0,n=0;
+  58   1              TI=0;
+  59   1              SM0=0;
+  60   1              SM1=0;
+  61   1      E1=0;
+  62   1      while(1)
+  63   1      for(m=0;m<16;m++)      //共有16行  循环16次显示这16行  串行的595送出行的数据
+  64   1              {                                       //由74hc154选中要显示的行
+  65   2      
+  66   2              for(n=0;n<12;n++)         //这个for循环用来向缓存数组中装载要显示的内容
+  67   2                      {cashe[11-n]=wd[n][m];}  //将第m个字的第n行信息装载  ，因为595串接 数据第一个进去的会在最后一个595中，最
+             -后进去的会在第一个595中
+  68   2          aline();     //将缓存中的一行信息载入595缓存中
+  69   2              ST=0;ST=1; //595产生上升沿 输出595锁存的数据
+  70   2              P2=m;  //选中要显示的行输出数据
+  71   2            
+  72   2              del(100);//延时一段时间，以造成视觉暂存效应
+  73   2      
+  74   2                }
+  75   1      
+  76   1      }
+  77          
+  78          
+  79          
+  80          
+  81          
+  82          
+  83          
+  84          
+  85          
+  86          
+  87          
+  88          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    152    ----
+   CONSTANT SIZE    =    192    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

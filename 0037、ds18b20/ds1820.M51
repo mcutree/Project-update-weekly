@@ -1,0 +1,428 @@
+BL51 BANKED LINKER/LOCATER V5.00                                                        12/05/2007  20:19:08  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE ds1820.obj TO ds1820
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  ds1820.obj (DS1820)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FCAST)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?CASTF)
+  C:\KEIL\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?LNEG)
+
+
+LINK MAP OF MODULE:  ds1820 (DS1820)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         ?DT?DS1820
+            DATA    0010H     0003H     UNIT         _DATA_GROUP_
+            IDATA   0013H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0241H     UNIT         ?C?LIB_CODE
+            CODE    0244H     00B2H     UNIT         ?PR?DS1820DISP?DS1820
+            CODE    02F6H     0071H     UNIT         ?PR?READ_TEMP?DS1820
+            CODE    0367H     002AH     UNIT         ?PR?_DISPLAY?DS1820
+            CODE    0391H     0027H     UNIT         ?PR?_DELAY1MS?DS1820
+            CODE    03B8H     0026H     UNIT         ?PR?LCD_INIT?DS1820
+            CODE    03DEH     001FH     UNIT         ?PR?INIT_PLAY?DS1820
+            CODE    03FDH     001EH     UNIT         ?PR?DS1820RD?DS1820
+            CODE    041BH     001EH     UNIT         ?CO?DS1820
+            CODE    0439H     001DH     UNIT         ?PR?DS1820RST?DS1820
+            CODE    0456H     001CH     UNIT         ?PR?_WR_COM?DS1820
+            CODE    0472H     001CH     UNIT         ?PR?_WR_DAT?DS1820
+            CODE    048EH     001AH     UNIT         ?PR?_DS1820WR?DS1820
+            CODE    04A8H     000CH     UNIT         ?C_C51STARTUP
+            CODE    04B4H     000BH     UNIT         ?PR?_DELAY_18B20?DS1820
+            CODE    04BFH     000BH     UNIT         ?PR?MAIN?DS1820
+
+
+
+OVERLAY MAP OF MODULE:   ds1820 (DS1820)
+
+
+SEGMENT                           DATA_GROUP 
+  +--> CALLED SEGMENT           START    LENGTH
+-----------------------------------------------
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 2
+
+
+?C_C51STARTUP                   -----    -----
+  +--> ?PR?MAIN?DS1820
+
+?PR?MAIN?DS1820                 -----    -----
+  +--> ?PR?INIT_PLAY?DS1820
+  +--> ?PR?READ_TEMP?DS1820
+  +--> ?PR?DS1820DISP?DS1820
+
+?PR?INIT_PLAY?DS1820            -----    -----
+  +--> ?PR?LCD_INIT?DS1820
+  +--> ?PR?_WR_COM?DS1820
+  +--> ?CO?DS1820
+  +--> ?PR?_DISPLAY?DS1820
+
+?PR?LCD_INIT?DS1820             -----    -----
+  +--> ?PR?_DELAY1MS?DS1820
+  +--> ?PR?_WR_COM?DS1820
+
+?PR?_DELAY1MS?DS1820            -----    -----
+  +--> ?PR?_WR_COM?DS1820
+
+?PR?_DISPLAY?DS1820             0010H    0003H
+  +--> ?PR?_WR_DAT?DS1820
+  +--> ?PR?_DELAY1MS?DS1820
+
+?PR?_WR_DAT?DS1820              -----    -----
+  +--> ?PR?_DELAY1MS?DS1820
+
+?PR?READ_TEMP?DS1820            -----    -----
+  +--> ?PR?DS1820RST?DS1820
+  +--> ?PR?_DS1820WR?DS1820
+  +--> ?PR?DS1820RD?DS1820
+
+?PR?DS1820RST?DS1820            0010H    0001H
+  +--> ?PR?_DELAY_18B20?DS1820
+
+?PR?_DS1820WR?DS1820            -----    -----
+  +--> ?PR?_DELAY_18B20?DS1820
+
+?PR?DS1820RD?DS1820             -----    -----
+  +--> ?PR?_DELAY_18B20?DS1820
+
+?PR?DS1820DISP?DS1820           0010H    0001H
+  +--> ?PR?_WR_COM?DS1820
+  +--> ?PR?_WR_DAT?DS1820
+
+
+
+SYMBOL TABLE OF MODULE:  ds1820 (DS1820)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        DS1820
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0439H         PUBLIC        ds1820rst
+  D:00A0H         PUBLIC        P2
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 3
+
+
+  D:00B0H         PUBLIC        P3
+  B:00B0H.4       PUBLIC        T0
+  B:00D0H.6       PUBLIC        AC
+  C:0398H         PUBLIC        _delay1ms
+  B:00B0H.5       PUBLIC        T1
+  B:00A8H.7       PUBLIC        EA
+  C:041BH         PUBLIC        str1
+  C:042AH         PUBLIC        str2
+  D:0008H         PUBLIC        tflag
+  B:00B0H.2       PUBLIC        EN
+  D:0009H         PUBLIC        tvalue
+  B:00B0H.7       PUBLIC        DQ
+  B:00B0H.7       PUBLIC        RD
+  B:00A8H.4       PUBLIC        ES
+  B:0098H.0       PUBLIC        RI
+  B:00B0H.2       PUBLIC        INT0
+  B:00D0H.7       PUBLIC        CY
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:00B8H.4       PUBLIC        PS
+  B:00B0H.0       PUBLIC        RS
+  B:00D0H.2       PUBLIC        OV
+  C:04BFH         PUBLIC        main
+  B:00B0H.1       PUBLIC        RW
+  B:00B0H.6       PUBLIC        WR
+  C:02F6H         PUBLIC        read_temp
+  B:0088H.1       PUBLIC        IE0
+  B:0088H.3       PUBLIC        IE1
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  C:03B8H         PUBLIC        lcd_init
+  B:0088H.7       PUBLIC        TF1
+  B:0098H.2       PUBLIC        RB8
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  B:0098H.3       PUBLIC        TB8
+  B:00A8H.2       PUBLIC        EX1
+  B:0088H.2       PUBLIC        IT1
+  C:03DEH         PUBLIC        init_play
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  B:0098H.5       PUBLIC        SM2
+  B:00B8H.1       PUBLIC        PT0
+  B:00B8H.3       PUBLIC        PT1
+  B:00D0H.3       PUBLIC        RS0
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  C:0244H         PUBLIC        ds1820disp
+  B:0088H.6       PUBLIC        TR1
+  B:00B8H.0       PUBLIC        PX0
+  B:00B8H.2       PUBLIC        PX1
+  C:0367H         PUBLIC        _display
+  D:000BH         PUBLIC        disdata
+  C:04B4H         PUBLIC        _delay_18B20
+  C:0472H         PUBLIC        _wr_dat
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 4
+
+
+  B:0098H.4       PUBLIC        REN
+  C:0456H         PUBLIC        _wr_com
+  C:048EH         PUBLIC        _ds1820wr
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  B:00D0H.5       PUBLIC        F0
+  C:03FDH         PUBLIC        ds1820rd
+  C:0391H         SYMBOL        L?0043
+  -------         PROC          L?0042
+  -------         ENDPROC       L?0042
+  C:0391H         SYMBOL        L?0043
+  -------         PROC          _DELAY1MS
+  D:0006H         SYMBOL        ms
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0398H         LINE#         19
+  C:0398H         LINE#         20
+  C:0398H         LINE#         21
+  C:03A2H         LINE#         22
+  C:03B7H         LINE#         23
+  -------         ENDPROC       _DELAY1MS
+  -------         PROC          _WR_COM
+  D:0001H         SYMBOL        com
+  C:0456H         LINE#         25
+  C:0458H         LINE#         26
+  C:045FH         LINE#         27
+  C:0461H         LINE#         28
+  C:0463H         LINE#         29
+  C:0465H         LINE#         30
+  C:0467H         LINE#         31
+  C:046AH         LINE#         32
+  C:046CH         LINE#         33
+  C:046FH         LINE#         34
+  C:0471H         LINE#         35
+  -------         ENDPROC       _WR_COM
+  -------         PROC          _WR_DAT
+  D:0001H         SYMBOL        dat
+  C:0472H         LINE#         37
+  C:0474H         LINE#         38
+  C:047BH         LINE#         39
+  C:047DH         LINE#         40
+  C:047FH         LINE#         41
+  C:0481H         LINE#         42
+  C:0483H         LINE#         43
+  C:0486H         LINE#         44
+  C:0488H         LINE#         45
+  C:048BH         LINE#         46
+  C:048DH         LINE#         47
+  -------         ENDPROC       _WR_DAT
+  -------         PROC          LCD_INIT
+  C:03B8H         LINE#         49
+  C:03B8H         LINE#         50
+  C:03BFH         LINE#         51
+  C:03C4H         LINE#         52
+  C:03C9H         LINE#         53
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 5
+
+
+  C:03CEH         LINE#         54
+  C:03D2H         LINE#         55
+  -------         ENDPROC       LCD_INIT
+  -------         PROC          _DISPLAY
+  D:0010H         SYMBOL        p
+  C:0367H         LINE#         59
+  C:036DH         LINE#         60
+  C:036DH         LINE#         61
+  C:0379H         LINE#         62
+  C:0379H         LINE#         63
+  C:037CH         LINE#         64
+  C:0387H         LINE#         65
+  C:038EH         LINE#         66
+  C:0390H         LINE#         67
+  -------         ENDPROC       _DISPLAY
+  -------         PROC          INIT_PLAY
+  C:03DEH         LINE#         69
+  C:03DEH         LINE#         70
+  C:03E1H         LINE#         71
+  C:03E6H         LINE#         72
+  C:03EFH         LINE#         73
+  C:03F4H         LINE#         74
+  -------         ENDPROC       INIT_PLAY
+  -------         PROC          _DELAY_18B20
+  D:0006H         SYMBOL        i
+  C:04B4H         LINE#         78
+  C:04B4H         LINE#         79
+  C:04B4H         LINE#         80
+  C:04BEH         LINE#         81
+  -------         ENDPROC       _DELAY_18B20
+  -------         PROC          DS1820RST
+  -------         DO            
+  D:0010H         SYMBOL        x
+  -------         ENDDO         
+  C:0439H         LINE#         83
+  C:0439H         LINE#         84
+  C:043CH         LINE#         85
+  C:043EH         LINE#         86
+  C:0444H         LINE#         87
+  C:0446H         LINE#         88
+  C:044DH         LINE#         89
+  C:044FH         LINE#         90
+  -------         ENDPROC       DS1820RST
+  -------         PROC          DS1820RD
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0003H         SYMBOL        dat
+  -------         ENDDO         
+  C:03FDH         LINE#         93
+  C:03FDH         LINE#         94
+  C:03FEH         LINE#         95
+  C:03FFH         LINE#         96
+  C:0401H         LINE#         97
+  C:0403H         LINE#         98
+  C:0407H         LINE#         99
+  C:0409H         LINE#         100
+  C:040CH         LINE#         101
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 6
+
+
+  C:040FH         LINE#         102
+  C:0416H         LINE#         103
+  C:0418H         LINE#         104
+  C:041AH         LINE#         105
+  -------         ENDPROC       DS1820RD
+  -------         PROC          _DS1820WR
+  D:0005H         SYMBOL        wdata
+  -------         DO            
+  D:0003H         SYMBOL        i
+  -------         ENDDO         
+  C:048EH         LINE#         107
+  C:0490H         LINE#         108
+  C:0490H         LINE#         109
+  C:0492H         LINE#         110
+  C:0494H         LINE#         111
+  C:0498H         LINE#         112
+  C:049FH         LINE#         113
+  C:04A1H         LINE#         114
+  C:04A5H         LINE#         115
+  C:04A7H         LINE#         116
+  -------         ENDPROC       _DS1820WR
+  -------         PROC          READ_TEMP
+  -------         DO            
+  D:0002H         SYMBOL        a
+  D:0007H         SYMBOL        b
+  -------         ENDDO         
+  C:02F6H         LINE#         120
+  C:02F6H         LINE#         121
+  C:02F6H         LINE#         122
+  C:02F9H         LINE#         123
+  C:02FEH         LINE#         124
+  C:0303H         LINE#         125
+  C:0306H         LINE#         126
+  C:030BH         LINE#         127
+  C:0310H         LINE#         128
+  C:0315H         LINE#         129
+  C:0318H         LINE#         130
+  C:031DH         LINE#         131
+  C:0324H         LINE#         132
+  C:0329H         LINE#         133
+  C:0334H         LINE#         134
+  C:0339H         LINE#         136
+  C:034AH         LINE#         137
+  C:034DH         LINE#         138
+  C:034DH         LINE#         139
+  C:0366H         LINE#         140
+  C:0366H         LINE#         141
+  -------         ENDPROC       READ_TEMP
+  -------         PROC          DS1820DISP
+  -------         DO            
+  D:0010H         SYMBOL        flagdat
+  -------         ENDDO         
+  C:0244H         LINE#         144
+  C:0244H         LINE#         145
+  C:0244H         LINE#         146
+  C:0254H         LINE#         147
+  C:0271H         LINE#         148
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 7
+
+
+  C:028EH         LINE#         149
+  C:029EH         LINE#         151
+  C:02A2H         LINE#         152
+  C:02A7H         LINE#         154
+  C:02AAH         LINE#         156
+  C:02AFH         LINE#         157
+  C:02B2H         LINE#         158
+  C:02B7H         LINE#         159
+  C:02BAH         LINE#         160
+  C:02BAH         LINE#         161
+  C:02BAH         LINE#         163
+  C:02BFH         LINE#         164
+  C:02C4H         LINE#         165
+  C:02C9H         LINE#         166
+  C:02CEH         LINE#         167
+  C:02D3H         LINE#         168
+  C:02D8H         LINE#         169
+  C:02DDH         LINE#         170
+  C:02E2H         LINE#         171
+  C:02E7H         LINE#         172
+  C:02ECH         LINE#         173
+  C:02F1H         LINE#         174
+  -------         ENDPROC       DS1820DISP
+  -------         PROC          MAIN
+  C:04BFH         LINE#         177
+  C:04BFH         LINE#         178
+  C:04C2H         LINE#         179
+  C:04C2H         LINE#         180
+  C:04C5H         LINE#         181
+  C:04C8H         LINE#         182
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        DS1820
+
+  -------         MODULE        ?C?FPMUL
+  C:0003H         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FCAST
+  C:0113H         PUBLIC        ?C?FCASTC
+  C:010EH         PUBLIC        ?C?FCASTI
+  C:0109H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:0147H         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?CLDPTR
+  C:01C8H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:01E1H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:0236H         PUBLIC        ?C?LNEG
+BL51 BANKED LINKER/LOCATER V5.00                                                      12/05/2007  20:19:08  PAGE 8
+
+
+  -------         ENDMOD        ?C?LNEG
+
+Program Size: data=20.0 xdata=0 code=1226
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

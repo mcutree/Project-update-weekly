@@ -1,0 +1,34 @@
+C51 COMPILER V7.09   MAX7221                                                               09/19/2005 22:15:57 PAGE 1   
+
+
+C51 COMPILER V7.09, COMPILATION OF MODULE MAX7221
+OBJECT MODULE PLACED IN Max7221.OBJ
+COMPILER INVOKED BY: C:\Program Files\Keil\C51\BIN\C51.EXE Max7221.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "Max7221.h"
+   3          
+   4          unsigned char DisplayBuffer[8]={0,1,2,3,4,5,6,7};//œ‘ æª∫≥Â«¯
+   5          
+   6          main()
+   7          {
+   8   1              InitialMax7221();
+   9   1              Max7221Display(&DisplayBuffer[0]);
+  10   1              while(1);       
+  11   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    177    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

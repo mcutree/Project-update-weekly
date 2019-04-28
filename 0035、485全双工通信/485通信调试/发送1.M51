@@ -1,0 +1,155 @@
+BL51 BANKED LINKER/LOCATER V5.03                                                        07/31/2007  13:37:47  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.03, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE 00.obj TO 发送1 RAMSIZE (128)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  00.obj (00)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  发送1 (00)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         ?DT?00
+            IDATA   000DH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0012H     UNIT         ?PR?_DELAY?00
+            CODE    0015H     0012H     UNIT         ?PR?INIT?00
+            CODE    0027H     0012H     UNIT         ?PR?KEYSCAN?00
+            CODE    0039H     000DH     UNIT         ?PR?MAIN?00
+            CODE    0046H     000CH     UNIT         ?C_C51STARTUP
+            CODE    0052H     000BH     UNIT         ?PR?SEND?00
+
+
+
+OVERLAY MAP OF MODULE:   发送1 (00)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?00
+
+?PR?MAIN?00
+  +--> ?PR?_DELAY?00
+  +--> ?PR?INIT?00
+  +--> ?PR?SEND?00
+
+
+
+SYMBOL TABLE OF MODULE:  发送1 (00)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        00
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+BL51 BANKED LINKER/LOCATER V5.03                                                      07/31/2007  13:37:47  PAGE 2
+
+
+  D:00A0H         PUBLIC        P2
+  D:0008H         PUBLIC        flag
+  B:0098H.1       PUBLIC        TI
+  C:0039H         PUBLIC        main
+  C:0052H         PUBLIC        send
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  C:0015H         PUBLIC        init
+  D:0009H         PUBLIC        flag1
+  D:000AH         PUBLIC        data1
+  D:008DH         PUBLIC        TH1
+  D:000BH         PUBLIC        data2
+  D:008BH         PUBLIC        TL1
+  D:000CH         PUBLIC        pf
+  B:0088H.6       PUBLIC        TR1
+  C:0003H         PUBLIC        _delay
+  C:0027H         PUBLIC        keyscan
+  B:0090H.0       PUBLIC        key1
+  B:00A0H.0       PUBLIC        key2
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        k
+  -------         DO            
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:0003H         LINE#         16
+  C:0003H         LINE#         17
+  C:0003H         LINE#         19
+  C:0009H         LINE#         20
+  C:0009H         LINE#         21
+  C:0011H         LINE#         22
+  C:0014H         LINE#         23
+  C:0014H         LINE#         24
+  -------         ENDPROC       _DELAY
+  -------         PROC          INIT
+  C:0015H         LINE#         26
+  C:0015H         LINE#         27
+  C:0015H         LINE#         28
+  C:0018H         LINE#         29
+  C:001BH         LINE#         30
+  C:001EH         LINE#         31
+  C:0021H         LINE#         32
+  C:0023H         LINE#         33
+  C:0026H         LINE#         34
+  -------         ENDPROC       INIT
+  -------         PROC          KEYSCAN
+  C:0027H         LINE#         36
+  C:0027H         LINE#         37
+  C:0027H         LINE#         38
+  C:002AH         LINE#         39
+  C:002FH         LINE#         40
+  C:0032H         LINE#         41
+  C:0032H         LINE#         42
+  C:0035H         LINE#         43
+  C:0035H         LINE#         45
+  C:0035H         LINE#         46
+BL51 BANKED LINKER/LOCATER V5.03                                                      07/31/2007  13:37:47  PAGE 3
+
+
+  C:0038H         LINE#         47
+  C:0038H         LINE#         48
+  -------         ENDPROC       KEYSCAN
+  -------         PROC          SEND
+  C:0052H         LINE#         51
+  C:0052H         LINE#         52
+  C:0052H         LINE#         55
+  C:0054H         LINE#         56
+  C:0057H         LINE#         57
+  C:005AH         LINE#         58
+  C:005AH         LINE#         60
+  C:005AH         LINE#         61
+  C:005CH         LINE#         67
+  -------         ENDPROC       SEND
+  -------         PROC          MAIN
+  C:0039H         LINE#         70
+  C:0039H         LINE#         71
+  C:0039H         LINE#         72
+  C:003EH         LINE#         73
+  C:0041H         LINE#         74
+  C:0041H         LINE#         75
+  C:0041H         LINE#         77
+  C:0044H         LINE#         78
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        00
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?KEYSCAN?00
+
+Program Size: data=14.0 xdata=0 code=93
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

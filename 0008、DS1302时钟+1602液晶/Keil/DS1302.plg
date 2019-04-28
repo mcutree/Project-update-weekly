@@ -1,0 +1,25 @@
+<html>
+<body>
+<pre>
+<h1>礦ision3 Build Log</h1>
+<h2>Project:</h2>
+E:\汇诚科技\产品整理\proteus\经典仿真资料\51系列程序\0008、DS1302时钟+1602液晶\Keil\DS1302.uv2
+Project File Date:  08/24/2008
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling DS1302.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DATETOSTR?DS1302
+Program Size: data=35.1 xdata=0 code=990
+creating hex file from "DS1302"...
+"DS1302" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling DS1302.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DATETOSTR?DS1302
+Program Size: data=35.1 xdata=0 code=988
+creating hex file from "DS1302"...
+"DS1302" - 0 Error(s), 1 Warning(s).

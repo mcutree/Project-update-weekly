@@ -1,0 +1,278 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        12/17/2008  10:36:17  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+C:\PROGRAM FILES\KEIL\C51\BIN\BL51.EXE 接收.obj TO 接收试验 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  接收.obj (接收)
+  C:\PROGRAM FILES\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  接收试验 (接收)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         ?DT?接收
+            IDATA   0010H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     006CH     UNIT         ?PR?MAIN?接收
+            CODE    007AH     0061H     UNIT         ?PR?CODINGSWITCHPOLLING1?接收
+            CODE    00DBH     0061H     UNIT         ?PR?CODINGSWITCHPOLLING2?接收
+            CODE    013CH     0061H     UNIT         ?PR?CODINGSWITCHPOLLING3?接收
+            CODE    019DH     0061H     UNIT         ?PR?CODINGSWITCHPOLLING4?接收
+            CODE    01FEH     002EH     UNIT         ?PR?TIMER1INT?接收
+            CODE    022CH     000CH     UNIT         ?C_C51STARTUP
+            CODE    0238H     000AH     UNIT         ?CO?接收
+
+
+
+OVERLAY MAP OF MODULE:   接收试验 (接收)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?TIMER1INT?接收
+  +--> ?PR?CODINGSWITCHPOLLING1?接收
+  +--> ?PR?CODINGSWITCHPOLLING2?接收
+  +--> ?PR?CODINGSWITCHPOLLING3?接收
+  +--> ?PR?CODINGSWITCHPOLLING4?接收
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?接收
+
+?PR?MAIN?接收
+  +--> ?CO?接收
+
+BL51 BANKED LINKER/LOCATER V6.00                                                      12/17/2008  10:36:17  PAGE 2
+
+
+
+
+SYMBOL TABLE OF MODULE:  接收试验 (接收)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        接收
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  B:0090H.0       PUBLIC        CodingsWitch_A1
+  B:0090H.2       PUBLIC        CodingsWitch_A2
+  B:0090H.1       PUBLIC        CodingsWitch_B1
+  C:01FEH         PUBLIC        timer1int
+  B:0090H.4       PUBLIC        CodingsWitch_A3
+  B:0090H.3       PUBLIC        CodingsWitch_B2
+  B:0090H.6       PUBLIC        CodingsWitch_A4
+  B:0090H.5       PUBLIC        CodingsWitch_B3
+  B:0090H.7       PUBLIC        CodingsWitch_B4
+  C:000EH         PUBLIC        main
+  D:0089H         PUBLIC        TMOD
+  D:000CH         PUBLIC        dat
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:0238H         PUBLIC        num
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  C:007AH         PUBLIC        CodingsWitchPolling1
+  C:00DBH         PUBLIC        CodingsWitchPolling2
+  C:013CH         PUBLIC        CodingsWitchPolling3
+  C:019DH         PUBLIC        CodingsWitchPolling4
+  -------         PROC          TIMER1INT
+  C:01FEH         LINE#         27
+  C:020BH         LINE#         28
+  C:020DH         LINE#         29
+  C:0210H         LINE#         30
+  C:0213H         LINE#         31
+  C:0216H         LINE#         32
+  C:0219H         LINE#         33
+  C:021CH         LINE#         34
+  C:021FH         LINE#         35
+  C:0221H         LINE#         36
+  -------         ENDPROC       TIMER1INT
+  -------         PROC          MAIN
+  -------         DO            
+  D:0005H         SYMBOL        i
+  D:0007H         SYMBOL        c
+  D:0006H         SYMBOL        b
+  D:0002H         SYMBOL        a
+  -------         ENDDO         
+  C:000EH         LINE#         37
+BL51 BANKED LINKER/LOCATER V6.00                                                      12/17/2008  10:36:17  PAGE 3
+
+
+  C:000EH         LINE#         38
+  C:000EH         LINE#         41
+  C:0011H         LINE#         42
+  C:0014H         LINE#         43
+  C:0017H         LINE#         44
+  C:001AH         LINE#         45
+  C:001DH         LINE#         46
+  C:001FH         LINE#         47
+  C:0021H         LINE#         48
+  C:0023H         LINE#         49
+  C:0025H         LINE#         50
+  C:0027H         LINE#         51
+  C:0033H         LINE#         52
+  C:0033H         LINE#         53
+  C:0033H         LINE#         54
+  C:0035H         LINE#         56
+  C:0037H         LINE#         57
+  C:0037H         LINE#         58
+  C:0039H         LINE#         59
+  C:0057H         LINE#         60
+  C:005FH         LINE#         61
+  C:006DH         LINE#         62
+  C:0074H         LINE#         64
+  -------         ENDPROC       MAIN
+  -------         PROC          CODINGSWITCHPOLLING1
+  -------         DO            
+  D:0008H         SYMBOL        st
+  -------         ENDDO         
+  C:007AH         LINE#         68
+  C:007AH         LINE#         69
+  C:007AH         LINE#         71
+  C:0080H         LINE#         72
+  C:0083H         LINE#         73
+  C:0089H         LINE#         74
+  C:008CH         LINE#         75
+  C:0090H         LINE#         76
+  C:0090H         LINE#         77
+  C:0098H         LINE#         78
+  C:0098H         LINE#         79
+  C:009BH         LINE#         80
+  C:009BH         LINE#         81
+  C:00A8H         LINE#         82
+  C:00B6H         LINE#         83
+  C:00B8H         LINE#         85
+  C:00B8H         LINE#         86
+  C:00BBH         LINE#         87
+  C:00BBH         LINE#         88
+  C:00C9H         LINE#         89
+  C:00D7H         LINE#         90
+  C:00DAH         LINE#         92
+  C:00DAH         LINE#         93
+  C:00DAH         LINE#         94
+  C:00DAH         LINE#         95
+  -------         ENDPROC       CODINGSWITCHPOLLING1
+  -------         PROC          CODINGSWITCHPOLLING2
+  -------         DO            
+  D:0009H         SYMBOL        st
+BL51 BANKED LINKER/LOCATER V6.00                                                      12/17/2008  10:36:17  PAGE 4
+
+
+  -------         ENDDO         
+  C:00DBH         LINE#         98
+  C:00DBH         LINE#         99
+  C:00DBH         LINE#         101
+  C:00E1H         LINE#         102
+  C:00E4H         LINE#         103
+  C:00EAH         LINE#         104
+  C:00EDH         LINE#         105
+  C:00F1H         LINE#         106
+  C:00F1H         LINE#         107
+  C:00F9H         LINE#         108
+  C:00F9H         LINE#         109
+  C:00FCH         LINE#         110
+  C:00FCH         LINE#         111
+  C:0109H         LINE#         112
+  C:0117H         LINE#         113
+  C:0119H         LINE#         115
+  C:0119H         LINE#         116
+  C:011CH         LINE#         117
+  C:011CH         LINE#         118
+  C:012AH         LINE#         119
+  C:0138H         LINE#         120
+  C:013BH         LINE#         122
+  C:013BH         LINE#         123
+  C:013BH         LINE#         124
+  C:013BH         LINE#         125
+  -------         ENDPROC       CODINGSWITCHPOLLING2
+  -------         PROC          CODINGSWITCHPOLLING3
+  -------         DO            
+  D:000AH         SYMBOL        st
+  -------         ENDDO         
+  C:013CH         LINE#         126
+  C:013CH         LINE#         127
+  C:013CH         LINE#         129
+  C:0142H         LINE#         130
+  C:0145H         LINE#         131
+  C:014BH         LINE#         132
+  C:014EH         LINE#         133
+  C:0152H         LINE#         134
+  C:0152H         LINE#         135
+  C:015AH         LINE#         136
+  C:015AH         LINE#         137
+  C:015DH         LINE#         138
+  C:015DH         LINE#         139
+  C:016AH         LINE#         140
+  C:0178H         LINE#         141
+  C:017AH         LINE#         143
+  C:017AH         LINE#         144
+  C:017DH         LINE#         145
+  C:017DH         LINE#         146
+  C:018BH         LINE#         147
+  C:0199H         LINE#         148
+  C:019CH         LINE#         150
+  C:019CH         LINE#         151
+  C:019CH         LINE#         152
+  C:019CH         LINE#         153
+  -------         ENDPROC       CODINGSWITCHPOLLING3
+BL51 BANKED LINKER/LOCATER V6.00                                                      12/17/2008  10:36:17  PAGE 5
+
+
+  -------         PROC          CODINGSWITCHPOLLING4
+  -------         DO            
+  D:000BH         SYMBOL        st
+  -------         ENDDO         
+  C:019DH         LINE#         154
+  C:019DH         LINE#         155
+  C:019DH         LINE#         157
+  C:01A3H         LINE#         158
+  C:01A6H         LINE#         159
+  C:01ACH         LINE#         160
+  C:01AFH         LINE#         161
+  C:01B3H         LINE#         162
+  C:01B3H         LINE#         163
+  C:01BBH         LINE#         164
+  C:01BBH         LINE#         165
+  C:01BEH         LINE#         166
+  C:01BEH         LINE#         167
+  C:01CBH         LINE#         168
+  C:01D9H         LINE#         169
+  C:01DBH         LINE#         171
+  C:01DBH         LINE#         172
+  C:01DEH         LINE#         173
+  C:01DEH         LINE#         174
+  C:01ECH         LINE#         175
+  C:01FAH         LINE#         176
+  C:01FDH         LINE#         178
+  C:01FDH         LINE#         179
+  C:01FDH         LINE#         180
+  C:01FDH         LINE#         181
+  -------         ENDPROC       CODINGSWITCHPOLLING4
+  -------         ENDMOD        接收
+
+Program Size: data=17.0 xdata=0 code=570
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

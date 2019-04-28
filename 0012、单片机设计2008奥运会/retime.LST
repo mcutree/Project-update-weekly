@@ -1,0 +1,1010 @@
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 1   
+
+
+C51 COMPILER V8.02, COMPILATION OF MODULE RETIME
+OBJECT MODULE PLACED IN retime.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE retime.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /***************************************
+   2          名称:2008奥运会倒计时
+   3          ***************************************/
+   4          #include<reg51.h>
+   5          #include<absacc.h>
+   6          #include<intrins.h>
+   7          #include "delay.h"
+   8          #define clock_segment XBYTE[0xBFFF] //时钟段码地址
+   9          #define clock_sel XBYTE[0x7FFF]     //时钟位码地址
+  10          #define year_segment XBYTE[0xEFFF]  //日历段码地址
+  11          #define year_sel XBYTE[0xDFFF]      //日历位码地址
+  12          #define retime_segment XBYTE[0xFBFF]//倒计时段码地址
+  13          #define retime_sel XBYTE[0xF7FF]    //倒计时位码地址
+  14          
+  15          unsigned char time_num=0;//定时一秒次数
+  16          unsigned char shi_num=24;//小时位计数
+  17          unsigned char miao_ge=0; //秒个位
+  18          unsigned char miao_shi=0;//秒十位
+  19          unsigned char fen_ge=0;//分个位
+  20          unsigned char fen_shi=4;//分十位
+  21          unsigned char shi_ge=8;//时个位
+  22          unsigned char shi_shi=0;//时十位
+  23          unsigned char year_thousand=2;
+  24          unsigned char year_hundred=0;
+  25          unsigned char year_decade=0;
+  26          unsigned char year_unit=7;
+  27          unsigned char month_decade=0;
+  28          unsigned char month_unit=6;
+  29          unsigned char day_decade=2;
+  30          unsigned char day_unit=6;
+  31          unsigned char retime_unit=0;
+  32          unsigned char retime_decade=1;
+  33          unsigned char retime_hundred=4;
+  34          unsigned char retime_thousand=0;
+  35          
+  36          unsigned char year_thoustore; //保存年千位数据
+  37          unsigned char year_hundstore; //保存年百位数据
+  38          unsigned char year_decastore; //保存年十位数据
+  39          unsigned char year_unitstore; //保存年个位数据
+  40          unsigned char month_unitstore;//保存月个位数据
+  41          unsigned char month_decastore;//保存月十位数据
+  42          unsigned char day_unitstore;  //保存日个位数据
+  43          unsigned char day_decastore;  //保存日十位数据
+  44          unsigned char year_unitstore2;//保存年各位数据
+  45          unsigned char year_decastore2;//年位组合子程序用来保护数据用
+  46          unsigned char year_hundstore2;
+  47          unsigned char year_thoustore2;
+  48          unsigned char retime_ustore;  //保存倒计时各位数据
+  49          unsigned char retime_dstore;
+  50          unsigned char retime_hstore;
+  51          unsigned char retime_tstore;
+  52          unsigned char day_numj=31;  //奇数月31天
+  53          unsigned char day_numo=30;  //偶数月30天
+  54          unsigned char day_numooo=30;
+  55          unsigned char day_numoo;
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 2   
+
+  56          unsigned char month_num=12;
+  57          unsigned int year_jointed; //年各位组合在一起,以便进行闰年判断
+  58          unsigned int year_help1;
+  59          unsigned int year_help2;
+  60          unsigned char xiaoshi_ge;//闪烁时存小时个位
+  61          unsigned char xiaoshi_shi;//闪烁时存小时十位
+  62          unsigned char fenzhong_ge;//闪烁时存分钟个位
+  63          unsigned char fenzhong_shi;//闪烁时存分钟十位
+  64          unsigned char cort=0;//判断第几次按下确认键
+  65          sbit key_sure=P1^0;//调时或确认键
+  66          sbit key_dec=P1^2;//调时减键
+  67          bit first_sure=0; //第一次按下确认键
+  68          bit second_sure=0;//第二次按下确认键
+  69          bit third_sure=0; //第三次按下确认键
+  70          bit fourth_sure=0;//第四次按下确认键
+  71          bit fifth_sure=0; //第五次按下确认键
+  72          bit sixth_sure=0; //第六次按下确认键
+  73          bit seventh_sure=0;//第七次按下确认键
+  74          unsigned code table[]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x00};//段码表
+  75          /************函数声明*************/
+  76          void shannum_jian(void);
+  77          void inc_key(void);
+  78          void dec_key(void);
+  79          void dis_dingshi(void);
+  80          void hour_shanshuo(void);
+  81          void min_shanshuo(void);
+  82          void kbscan(void);
+  83          void display(void);
+  84          void year_joint(void);
+  85          unsigned char judgement_leap(void);
+  86          void retime_flash(void);
+  87          /********************************
+  88          显示子程序
+  89          *********************************/
+  90          void display(void)
+  91          {
+  92   1          clock_sel=0xdf; 
+  93   1          clock_segment=table[miao_ge];        //送秒个位段位码
+  94   1          delay(3);
+  95   1          clock_sel=0xef;
+  96   1          clock_segment=table[miao_shi];       //送秒十位段位码
+  97   1          delay(3);
+  98   1          clock_sel=0xf7; 
+  99   1          clock_segment=table[fen_ge]|0x80;    //送分个位段位码
+ 100   1          delay(3);
+ 101   1          clock_sel=0xfb;
+ 102   1          clock_segment=table[fen_shi];        //送分十位段位码
+ 103   1          delay(3);
+ 104   1          clock_sel=0xfd;
+ 105   1          clock_segment=table[shi_ge]|0x80;    //送时个位段位码
+ 106   1          delay(3);
+ 107   1          clock_sel=0xfe;
+ 108   1          clock_segment=table[shi_shi];        //送时十位段位码
+ 109   1          delay(3);
+ 110   1          year_sel=0x7f;
+ 111   1          year_segment=table[day_unit];        //送日个位段位码
+ 112   1          delay(3);
+ 113   1          year_sel=0xbf;
+ 114   1          year_segment=table[day_decade];      //送日十位段位码
+ 115   1          delay(3);
+ 116   1          year_sel=0xdf;
+ 117   1          year_segment=table[month_unit]|0x80; //送月个位段位码
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 3   
+
+ 118   1          delay(3);
+ 119   1          year_sel=0xef;
+ 120   1          year_segment=table[month_decade];    //送月十位段位码
+ 121   1          delay(3);
+ 122   1          year_sel=0xf7;
+ 123   1          year_segment=table[year_unit]|0x80;  //送年个位段位码
+ 124   1          delay(3);
+ 125   1          year_sel=0xfb;
+ 126   1          year_segment=table[year_decade];     //送年十位段位码
+ 127   1          delay(3);
+ 128   1          year_sel=0xfd;
+ 129   1          year_segment=table[year_hundred];    //送年百位段位码
+ 130   1          delay(3);
+ 131   1          year_sel=0xfe;
+ 132   1          year_segment=table[year_thousand];   //送年千位段位码
+ 133   1          delay(3);
+ 134   1          retime_sel=0xf7;
+ 135   1          retime_segment=table[retime_unit];   //送倒计时个位段位码
+ 136   1          delay(3);
+ 137   1          retime_sel=0xfb;
+ 138   1          retime_segment=table[retime_decade]; //送倒计时十位段位码
+ 139   1          delay(3);
+ 140   1          retime_sel=0xfd;
+ 141   1          retime_segment=table[retime_hundred];//送倒计时百位段位码
+ 142   1          delay(3);
+ 143   1          retime_sel=0xfe;
+ 144   1          retime_segment=table[retime_thousand];//送倒计时千位段位码
+ 145   1          delay(3);
+ 146   1      
+ 147   1      }
+ 148          /**********************************
+ 149          判断闰年子程序
+ 150          ***********************************/
+ 151          unsigned char judgement_leap(void)
+ 152          {
+ 153   1          year_joint();       //调用年各位组合子程序
+ 154   1          if((year_jointed%4==0&&year_jointed%100!=0)||(year_jointed%100==0&&year_jointed%400==0))return(29); //
+             -是闰年二月29天
+ 155   1          else return(28);    //是平年二月28天        
+ 156   1      }
+ 157          /**********************************
+ 158          按键扫描子程序
+ 159          ***********************************/
+ 160          void kbscan(void)
+ 161          {
+ 162   1          unsigned char sccode;
+ 163   1          P1=0xff;
+ 164   1          if((P1&0xff)!=0xff)
+ 165   1          {
+ 166   2              //delay(5); 
+ 167   2              display();
+ 168   2              display();
+ 169   2              display();
+ 170   2                              
+ 171   2              if((P1&0xff)!=0xff)
+ 172   2              {
+ 173   3                   sccode=P1;
+ 174   3                   //while((P1&0xff)!=0xff)     //按键后消陡
+ 175   3                       //{
+ 176   3                       //     ;
+ 177   3                      // }
+ 178   3                   switch(sccode)
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 4   
+
+ 179   3                       {
+ 180   4                      case 0xfe:shannum_jian();break;
+ 181   4                      case 0xfd:inc_key();     break;
+ 182   4                      case 0xfb:dec_key();     break;
+ 183   4                      default:                                 break;
+ 184   4                       }
+ 185   3              }
+ 186   2          }
+ 187   1      }
+ 188          /********************************
+ 189          确认键按键次数子程序
+ 190          ********************************/
+ 191          void shannum_jian(void)
+ 192          {   
+ 193   1          cort++;
+ 194   1          if(cort==1)          //第一次按下确认键
+ 195   1          {
+ 196   2              first_sure=1;
+ 197   2              second_sure=0;
+ 198   2              third_sure=0;
+ 199   2              fourth_sure=0;
+ 200   2              fifth_sure=0;
+ 201   2              sixth_sure=0;
+ 202   2              seventh_sure=0;
+ 203   2              
+ 204   2          }
+ 205   1          else if(cort==2)    //第二次按下确认键
+ 206   1          {   
+ 207   2              first_sure=0;
+ 208   2              second_sure=1;
+ 209   2              third_sure=0;
+ 210   2              fourth_sure=0;
+ 211   2              fifth_sure=0;
+ 212   2              sixth_sure=0;
+ 213   2              seventh_sure=0;
+ 214   2              
+ 215   2          }
+ 216   1          else if(cort==3)    //第三次按下确认键
+ 217   1          {
+ 218   2              first_sure=0;
+ 219   2              second_sure=0;
+ 220   2              third_sure=1;
+ 221   2              fourth_sure=0;
+ 222   2              fifth_sure=0;
+ 223   2              sixth_sure=0;
+ 224   2              seventh_sure=0;
+ 225   2              
+ 226   2          }
+ 227   1          else if(cort==4)   //第四次按下确认键
+ 228   1          {
+ 229   2              first_sure=0;
+ 230   2              second_sure=0;
+ 231   2              third_sure=0;
+ 232   2              fourth_sure=1;
+ 233   2              fifth_sure=0;
+ 234   2              sixth_sure=0;
+ 235   2              seventh_sure=0;
+ 236   2                      
+ 237   2          }
+ 238   1          else if(cort==5)   //第五次按下确认键
+ 239   1          {
+ 240   2              first_sure=0;
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 5   
+
+ 241   2              second_sure=0;
+ 242   2              third_sure=0;
+ 243   2              fourth_sure=0;
+ 244   2              fifth_sure=1;
+ 245   2              sixth_sure=0;
+ 246   2              seventh_sure=0;
+ 247   2                      
+ 248   2          }
+ 249   1          else if(cort==6)   //第六次按下确认键
+ 250   1          {
+ 251   2              
+ 252   2              first_sure=0;
+ 253   2              second_sure=0;
+ 254   2              third_sure=0;
+ 255   2              fourth_sure=0;
+ 256   2              fifth_sure=0;
+ 257   2              sixth_sure=1;
+ 258   2              seventh_sure=0;
+ 259   2                      
+ 260   2          }
+ 261   1          else if(cort==7)  //第七次按下确认键
+ 262   1          {
+ 263   2              cort=0;
+ 264   2              first_sure=0;
+ 265   2              second_sure=0;
+ 266   2              third_sure=0;
+ 267   2              fourth_sure=0;
+ 268   2              fifth_sure=0;
+ 269   2              sixth_sure=0;
+ 270   2              seventh_sure=1;
+ 271   2          }           
+ 272   1      
+ 273   1      }
+ 274          /*******************************
+ 275          减一键子程序
+ 276          *******************************/
+ 277          void dec_key(void)
+ 278          {
+ 279   1          if(first_sure)                          //第一次按下确认键,小时位减
+ 280   1          {
+ 281   2              if(shi_num!=24)
+ 282   2              {
+ 283   3                  ++shi_num;
+ 284   3                  if((--xiaoshi_ge)==255)
+ 285   3                      {
+ 286   4                      xiaoshi_ge=9;
+ 287   4                      if((--xiaoshi_shi)==255)
+ 288   4                              {
+ 289   5                          xiaoshi_shi=2;
+ 290   5                          xiaoshi_ge=3;
+ 291   5                              }
+ 292   4                      }       
+ 293   3              }
+ 294   2              else if(shi_num==24)
+ 295   2              {
+ 296   3                  shi_num=1;
+ 297   3                  xiaoshi_ge=3;
+ 298   3                  xiaoshi_shi=2;
+ 299   3              }
+ 300   2          }
+ 301   1          else if(second_sure)                         //第二次按下确认键,分钟位减
+ 302   1          {
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 6   
+
+ 303   2              if((--fenzhong_ge)==255)
+ 304   2              {
+ 305   3                  fenzhong_ge=9;
+ 306   3                  if((--fenzhong_shi)==255)
+ 307   3                      {
+ 308   4                      fenzhong_shi=5;
+ 309   4                      }
+ 310   3              }
+ 311   2          }
+ 312   1          else if(third_sure)                           //第三次按下确认键,年位减
+ 313   1          {
+ 314   2              if((--year_unitstore)==255)
+ 315   2              {
+ 316   3                  year_unitstore=9;
+ 317   3                  if((--year_decastore)==255)
+ 318   3                      {
+ 319   4                      year_decastore=9;
+ 320   4                      if((--year_hundstore)==255)
+ 321   4                              {
+ 322   5                          year_hundstore=9;
+ 323   5                          if((--year_thoustore)==255)
+ 324   5                                      {
+ 325   6                              year_thoustore=9;
+ 326   6                                      }
+ 327   5                              }
+ 328   4                      }
+ 329   3              }
+ 330   2          }
+ 331   1          else if(fourth_sure)                        //第四次按下确认键,月位减
+ 332   1          {
+ 333   2              if(month_num!=12)
+ 334   2              {
+ 335   3                    ++month_num;
+ 336   3                    if((--month_unitstore)==255)
+ 337   3                        {
+ 338   4                          month_unitstore=9;
+ 339   4                          --month_decastore;
+ 340   4                        }
+ 341   3              }
+ 342   2              else if(month_num==12)
+ 343   2              {
+ 344   3                  month_num=1;
+ 345   3                  month_unitstore=2;
+ 346   3                  month_decastore=1;
+ 347   3              }
+ 348   2          }
+ 349   1          else if(fifth_sure)                         //第五次按下确认键,日位减
+ 350   1          {                                                                                            
+ 351   2              if((month_unitstore|0xfe)==0xff)        //是奇数月,日为31天
+ 352   2               {      
+ 353   3                  if((day_numj)!=31)
+ 354   3                      {
+ 355   4                      ++day_numj;
+ 356   4                      if((--day_unitstore)==255)
+ 357   4                              {
+ 358   5                          day_unitstore=9;
+ 359   5                          --day_decastore;
+ 360   5                              }
+ 361   4                      }
+ 362   3                  else if(day_numj==31)
+ 363   3                      {
+ 364   4                      day_numj=1;
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 7   
+
+ 365   4                      day_unitstore=1;
+ 366   4                      day_decastore=3;
+ 367   4                      }
+ 368   3              }
+ 369   2              else if((month_unitstore|0xfe)!=0xff)      //是偶数月,日为30天
+ 370   2              {
+ 371   3                      
+ 372   3                      if(
+ 373   3                      
+ 374   3                  month_unitstore==2)                    //是二月
+ 375   3                      {       
+ 376   4                              if(day_numo!=day_numoo)
+ 377   4                                              {       
+ 378   5                                      ++day_numo;
+ 379   5                                  if((--day_unitstore)==255)
+ 380   5                                                      {
+ 381   6                                      day_unitstore=9;
+ 382   6                                      --day_decastore;
+ 383   6                                                      }
+ 384   5                                              }
+ 385   4                              
+ 386   4                              else if(day_numo==day_numoo)
+ 387   4                                              {
+ 388   5                                  if(day_numoo==28)
+ 389   5                                              {       
+ 390   6                                              day_numo=1;
+ 391   6                                              day_unitstore=8;
+ 392   6                                              day_decastore=2;
+ 393   6                                                      }
+ 394   5                                  else if(day_numoo==29)
+ 395   5                                                      {
+ 396   6                                              day_numo=1;
+ 397   6                                              day_unitstore=9;
+ 398   6                                              day_decastore=2;
+ 399   6                                                      }
+ 400   5                              
+ 401   5                                              }
+ 402   4                      }
+ 403   3                  else if(month_unitstore!=2)                 //不是二月
+ 404   3                      {       
+ 405   4                      if(day_numooo!=30)
+ 406   4                              {
+ 407   5                          ++day_numooo;
+ 408   5                          day_numo=day_numooo;
+ 409   5                          if((--day_unitstore)==255)
+ 410   5                                      {
+ 411   6                              day_unitstore=9;
+ 412   6                              --day_decastore;
+ 413   6                              day_numo=day_numooo;
+ 414   6                                      }
+ 415   5                              }
+ 416   4                      else if(day_numooo==30)
+ 417   4                              {
+ 418   5                              
+ 419   5                              day_numooo=1;
+ 420   5                              day_unitstore=0;
+ 421   5                              day_decastore=3;
+ 422   5                              day_numo=day_numooo;
+ 423   5                              
+ 424   5                              }
+ 425   4                      }
+ 426   3              }
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 8   
+
+ 427   2          }
+ 428   1          else if(sixth_sure)                         //第六次按下确认键,倒计时位减
+ 429   1          {
+ 430   2               if((--retime_ustore)==255)
+ 431   2               {
+ 432   3                     retime_ustore=9;
+ 433   3                     if((--retime_dstore)==255)
+ 434   3                         {
+ 435   4                           retime_dstore=9;
+ 436   4                           if((--retime_hstore)==255)
+ 437   4                                       {
+ 438   5                                      retime_hstore=9;
+ 439   5                                  if((--retime_tstore)==255)retime_tstore=9;
+ 440   5                                       }
+ 441   4                         }
+ 442   3               }
+ 443   2          }
+ 444   1      }
+ 445          /*******************************
+ 446          
+ 447          年位闪烁子程序
+ 448          
+ 449          *******************************/
+ 450          void year_flash(void)
+ 451          {
+ 452   1          unsigned char i;
+ 453   1          if(third_sure)
+ 454   1          {
+ 455   2               year_thoustore=year_thousand;
+ 456   2               year_hundstore=year_hundred;
+ 457   2               year_decastore=year_decade;
+ 458   2               year_unitstore=year_unit;
+ 459   2               while(third_sure)
+ 460   2               {
+ 461   3                  for(i=0;i<18;i++)       //年位不显示,其它位都显示
+ 462   3                      {
+ 463   4                      year_thousand=10;
+ 464   4                      year_hundred=10;
+ 465   4                      year_decade=10;
+ 466   4                      year_unit=10;
+ 467   4                      fen_ge=fenzhong_ge;
+ 468   4                      fen_shi=fenzhong_shi;
+ 469   4                      display();
+ 470   4                      kbscan();
+ 471   4                      if(!third_sure)i=51;   //如果不满足立即跳出
+ 472   4                      }
+ 473   3                  if(third_sure)
+ 474   3                      {
+ 475   4                      for(i=0;i<18;i++)      //年位和其它位都显示
+ 476   4                              {
+ 477   5                           year_thousand=year_thoustore;
+ 478   5                           year_hundred=year_hundstore;
+ 479   5                           year_decade=year_decastore;
+ 480   5                           year_unit=year_unitstore;
+ 481   5                           fen_ge=fenzhong_ge;
+ 482   5                           fen_shi=fenzhong_shi;
+ 483   5                               display();
+ 484   5                               kbscan();
+ 485   5                           if(!third_sure)i=51;   //如果不满足立即跳出
+ 486   5                              }
+ 487   4                      }
+ 488   3               }
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 9   
+
+ 489   2          }
+ 490   1      }
+ 491          /*******************************
+ 492          月位闪烁子程序
+ 493          *******************************/
+ 494          void month_flash(void)
+ 495          {
+ 496   1          unsigned char i;
+ 497   1          if(TR0==0)                                  //为日位润平年二月天数做准备
+ 498   1          {
+ 499   2                  day_numo=judgement_leap();
+ 500   2                  day_numoo=day_numo;
+ 501   2          }
+ 502   1          if(fourth_sure)
+ 503   1          {
+ 504   2              month_unitstore=month_unit;
+ 505   2              month_decastore=month_decade;
+ 506   2              while(fourth_sure)
+ 507   2              {
+ 508   3                  for(i=0;i<18;i++)
+ 509   3                      {
+ 510   4                       month_unit=10;
+ 511   4                       month_decade=10;
+ 512   4                       year_thousand=year_thoustore;    //送原始数据避免取到不显示数据
+ 513   4                       year_hundred=year_hundstore;
+ 514   4                       year_decade=year_decastore;
+ 515   4                       year_unit=year_unitstore;
+ 516   4                       display();
+ 517   4                       kbscan();
+ 518   4                       if(!fourth_sure)i=51;
+ 519   4                      }
+ 520   3                  if(fourth_sure)
+ 521   3                      {
+ 522   4                       for(i=0;i<18;i++)
+ 523   4                               {      
+ 524   5                          month_unit=month_unitstore;
+ 525   5                          month_decade=month_decastore;//送原始数据避免取到不显示数据
+ 526   5                          year_thousand=year_thoustore;
+ 527   5                          year_hundred=year_hundstore;
+ 528   5                          year_decade=year_decastore;
+ 529   5                          year_unit=year_unitstore;
+ 530   5                              display();
+ 531   5                              kbscan();
+ 532   5                          if(!fourth_sure)i=51;
+ 533   5                              }
+ 534   4                      }
+ 535   3              }
+ 536   2      
+ 537   2          }
+ 538   1      }
+ 539          /*******************************
+ 540          日位闪烁子程序
+ 541          ******************************/
+ 542          void day_flash(void)
+ 543          {
+ 544   1          unsigned char i;
+ 545   1          if(fifth_sure)
+ 546   1          {
+ 547   2              day_unitstore=day_unit;
+ 548   2              day_decastore=day_decade;
+ 549   2              while(fifth_sure)
+ 550   2              {
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 10  
+
+ 551   3                  for(i=0;i<18;i++)
+ 552   3                      {
+ 553   4                      day_unit=10;
+ 554   4                      day_decade=10;
+ 555   4                      month_unit=month_unitstore;       //送原始数据避免取到不显示数据
+ 556   4                      month_decade=month_decastore;
+ 557   4                      year_thousand=year_thoustore;
+ 558   4                      year_hundred=year_hundstore;
+ 559   4                      year_decade=year_decastore;
+ 560   4                      year_unit=year_unitstore;
+ 561   4                      display();
+ 562   4                      kbscan();
+ 563   4                      if(!fifth_sure)i=51;
+ 564   4                      }
+ 565   3                  if(fifth_sure)
+ 566   3                      {
+ 567   4                      for(i=0;i<18;i++)
+ 568   4                              {
+ 569   5                           day_unit=day_unitstore;
+ 570   5                           day_decade=day_decastore;
+ 571   5                           month_unit=month_unitstore;     //送原始数据避免取到不显示数据
+ 572   5                           month_decade=month_decastore;
+ 573   5                           year_thousand=year_thoustore;
+ 574   5                           year_hundred=year_hundstore;
+ 575   5                           year_decade=year_decastore;
+ 576   5                           year_unit=year_unitstore;
+ 577   5                               display();
+ 578   5                               kbscan();
+ 579   5                           if(!fifth_sure)i=51;
+ 580   5                              }
+ 581   4                      }
+ 582   3              }
+ 583   2          }
+ 584   1      }
+ 585          /*******************************
+ 586          倒计时位闪烁子程序
+ 587          *******************************/
+ 588          void retime_flash(void)
+ 589          {
+ 590   1          unsigned char i;
+ 591   1          if(sixth_sure)
+ 592   1          {
+ 593   2              retime_ustore=retime_unit;
+ 594   2              retime_dstore=retime_decade;
+ 595   2              retime_hstore=retime_hundred;
+ 596   2              retime_tstore=retime_thousand;
+ 597   2              while(sixth_sure)
+ 598   2              {
+ 599   3                   for(i=0;i<18;i++)
+ 600   3                       {
+ 601   4                      retime_unit=10;
+ 602   4                      retime_decade=10;
+ 603   4                      retime_hundred=10;
+ 604   4                      retime_thousand=10;
+ 605   4                      day_unit=day_unitstore;
+ 606   4                      day_decade=day_decastore;
+ 607   4                      display();
+ 608   4                      kbscan();
+ 609   4                      if(!sixth_sure)i=51;
+ 610   4                       }
+ 611   3                   if(sixth_sure)
+ 612   3                       {
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 11  
+
+ 613   4                      for(i=0;i<18;i++)
+ 614   4                              {
+ 615   5                         retime_unit=retime_ustore;
+ 616   5                         retime_decade=retime_dstore;
+ 617   5                         retime_hundred=retime_hstore;
+ 618   5                         retime_thousand=retime_tstore;
+ 619   5                         day_unit=day_unitstore;
+ 620   5                         day_decade=day_decastore;
+ 621   5                         display();
+ 622   5                         kbscan();
+ 623   5                         if(!sixth_sure)i=51;
+ 624   5                              }
+ 625   4                       }
+ 626   3              }
+ 627   2              if(seventh_sure)                 //第八次确认键按下,启动定时器,将各位的数据全部弹出,时钟正常显示
+ 628   2              {
+ 629   3                  seventh_sure=0;
+ 630   3                  fen_ge=fenzhong_ge;                                 
+ 631   3                  fen_shi=fenzhong_shi;
+ 632   3                  shi_ge=xiaoshi_ge;  
+ 633   3                  shi_shi=xiaoshi_shi;
+ 634   3                  year_unit=year_unitstore;
+ 635   3                  year_decade=year_decastore;
+ 636   3                  year_hundred=year_hundstore;
+ 637   3                  year_thousand=year_thoustore;
+ 638   3                  month_unit=month_unitstore;
+ 639   3                  month_decade=month_decastore;
+ 640   3                  day_unit=day_unitstore;
+ 641   3                  day_decade=day_decastore;
+ 642   3                  retime_unit=retime_ustore;
+ 643   3                  retime_decade=retime_dstore;
+ 644   3                  retime_hundred=retime_hstore;
+ 645   3                  retime_thousand=retime_tstore;
+ 646   3                  TR0=1;                                      
+ 647   3              }
+ 648   2          }
+ 649   1      }
+ 650          /*******************************
+ 651          小时位闪烁子程序
+ 652          *******************************/
+ 653          void hour_flash(void)
+ 654          {   
+ 655   1          unsigned char i;
+ 656   1          if(first_sure)
+ 657   1          {   
+ 658   2              TR0=0;                //关定时器,进入闪烁 
+ 659   2              xiaoshi_ge=shi_ge;    //保存时个位显示的数据
+ 660   2              xiaoshi_shi=shi_shi;  //保存时十位显示的数据
+ 661   2              while(first_sure)     //第一次确认键按下,在小时位闪烁
+ 662   2              {       
+ 663   3                  for(i=0;i<18;i++) //小时位不显示,其它位显示
+ 664   3                      {       
+ 665   4                      shi_ge=10;
+ 666   4                      shi_shi=10;
+ 667   4                      display();
+ 668   4                      kbscan();
+ 669   4                      if(!first_sure)i=51;
+ 670   4                      }
+ 671   3                  if(first_sure)
+ 672   3                      {
+ 673   4                      for(i=0;i<18;i++)//小时位和其它位都显示
+ 674   4                              {       
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 12  
+
+ 675   5                          shi_ge=xiaoshi_ge;
+ 676   5                          shi_shi=xiaoshi_shi;
+ 677   5                              display();
+ 678   5                              kbscan();
+ 679   5                          if(!first_sure)i=51;
+ 680   5                              }
+ 681   4                      }  
+ 682   3              }
+ 683   2          }
+ 684   1      }
+ 685          /******************************
+ 686          分钟位闪烁子程序
+ 687          *******************************/
+ 688          void min_flash(void)    
+ 689          {   
+ 690   1          unsigned char i;
+ 691   1          if(second_sure)
+ 692   1          {   
+ 693   2                  fenzhong_ge=fen_ge;     //保存分个位显示的数据
+ 694   2                  fenzhong_shi=fen_shi;   //保存分十位显示的数据
+ 695   2                  while(second_sure)      //第二次确认键按下,在分钟位闪烁
+ 696   2                      {
+ 697   3                      for(i=0;i<18;i++)//分钟位不显示，其它位都显示
+ 698   3                              {
+ 699   4                              fen_ge=10;
+ 700   4                              fen_shi=10;
+ 701   4                          shi_ge=xiaoshi_ge;  //送小时个位的原始数据,避免调到小时个位不显示时的数据
+ 702   4                          shi_shi=xiaoshi_shi;//送小时十位的原始数据,避免调到小时十位不显示时的数据
+ 703   4                              display();
+ 704   4                              kbscan();
+ 705   4                          if(!second_sure)i=51;
+ 706   4                              }
+ 707   3                      if(second_sure)
+ 708   3                              {
+ 709   4                          for(i=0;i<18;i++)      //分钟位和其它位都显示
+ 710   4                                      {
+ 711   5                              fen_ge=fenzhong_ge;
+ 712   5                              fen_shi=fenzhong_shi;
+ 713   5                              shi_ge=xiaoshi_ge;  //送小时个位的原始数据,避免调到小时个位不显示时的数据
+ 714   5                              shi_shi=xiaoshi_shi;//送小时十位的原始数据,避免调到小时十位不显示时的数据
+ 715   5                                      display();
+ 716   5                                      kbscan();
+ 717   5                              if(!second_sure)i=51;
+ 718   5                                      }
+ 719   4                              }       
+ 720   3                      }
+ 721   2          }
+ 722   1      }
+ 723          /******************************
+ 724          年位组合子程序
+ 725          ********************************/
+ 726          void year_joint(void)
+ 727          {   
+ 728   1          year_unitstore2=year_unitstore;       //保存年各位数据
+ 729   1          year_decastore2=year_decastore;
+ 730   1          year_hundstore2=year_hundstore;
+ 731   1          year_thoustore2=year_thoustore;
+ 732   1          year_jointed=year_unitstore;
+ 733   1          year_decastore=year_decastore<<4;
+ 734   1          year_decastore=year_decastore&0xf0;
+ 735   1          year_jointed=year_jointed+year_decastore;       //得到年的抵8位
+ 736   1          year_jointed=year_jointed<<8;               //将年的低8和高8互换
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 13  
+
+ 737   1          year_jointed=year_jointed+year_hundstore;
+ 738   1          year_thoustore=year_thoustore<<4;
+ 739   1          year_thoustore=year_thoustore&0xf0;
+ 740   1          year_jointed=year_jointed+year_thoustore;   //得到年,需将其进行高8与低8互换
+ 741   1          year_help1=year_jointed&0xff00;
+ 742   1          year_help1=year_help1>>8;                   //得到年低8位
+ 743   1          year_help2=year_jointed&0x00ff;
+ 744   1          year_help2=year_help2<<8;                   //得到年高8位
+ 745   1          year_jointed=year_help1+year_help2;         // 得到年位
+ 746   1          year_unitstore=year_unitstore2;
+ 747   1          year_decastore=year_decastore2;
+ 748   1          year_hundstore=year_hundstore2;
+ 749   1          year_thoustore=year_thoustore2;             //弹出年各位数据
+ 750   1      }
+ 751          
+ 752          /*******************************
+ 753          定时器0中断子程序
+ 754          ********************************/
+ 755          void timer0(void) interrupt 1 using 1
+ 756          {
+ 757   1          TH0=0x3c;
+ 758   1          TL0=0xb0;
+ 759   1          if((++time_num)==20)
+ 760   1              {
+ 761   2                  time_num=0;
+ 762   2                  ++miao_ge;   //定时一秒到,秒个位加一
+ 763   2              }
+ 764   1      }               
+ 765          /******************************
+ 766           当秒个位加到9时进一，
+ 767          ……
+ 768          *******************************/    
+ 769          void dis_dingshi(void)  
+ 770          {   
+ 771   1          if(miao_ge==10)                     
+ 772   1          {
+ 773   2              miao_ge=0;
+ 774   2              if((++miao_shi)==6)             
+ 775   2              {       
+ 776   3                  miao_shi=0;
+ 777   3                  if((++fen_ge)==10)          
+ 778   3                      {
+ 779   4                      fen_ge=0;
+ 780   4                      if((++fen_shi)==6)
+ 781   4                              {
+ 782   5                              fen_shi=0;
+ 783   5                          if((--shi_num)!=0)
+ 784   5                                      {
+ 785   6                              if((++shi_ge)==10)
+ 786   6                                              {
+ 787   7                                              shi_ge=0;
+ 788   7                                      ++shi_shi;
+ 789   7                                              }
+ 790   6                                      }
+ 791   5                          else if(shi_num==0)
+ 792   5                                      {
+ 793   6                              shi_num=24;
+ 794   6                                      shi_ge=0;
+ 795   6                                      shi_shi=0;
+ 796   6                                  if(retime_unit==0&retime_decade==0&retime_hundred==0&retime_thousand==0)//倒计
+             -时减一
+ 797   6                                                      {
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 14  
+
+ 798   7                                                      ;
+ 799   7                                                      }
+ 800   6                                              else 
+ 801   6                                                      {
+ 802   7                                       if((--retime_unit)==10)
+ 803   7                                                       {
+ 804   8                                              retime_unit=0;
+ 805   8                                          if((--retime_decade)==10)
+ 806   8                                                              {
+ 807   9                                                      retime_decade=0;
+ 808   9                                              if((--retime_hundred)==10)
+ 809   9                                                                      {
+ 810  10                                                              retime_hundred=0;
+ 811  10                                                      if((--retime_thousand)==10)
+ 812  10                                                                              {
+ 813  11                                                                      retime_thousand=0;
+ 814  11                                                                              }
+ 815  10                                                                      }
+ 816   9                                                              }
+ 817   8                                                       }
+ 818   7                                                      }
+ 819   6      
+ 820   6                              if((month_unit|0xfe)==0xff)     //是奇数月,日为31天
+ 821   6                                              {       
+ 822   7                                          if((--day_numj)!=0)                 //31天没到
+ 823   7                                                          {   
+ 824   8                                                      if((++day_unit)==10)
+ 825   8                                                                      {
+ 826   9                                                                      day_unit=0;
+ 827   9                                                                      ++day_decade;
+ 828   9                                                                      }
+ 829   8                                                              }
+ 830   7                                          else if(day_numj==0)                        //31天到了
+ 831   7                                                              {
+ 832   8                                                      day_numj=31;
+ 833   8                                                              day_unit=1;
+ 834   8                                                      day_decade=0;
+ 835   8                                                                      
+ 836   8                                              if((--month_num)!=0)             //12个月没到
+ 837   8                                                                      {       
+ 838   9                                                              if((++month_unit)==10)
+ 839   9                                                                                      {
+ 840  10                                                                              month_unit=0;
+ 841  10                                                                              ++month_decade;
+ 842  10                                                                                      }
+ 843   9                                                                      }
+ 844   8                                              else if(month_num==0)    //12个月到了
+ 845   8                                                                      {
+ 846   9                                                                      month_num=12;
+ 847   9                                                                      month_unit=1;
+ 848   9                                                              month_decade=0;
+ 849   9                                                  if((++year_unit)==10)       //年个位是否到9
+ 850   9                                                                              {
+ 851  10                                                                      year_unit=0;
+ 852  10                                                              if((++year_decade)==10)
+ 853  10                                                                                      {
+ 854  11                                                                              year_decade=0;
+ 855  11                                                                      if((++year_hundred)==10)
+ 856  11                                                                                              {
+ 857  12                                                                                      year_hundred=0;
+ 858  12                                                              if((++year_thousand)==10)year_thousand=0;
+ 859  12                                                                                              }
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 15  
+
+ 860  11                                                                                      }
+ 861  10                                                                              }
+ 862   9                                                                      }
+ 863   8                                                              }
+ 864   7                                              }
+ 865   6                              else if((month_unit|0xfe)!=0xff)    //是偶数月,日为30天
+ 866   6                                              {
+ 867   7                                  if((--day_numo)!=0)                 //30天没到
+ 868   7                                              {       
+ 869   8                                      if((++day_unit)==10)
+ 870   8                                                      {
+ 871   9                                                      day_unit=0;
+ 872   9                                                      ++day_decade;
+ 873   9                                                      }
+ 874   8                                                      }
+ 875   7                                  else if(day_numo==0)                        //30天到了
+ 876   7                                                      {
+ 877   8                                      if(month_unit==2)
+ 878   8                                                      {       
+ 879   9                                              if(day_numoo==28)
+ 880   9                                                              {       
+ 881  10                                                              day_numo=28;
+ 882  10                                                              day_unit=1;
+ 883  10                                                              day_decade=0;
+ 884  10                                                              }
+ 885   9                                              else if(day_numoo==29)
+ 886   9                                                              {
+ 887  10                                                              day_numo=29;
+ 888  10                                                              day_unit=1;
+ 889  10                                                              day_decade=0;
+ 890  10                                                              }
+ 891   9                                                      }                       
+ 892   8                                                      else 
+ 893   8                                                      {       
+ 894   9                                                      day_numj=30;
+ 895   9                                                      day_unit=1;
+ 896   9                                              day_decade=0;
+ 897   9                                                      }
+ 898   8                                     if((--month_num)!=0)              //12个月没到
+ 899   8                                                 {    
+ 900   9                                              if((++month_unit)==10)
+ 901   9                                                              {
+ 902  10                                                              month_unit=0;
+ 903  10                                                      ++month_decade;
+ 904  10                                                              }
+ 905   9                                                      }
+ 906   8                                      else if(month_num==0)    //12个月到了
+ 907   8                                                      {
+ 908   9                                                      month_num=12;
+ 909   9                                                      month_unit=1;
+ 910   9                                                      month_decade=0;
+ 911   9                                          if((++year_unit)==10)       //年个位是否到9
+ 912   9                                                              {
+ 913  10                                                               year_unit=0;
+ 914  10                                               if((++year_decade)==10)
+ 915  10                                                                       {
+ 916  11                                                              year_decade=0;
+ 917  11      
+ 918  11                                                      if((++year_hundred)==10)
+ 919  11                                                                              {
+ 920  12                                                                      year_hundred=0;
+ 921  12                                                      if((++year_thousand)==10)year_thousand=0;
+C51 COMPILER V8.02   RETIME                                                                06/24/2007 13:22:44 PAGE 16  
+
+ 922  12                                                                              }
+ 923  11                                                                       }
+ 924  10                                                              }
+ 925   9                                                      }
+ 926   8                                                      }
+ 927   7                                              }
+ 928   6                                      }
+ 929   5                              }
+ 930   4                      }
+ 931   3              }
+ 932   2          }
+ 933   1      }   
+ 934          /*************主程序**************/
+ 935          void main(void)
+ 936          {  
+ 937   1          TMOD=0x01;
+ 938   1          TH0=0x3c;
+ 939   1          TL0=0xb0;
+ 940   1          EA=1;
+ 941   1          ET0=1;
+ 942   1          TR0=1;
+ 943   1          while(1)
+ 944   1          {   
+ 945   2              kbscan();       //调按键扫描
+ 946   2              display();      //六个数码管显示
+ 947   2              hour_flash();   //调小时位闪烁
+ 948   2              min_flash();    //调分钟位闪烁
+ 949   2              year_flash();   //年闪烁
+ 950   2              month_flash();  //月闪烁
+ 951   2              day_flash();    //日闪烁
+ 952   2              retime_flash();
+ 953   2              dis_dingshi();  //到一秒加一，到一分加一，到一小时加一，到24点清零
+ 954   2          }
+ 955   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2340    ----
+   CONSTANT SIZE    =     22    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     52       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      7    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

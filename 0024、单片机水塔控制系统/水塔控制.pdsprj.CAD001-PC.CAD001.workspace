@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<WORKSPACE>
+ <FRAME activewindow="0">
+  <PLACEMENT>2c0000000200000003000000ffffffffffffffffffffffffffffffff3e0000000d000000760600000d040000</PLACEMENT>
+  <WINDOW type="default" module="ISIS"/>
+ </FRAME>
+ <MODULE name="VSMDEBUG">
+  <PWI>
+   <POPUP w="800" x="100" flags="00000002" y="128" h="200" pid="0" iid="-1">
+    <PROPERTIES/>
+   </POPUP>
+   <POPUP w="350" x="120" flags="00000032" y="148" h="200" pid="1" iid="-1">
+    <PROPERTIES/>
+   </POPUP>
+   <POPUP w="24" x="140" flags="00000048" y="168" h="17" pid="1" iid="12">
+    <PROPERTIES/>
+   </POPUP>
+   <POPUP w="8" x="160" flags="0000000a" y="188" h="16" pid="3" iid="12">
+    <PROPERTIES/>
+   </POPUP>
+   <POPUP w="8" x="180" flags="0000000a" y="208" h="16" pid="2" iid="12">
+    <PROPERTIES/>
+   </POPUP>
+  </PWI>
+ </MODULE>
+</WORKSPACE>

@@ -1,0 +1,336 @@
+C51 COMPILER V7.09   HYPERTERMINAL                                                         01/03/2007 02:19:15 PAGE 1   
+
+
+C51 COMPILER V7.09, COMPILATION OF MODULE HYPERTERMINAL
+OBJECT MODULE PLACED IN HyperTerminal.OBJ
+COMPILER INVOKED BY: C:\Program Files\Keil\C51\BIN\C51.EXE HyperTerminal.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "HyperTerminal.h"
+   2          
+   3          /*****************************************************************************/
+   4          char idata SerialBuffer[MAX_SERIAL_BUFFER_SIZE];
+   5          char idata PromptBuffer[MAX_PROMPT_BUFFER_SIZE];
+   6          char idata CursorPosion;
+   7          char idata ExecCommandFlag;
+   8          
+   9          COMMAND CommandList[MAX_COMMAND_NUM] = {
+  10                  {"help",Help," help -- Command help"},
+  11                  {"prompt",Prompt," prompt <string> -- Change a prompt"},
+  12                  {"clear",Clear," clear -- Clear screen"},
+  13                  {"reboot",Reboot," reboot -- Reboot the MCU"}
+  14          };
+  15          
+  16          /*****************************************************************************/
+  17          void Help(char argc, const char **argv)
+  18          {
+  19   1              char i;
+  20   1              argv = argv;
+  21   1              switch(argc)
+  22   1              {
+  23   2              case 1:
+  24   2                      for(i = 0; i < MAX_COMMAND_NUM; i++)
+  25   2                      {
+  26   3                              SerialSendStr(CommandList[i].HelpString);
+  27   3                              SerialSendStr("\r\n");
+  28   3                      }
+  29   2                      SerialSendStr("\r\n");
+  30   2                      break;
+  31   2              default:
+  32   2                      SerialSendStr(" Invalid 'help' command: too many arguments\r\n");
+  33   2                      SerialSendStr(" Usage:\r\n");
+  34   2                      SerialSendStr("     help\r\n");
+  35   2                      break;
+  36   2              }
+  37   1      }
+  38          
+  39          void Prompt(char argc, const char **argv)
+  40          {
+  41   1              switch(argc)
+  42   1              {
+  43   2              case 2:
+  44   2                      if(strlen(argv[1]) >= MAX_PROMPT_BUFFER_SIZE)
+  45   2                      {
+  46   3                              SerialSendStr(" Warnning:Your argument is too long!\r\n\r\n");
+  47   3                              break;
+  48   3                      }
+  49   2                      memcpy(PromptBuffer,argv[1],MAX_PROMPT_BUFFER_SIZE);
+  50   2                      SerialSendStr(" Prompt is chagned to \"");
+  51   2                      sprintf(&SerialBuffer[0],"%s\"\r\n\r\n",&PromptBuffer[0]);
+  52   2                      SerialSendStr(&SerialBuffer[0]);
+  53   2                      break;
+  54   2              default:
+  55   2                      SerialSendStr(" Invalid 'prompt' command: too few or many arguments\r\n");
+C51 COMPILER V7.09   HYPERTERMINAL                                                         01/03/2007 02:19:15 PAGE 2   
+
+  56   2                      SerialSendStr(" Usage:\r\n");
+  57   2                      SerialSendStr("     prompt <string>\r\n");
+  58   2                      break;
+  59   2              }
+  60   1      }
+  61          
+  62          void Clear(char argc, const char **argv)
+  63          {
+  64   1              argv = argv;
+  65   1              switch(argc)
+  66   1              {
+  67   2              case 1:
+  68   2                      SerialSendStr(CLEARSCREEN);     
+  69   2                      break;
+  70   2              default:
+  71   2                      SerialSendStr(" Invalid 'clear' command: too many arguments\r\n");
+  72   2                      SerialSendStr(" Usage:\r\n");
+  73   2                      SerialSendStr("     clear\r\n");
+  74   2                      break;
+  75   2              }
+  76   1      }
+  77          
+  78          void Reboot(char argc, const char **argv)
+  79          {
+  80   1              argv = argv;
+  81   1              switch(argc)
+  82   1              {
+  83   2              case 1:
+  84   2                      (*(void(*)())0)(); 
+  85   2                      break;
+  86   2              default:
+  87   2                      SerialSendStr(" Invalid 'reboot' command: too many arguments\r\n");
+  88   2                      SerialSendStr(" Usage:\r\n");
+  89   2                      SerialSendStr("     reboot\r\n");
+  90   2                      break;
+  91   2              }
+  92   1      }
+  93          /*****************************************************************************/
+  94          void InitHyperTerminal(void)
+  95          {
+  96   1              TMOD |= 0x20;           /* timer1, mode 2, 8 bit reload */
+  97   1              SCON  = 0x50;           /* serial mode 1, 8 bit uart, enable receive  */
+  98   1              PCON  = 0x80;           /* SMOD = 1, double baud */ 
+  99   1              TH1   = 0xFF;           /* baud = 57600, fosc = 11.0592MHZ */
+ 100   1              TL1   = 0xFF;           
+ 101   1              RI    = 0;                      /* clear receive flag */
+ 102   1              TI    = 0;                      /* clear send flag */
+ 103   1              TR1   = 1;                      /* start timer1 */
+ 104   1              ES    = 1;                      /* enable serial interrupt */
+ 105   1              EA    = 1;                      /* enable all interrupt */
+ 106   1      
+ 107   1              CursorPosion = 0;
+ 108   1              ExecCommandFlag = 0;
+ 109   1              memset(&SerialBuffer[0],'\0',MAX_SERIAL_BUFFER_SIZE);
+ 110   1              memcpy(&PromptBuffer[0],"-->>",MAX_PROMPT_BUFFER_SIZE);
+ 111   1              SerialSendStr(F_LIGHTGREEN);
+ 112   1              SerialSendStr(B_BLACK);
+ 113   1              SerialSendStr(CLEARSCREEN);
+ 114   1              SerialSendStr("-----------------------------\r\n");
+ 115   1              SerialSendStr("  The 8051 Hyper Terminal,by JJJ\r\n");
+ 116   1              SerialSendStr("  http://www.proteus.com.cn \r\n");
+ 117   1              SerialSendStr("-----------------------------\r\n");
+C51 COMPILER V7.09   HYPERTERMINAL                                                         01/03/2007 02:19:15 PAGE 3   
+
+ 118   1              SerialSendStr("\r\n");
+ 119   1              SerialSendStr(&PromptBuffer[0]);
+ 120   1      }
+ 121          
+ 122          void SerialSendByte(char dat)
+ 123          {
+ 124   1              SBUF = dat;
+ 125   1              while(TI == 0);
+ 126   1              TI = 0;
+ 127   1      }
+ 128          
+ 129          void SerialSendStr(char *str)
+ 130          {
+ 131   1              while(*str != '\0')
+ 132   1              {
+ 133   2                      SerialSendByte(*str);
+ 134   2                      str++;
+ 135   2              }
+ 136   1      }
+ 137                  
+ 138          void SerialInterrupt(void) interrupt 4 using 3
+ 139          {
+ 140   1              char SbufTemp;
+ 141   1              if(RI)
+ 142   1              {
+ 143   2                      RI = 0;
+ 144   2                      SbufTemp = SBUF;
+ 145   2                      switch(SbufTemp)
+ 146   2                      {
+ 147   3                      case 0x08:
+ 148   3                      case 0x06:
+ 149   3                      case 0x07:
+ 150   3                      case 0x7E:
+ 151   3                      case 0x7F:
+ 152   3                              if(CursorPosion > 0)
+ 153   3                              {
+ 154   4                                      CursorPosion--;
+ 155   4                                      SerialSendByte(0x08);
+ 156   4                                      SerialSendByte(' ');
+ 157   4                                      SerialSendByte(0x08);
+ 158   4                              }
+ 159   3                              SerialBuffer[CursorPosion] = '\0';
+ 160   3                              break;
+ 161   3                      case '\r':
+ 162   3                      case '\n':
+ 163   3                      case '\0':
+ 164   3                              SerialSendByte('\r');
+ 165   3                              SerialSendByte('\n');
+ 166   3                              ExecCommandFlag = 1;
+ 167   3                              break;
+ 168   3                      case '\t':
+ 169   3                              break;
+ 170   3                      default:
+ 171   3                              if(CursorPosion < MAX_SERIAL_BUFFER_SIZE)
+ 172   3                              {
+ 173   4                                      SerialBuffer[CursorPosion] = SbufTemp;
+ 174   4                                      SerialSendByte(SbufTemp);
+ 175   4                                      CursorPosion++;
+ 176   4                              }
+ 177   3                              else
+ 178   3                              {
+ 179   4                                      CursorPosion = 0;
+C51 COMPILER V7.09   HYPERTERMINAL                                                         01/03/2007 02:19:15 PAGE 4   
+
+ 180   4                                      memset(&SerialBuffer[0],'\0',MAX_SERIAL_BUFFER_SIZE);
+ 181   4                                      SerialSendStr("\r\n Warnning:Your command string is too long!\r\n\r\n");
+ 182   4                                      SerialSendStr(&PromptBuffer[0]);
+ 183   4                              }
+ 184   3                              break;
+ 185   3                      }
+ 186   2              }
+ 187   1      }
+ 188          
+ 189          void ParseArgs(char *argstr,char *argc_p,char **argv, char **resid)
+ 190          {
+ 191   1              char argc = 0;
+ 192   1              char c;
+ 193   1              PARSESTATE stackedState,lastState = PS_WHITESPACE;
+ 194   1      
+ 195   1              while ((c = *argstr) != 0)
+ 196   1              {
+ 197   2                      PARSESTATE newState;
+ 198   2      
+ 199   2                      if (c == ';' && lastState != PS_STRING && lastState != PS_ESCAPE)
+ 200   2                              break;
+ 201   2      
+ 202   2                      if (lastState == PS_ESCAPE)
+ 203   2                      {
+ 204   3                              newState = stackedState;
+ 205   3                      }
+ 206   2                      else if (lastState == PS_STRING)
+ 207   2                      {
+ 208   3                              if (c == '"')
+ 209   3                              {
+ 210   4                                      newState = PS_WHITESPACE;
+ 211   4                                      *argstr = 0;
+ 212   4                              }
+ 213   3                              else 
+ 214   3                              {
+ 215   4                                      newState = PS_STRING;
+ 216   4                              }
+ 217   3                      }
+ 218   2                      else if ((c == ' ') || (c == '\t'))
+ 219   2                      {
+ 220   3                              *argstr = 0;
+ 221   3                              newState = PS_WHITESPACE;
+ 222   3                      }
+ 223   2                      else if (c == '"') 
+ 224   2                      {
+ 225   3                              newState = PS_STRING;
+ 226   3                              *argstr++ = 0;
+ 227   3                              argv[argc++] = argstr;
+ 228   3                      }
+ 229   2                      else if (c == '\\') 
+ 230   2                      {
+ 231   3                              stackedState = lastState;
+ 232   3                              newState = PS_ESCAPE;
+ 233   3                      }
+ 234   2                      else 
+ 235   2                      {
+ 236   3                              if (lastState == PS_WHITESPACE) 
+ 237   3                              {
+ 238   4                                      argv[argc++] = argstr;
+ 239   4                              }
+ 240   3                              newState = PS_TOKEN;
+ 241   3                      }
+C51 COMPILER V7.09   HYPERTERMINAL                                                         01/03/2007 02:19:15 PAGE 5   
+
+ 242   2      
+ 243   2                      lastState = newState;
+ 244   2                      argstr++;
+ 245   2              }
+ 246   1      
+ 247   1              argv[argc] = NULL;
+ 248   1              if (argc_p != NULL)
+ 249   1                      *argc_p = argc;
+ 250   1      
+ 251   1              if (*argstr == ';') 
+ 252   1              {
+ 253   2                      *argstr++ = '\0';
+ 254   2              }
+ 255   1              *resid = argstr;
+ 256   1      }
+ 257          
+ 258          void ExecCommand(char *buf)
+ 259          {
+ 260   1              char argc,*argv[8],*resid,i;
+ 261   1              COMMAND *Command = 0;
+ 262   1      
+ 263   1              while(*buf)
+ 264   1              {
+ 265   2                      memset(argv,0,sizeof(argv));
+ 266   2                      ParseArgs(buf, &argc, argv, &resid);
+ 267   2                      if(argc > 0)
+ 268   2                      {
+ 269   3                              for(i = 0; i < MAX_COMMAND_NUM; i++)
+ 270   3                              {
+ 271   4                                      Command = &CommandList[i];      
+ 272   4                                      if(strncmp(Command->CommandName,argv[0],strlen(argv[0])) == 0)
+ 273   4                                              break;
+ 274   4                                      else
+ 275   4                                              Command = 0;
+ 276   4                              }
+ 277   3                              if(Command == 0)
+ 278   3                              {
+ 279   4                                      SerialSendStr(" Could not found \"");
+ 280   4                                      SerialSendStr(argv[0]);
+ 281   4                                      SerialSendStr("\" command\r\n");
+ 282   4                                      SerialSendStr(" If you want to konw available commands, type 'help'\r\n\r\n"); 
+ 283   4                              }
+ 284   3                              else
+ 285   3                              {
+ 286   4                                      Command->CommandFunc(argc,argv);
+ 287   4                              }
+ 288   3                      }
+ 289   2                      buf = resid;
+ 290   2              }
+ 291   1      }
+ 292          
+ 293          void RunHyperTerminal(void)
+ 294          {
+ 295   1              if(ExecCommandFlag)
+ 296   1              {
+ 297   2                      ExecCommand(&SerialBuffer[0]);
+ 298   2                      SerialSendStr(&PromptBuffer[0]);
+ 299   2                      memset(&SerialBuffer[0],'\0',MAX_SERIAL_BUFFER_SIZE);
+ 300   2                      CursorPosion = 0;
+ 301   2                      ExecCommandFlag = 0;
+ 302   2              }
+ 303   1      }
+C51 COMPILER V7.09   HYPERTERMINAL                                                         01/03/2007 02:19:15 PAGE 6   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1263    ----
+   CONSTANT SIZE    =    735    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     36      54
+   IDATA SIZE       =     26    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,36 @@
+C51 COMPILER V7.09   MAIN                                                                  01/03/2007 02:19:16 PAGE 1   
+
+
+C51 COMPILER V7.09, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Program Files\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <REGX51.H>
+   2          #include "HyperTerminal.h"
+   3          
+   4          void main(void)
+   5          {
+   6   1              InitHyperTerminal();
+   7   1      
+   8   1              while(1)
+   9   1              {
+  10   2                      RunHyperTerminal();
+  11   2              }
+  12   1      }
+  13          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      8    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

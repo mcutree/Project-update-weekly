@@ -1,0 +1,165 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        12/08/2008  09:50:14  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+C:\PROGRAM FILES\KEIL\C51\BIN\BL51.EXE STARTUP.obj, huan.obj TO huan RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  huan.obj (HUAN)
+
+
+LINK MAP OF MODULE:  huan (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         _DATA_GROUP_
+            IDATA   0010H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00C0H     UNIT         ?CO?HUAN
+            CODE    00C3H     009DH     UNIT         ?PR?MAIN?HUAN
+            CODE    0160H     004AH     UNIT         ?PR?_YIWEI?HUAN
+            CODE    01AAH     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   huan (?C_STARTUP)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?HUAN
+
+?PR?MAIN?HUAN                  0008H    0006H
+  +--> ?PR?_YIWEI?HUAN
+
+?PR?_YIWEI?HUAN                000EH    0002H
+  +--> ?CO?HUAN
+
+
+
+SYMBOL TABLE OF MODULE:  huan (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:01AAH         SEGMENT       ?C_C51STARTUP
+  I:0010H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+BL51 BANKED LINKER/LOCATER V6.00                                                      12/08/2008  09:50:14  PAGE 2
+
+
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:01ADH         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:01AAH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:01AAH         LINE#         133
+  C:01ACH         LINE#         134
+  C:01ADH         LINE#         135
+  C:01AEH         LINE#         136
+  C:01B0H         LINE#         185
+  C:01B3H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        HUAN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:0098H.1       PUBLIC        TI
+  C:00C3H         PUBLIC        main
+  B:00B0H.5       PUBLIC        ST
+  C:0164H         PUBLIC        _yiwei
+  D:0099H         PUBLIC        SBUF
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  C:0003H         PUBLIC        mo
+  B:00B0H.4       PUBLIC        E1
+  C:0160H         SYMBOL        L?0021
+  -------         PROC          L?0020
+  -------         ENDPROC       L?0020
+  C:0160H         SYMBOL        L?0021
+  -------         PROC          _YIWEI
+  D:000EH         SYMBOL        i
+  D:0004H         SYMBOL        j
+  D:0002H         SYMBOL        k
+  C:0164H         LINE#         20
+  C:0168H         LINE#         21
+  C:0168H         LINE#         22
+  C:01A2H         LINE#         23
+  C:01A7H         LINE#         24
+  C:01A9H         LINE#         25
+BL51 BANKED LINKER/LOCATER V6.00                                                      12/08/2008  09:50:14  PAGE 3
+
+
+  -------         ENDPROC       _YIWEI
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  D:000AH         SYMBOL        k
+  D:000CH         SYMBOL        n
+  D:0006H         SYMBOL        u
+  -------         ENDDO         
+  C:00C3H         LINE#         27
+  C:00C3H         LINE#         28
+  C:00CEH         LINE#         29
+  C:00D0H         LINE#         30
+  C:00D2H         LINE#         31
+  C:00D4H         LINE#         32
+  C:00D6H         LINE#         33
+  C:00DDH         LINE#         34
+  C:00E2H         LINE#         35
+  C:00E2H         LINE#         36
+  C:00E7H         LINE#         37
+  C:00F1H         LINE#         38
+  C:00FCH         LINE#         39
+  C:010FH         LINE#         40
+  C:0114H         LINE#         41
+  C:011CH         LINE#         42
+  C:0127H         LINE#         43
+  C:012CH         LINE#         44
+  C:012FH         LINE#         45
+  C:0131H         LINE#         46
+  C:0133H         LINE#         47
+  C:0141H         LINE#         49
+  C:0149H         LINE#         50
+  C:0154H         LINE#         51
+  C:0159H         LINE#         52
+  C:015BH         LINE#         53
+  C:015DH         LINE#         54
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        HUAN
+
+Program Size: data=17.0 xdata=0 code=438
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

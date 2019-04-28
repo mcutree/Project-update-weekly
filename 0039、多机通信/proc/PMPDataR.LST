@@ -1,0 +1,114 @@
+C51 COMPILER V7.50   PMPDATAR                                                              11/05/2007 01:16:17 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE PMPDATAR
+OBJECT MODULE PLACED IN PMPDataR.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE PMPDataR.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*****************************************/
+   2          /* Copyright (c) 2005, 通信工程学院      */
+   3          /* All rights reserved.                  */
+   4          /* 作    者：戴 佳                                               */
+   5          /*****************************************/
+   6          
+   7          #include "PMPDataR.h"
+   8          
+   9          unsigned char zu[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8d};
+  10          /* 延时t毫秒 */
+  11          void delay(uint t)
+  12          {
+  13   1              uint i;
+  14   1              while(t--)
+  15   1              {
+  16   2                      /* 对于11.0592M时钟，约延时1ms */
+  17   2                      for (i=0;i<125;i++)
+  18   2                      {}
+  19   2              }
+  20   1      } 
+  21          
+  22          /* 发送数据函数 */
+  23          uchar recvdata()
+  24          {
+  25   1      
+  26   1              /* 接收数据 */
+  27   1                      while(!RI);
+  28   1                      if (RB8==1)
+  29   1                              return 0xee;            // 若接收的为地址帧，则返回0xee
+  30   1                      buf = SBUF;     
+  31   1                      RI = 0; 
+  32   1              return 0;                                       // 返回0
+  33   1      }
+  34          
+  35          /* 串口初始化函数 */
+  36          void init_serial()
+  37          {
+  38   1              TMOD = 0x20;                            // 定时器T1使用工作方式2
+  39   1              TH1 = 250;
+  40   1              TL1 = 250;
+  41   1              TR1 = 1;                                        // 开始计时
+  42   1              PCON = 0x80;                            // SMOD = 1
+  43   1              SCON = 0xd0;                            // 工作方式，9位数据位，波特率9600kbit/s，允许接收 
+  44   1      }
+  45          
+  46          /* 主程序 */
+  47          void main()
+  48          { 
+  49   1              uchar i = 0;
+  50   1              uchar tmp = 0xff;
+  51   1              P1= 0xff;
+  52   1              addr = P1&0x0f;                         // 获取本机地址
+  53   1              P23 = 1;                                        // 发光管不亮
+  54   1              
+  55   1              init_serial();                          // 串口初始化 
+C51 COMPILER V7.50   PMPDATAR                                                              11/05/2007 01:16:17 PAGE 2   
+
+  56   1      
+  57   1              EA = 1;                                         // 关闭所有中断
+  58   1              
+  59   1              /* 进入设备应答 */
+  60   1              while(1)
+  61   1              {
+  62   2                      SM2 = 1;                                // 只接收地址帧
+  63   2                      
+  64   2                      /* 如果接收到的地址帧不是本机地址，则继续等待 */
+  65   2                      while (tmp!=addr)
+  66   2                      {
+  67   3                              RI = 0;
+  68   3                              while(!RI)
+  69   3                              tmp = SBUF;
+  70   3                              RI = 0;
+  71   3                      }       
+  72   2                      SM2 = 0;                                // 允许接收数据
+  73   2      
+  74   2                      /* 数据接收 */
+  75   2             tmp = recvdata();
+  76   2                 //if(buf!=0x00)
+  77   2                  
+  78   2                      if (tmp==0x00)  
+  79   2                      {                
+  80   3                           P0=buf;
+  81   3                              /* 绿灯亮，持续500ms，表示接收数据成功 */
+  82   3                              P23 = 0;                        
+  83   3                              delay(30);
+  84   3                              P23 = 1;
+  85   3                              
+  86   3                      }           
+  87   2                      // 如果接收数据时发现地址帧，则重新开始整个接收过程
+  88   2              }
+  89   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    131    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     18       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,508 @@
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     1
+
+
+MACRO ASSEMBLER A51 V7.09
+OBJECT MODULE PLACED IN HyperTerminal.OBJ
+ASSEMBLER INVOKED BY: C:\Program Files\Keil\C51\BIN\A51.EXE HyperTerminal.src PR(.\HyperTerminal.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\HyperTerminal.SRC generated from: HyperTerminal.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Program Files\Keil\C51\BIN\C51.EXE HyperTerminal.c BROWSE DEBUG OBJECTEXTEND SR
+                             C(.\HyperTerminal.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    HYPERTERMINAL
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00D6                13     AC      BIT     0D0H.6
+  00B4                14     T0      BIT     0B0H.4
+  00B5                15     T1      BIT     0B0H.5
+  00AF                16     EA      BIT     0A8H.7
+  00A8                17     IE      DATA    0A8H
+  0080                18     P0_0    BIT     080H.0
+  0090                19     P1_0    BIT     090H.0
+  0081                20     P0_1    BIT     080H.1
+  00D1                21     FL      BIT     0D0H.1
+  00A0                22     P2_0    BIT     0A0H.0
+  0091                23     P1_1    BIT     090H.1
+  0082                24     P0_2    BIT     080H.2
+  00B0                25     P3_0    BIT     0B0H.0
+  00A1                26     P2_1    BIT     0A0H.1
+  0092                27     P1_2    BIT     090H.2
+  0083                28     P0_3    BIT     080H.3
+  00B1                29     P3_1    BIT     0B0H.1
+  00A2                30     P2_2    BIT     0A0H.2
+  0093                31     P1_3    BIT     090H.3
+  0084                32     P0_4    BIT     080H.4
+  00B2                33     P3_2    BIT     0B0H.2
+  00A3                34     P2_3    BIT     0A0H.3
+  0094                35     P1_4    BIT     090H.4
+  0085                36     P0_5    BIT     080H.5
+  00B7                37     RD      BIT     0B0H.7
+  00B3                38     P3_3    BIT     0B0H.3
+  00A4                39     P2_4    BIT     0A0H.4
+  0095                40     P1_5    BIT     090H.5
+  0086                41     P0_6    BIT     080H.6
+  00B4                42     P3_4    BIT     0B0H.4
+  00A5                43     P2_5    BIT     0A0H.5
+  0096                44     P1_6    BIT     090H.6
+  0087                45     P0_7    BIT     080H.7
+  00B5                46     P3_5    BIT     0B0H.5
+  00AC                47     ES      BIT     0A8H.4
+  00A6                48     P2_6    BIT     0A0H.6
+  0097                49     P1_7    BIT     090H.7
+  00B6                50     P3_6    BIT     0B0H.6
+  00A7                51     P2_7    BIT     0A0H.7
+  00B8                52     IP      DATA    0B8H
+  00B7                53     P3_7    BIT     0B0H.7
+  0098                54     RI      BIT     098H.0
+  00D7                55     CY      BIT     0D0H.7
+  00B2                56     INT0    BIT     0B0H.2
+  00B3                57     INT1    BIT     0B0H.3
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     2
+
+  0099                58     TI      BIT     098H.1
+  00BC                59     PS      BIT     0B8H.4
+  0081                60     SP      DATA    081H
+  00D2                61     OV      BIT     0D0H.2
+  00B6                62     WR      BIT     0B0H.6
+  0099                63     SBUF    DATA    099H
+  0087                64     PCON    DATA    087H
+  0098                65     SCON    DATA    098H
+  0089                66     TMOD    DATA    089H
+  0088                67     TCON    DATA    088H
+  0089                68     IE0     BIT     088H.1
+  008B                69     IE1     BIT     088H.3
+  00F0                70     B       DATA    0F0H
+  00E0                71     ACC     DATA    0E0H
+  00A9                72     ET0     BIT     0A8H.1
+  00AB                73     ET1     BIT     0A8H.3
+  008D                74     TF0     BIT     088H.5
+  00AD                75     ET2     BIT     0A8H.5
+  008F                76     TF1     BIT     088H.7
+  009A                77     RB8     BIT     098H.2
+  008C                78     TH0     DATA    08CH
+  00A8                79     EX0     BIT     0A8H.0
+  0088                80     IT0     BIT     088H.0
+  008D                81     TH1     DATA    08DH
+  00AA                82     EX1     BIT     0A8H.2
+  009B                83     TB8     BIT     098H.3
+  008A                84     IT1     BIT     088H.2
+  00D0                85     P       BIT     0D0H.0
+  009F                86     SM0     BIT     098H.7
+  008A                87     TL0     DATA    08AH
+  009E                88     SM1     BIT     098H.6
+  008B                89     TL1     DATA    08BH
+  009D                90     SM2     BIT     098H.5
+  00B9                91     PT0     BIT     0B8H.1
+  00D3                92     RS0     BIT     0D0H.3
+  00BB                93     PT1     BIT     0B8H.3
+  00D4                94     RS1     BIT     0D0H.4
+  00BD                95     PT2     BIT     0B8H.5
+  008C                96     TR0     BIT     088H.4
+  008E                97     TR1     BIT     088H.6
+  00B8                98     PX0     BIT     0B8H.0
+  00BA                99     PX1     BIT     0B8H.2
+  0083               100     DPH     DATA    083H
+  0082               101     DPL     DATA    082H
+  009C               102     REN     BIT     098H.4
+  00B0               103     RXD     BIT     0B0H.0
+  00B1               104     TXD     BIT     0B0H.1
+  00D5               105     F0      BIT     0D0H.5
+  00D0               106     PSW     DATA    0D0H
+                     107     ?PR?InitHyperTerminal?HYPERTERMINAL      SEGMENT CODE 
+                     108     ?PR?_SerialSendByte?HYPERTERMINAL        SEGMENT CODE 
+                     109     ?PR?_SerialSendStr?HYPERTERMINAL         SEGMENT CODE 
+                     110     ?PR?SerialInterrupt?HYPERTERMINAL        SEGMENT CODE 
+                     111     ?CO?HYPERTERMINAL    SEGMENT CODE 
+                     112             EXTRN   CODE (?C?CLDPTR)
+                     113             PUBLIC  SerialInterrupt
+                     114             PUBLIC  _SerialSendStr
+                     115             PUBLIC  _SerialSendByte
+                     116             PUBLIC  InitHyperTerminal
+                     117     
+----                 118             RSEG  ?CO?HYPERTERMINAL
+0000                 119     ?SC_0:
+0000 1B5B313B        120             DB  01BH,'[' ,'1' ,';' ,'3' ,'2' ,'m' ,000H
+0004 33326D00                
+                     121     
+0008                 122     ?SC_8:
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     3
+
+0008 1B5B3430        123             DB  01BH,'[' ,'4' ,'0' ,'m' ,000H
+000C 6D00                    
+                     124     
+000E                 125     ?SC_14:
+000E 1B5B324A        126             DB  01BH,'[' ,'2' ,'J' ,000H
+0012 00                      
+                     127     
+0013                 128     ?SC_19:
+0013 2D2D2D2D        129             DB  '-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' 
+0017 2D2D2D2D                
+001B 2D2D                    
+001D 2D2D2D2D        130             DB  '-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' 
+0021 2D2D2D2D                
+0025 2D2D                    
+0027 2D2D2D2D        131             DB  '-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,'-' ,00DH
+002B 2D2D2D2D                
+002F 2D0D                    
+0031 0A00            132             DB  00AH,000H
+                     133     
+0033                 134     ?SC_51:
+0033 20205468        135             DB  ' ' ,' ' ,'T' ,'h' ,'e' ,' ' ,'8' ,'0' ,'5' ,'1' 
+0037 65203830                
+003B 3531                    
+003D 20487970        136             DB  ' ' ,'H' ,'y' ,'p' ,'e' ,'r' ,' ' ,'T' ,'e' ,'r' 
+0041 65722054                
+0045 6572                    
+0047 6D696E61        137             DB  'm' ,'i' ,'n' ,'a' ,'l' ,00DH,00AH,000H
+004B 6C0D0A00                
+                     138     
+                     139     ; #include "HyperTerminal.h"
+                     140     ; 
+                     141     ; void InitHyperTerminal(void)
+                     142     
+----                 143             RSEG  ?PR?InitHyperTerminal?HYPERTERMINAL
+0000                 144     InitHyperTerminal:
+                     145             USING   0
+                     146                             ; SOURCE LINE # 3
+                     147     ; {
+                     148                             ; SOURCE LINE # 4
+                     149     ;       TMOD |= 0x20;           /* timer1, mode 2, 8 bit reload */
+                     150                             ; SOURCE LINE # 5
+0000 438920          151             ORL     TMOD,#020H
+                     152     ;       SCON  = 0x50;           /* serial mode 1, 8 bit uart, enable receive  */
+                     153                             ; SOURCE LINE # 6
+0003 759850          154             MOV     SCON,#050H
+                     155     ;       PCON  = 0x80;           /* SMOD = 1, double baud */ 
+                     156                             ; SOURCE LINE # 7
+0006 758780          157             MOV     PCON,#080H
+                     158     ;       TH1   = 0xFF;           /* baud = 57600, fosc = 11.0592MHZ */
+                     159                             ; SOURCE LINE # 8
+0009 758DFF          160             MOV     TH1,#0FFH
+                     161     ;       TL1   = 0xFF;           
+                     162                             ; SOURCE LINE # 9
+000C 758BFF          163             MOV     TL1,#0FFH
+                     164     ;       RI    = 0;                      /* clear receive flag */
+                     165                             ; SOURCE LINE # 10
+000F C298            166             CLR     RI
+                     167     ;       TI    = 0;                      /* clear send flag */
+                     168                             ; SOURCE LINE # 11
+0011 C299            169             CLR     TI
+                     170     ;       TR1   = 1;                      /* start timer1 */
+                     171                             ; SOURCE LINE # 12
+0013 D28E            172             SETB    TR1
+                     173     ;       ES    = 1;                      /* enable serial interrupt */
+                     174                             ; SOURCE LINE # 13
+0015 D2AC            175             SETB    ES
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     4
+
+                     176     ;       EA    = 1;                      /* enable all interrupt */
+                     177                             ; SOURCE LINE # 14
+0017 D2AF            178             SETB    EA
+                     179     ;       
+                     180     ; 
+                     181     ;       SerialSendStr(F_LIGHTGREEN);
+                     182                             ; SOURCE LINE # 17
+0019 7BFF            183             MOV     R3,#0FFH
+001B 7A00     F      184             MOV     R2,#HIGH (?SC_0)
+001D 7900     F      185             MOV     R1,#LOW (?SC_0)
+001F 120000   F      186             LCALL   _SerialSendStr
+                     187     ;       SerialSendStr(B_BLACK);
+                     188                             ; SOURCE LINE # 18
+0022 7BFF            189             MOV     R3,#0FFH
+0024 7A00     F      190             MOV     R2,#HIGH (?SC_8)
+0026 7900     F      191             MOV     R1,#LOW (?SC_8)
+0028 120000   F      192             LCALL   _SerialSendStr
+                     193     ;       SerialSendStr(CLEARSCREEN);
+                     194                             ; SOURCE LINE # 19
+002B 7BFF            195             MOV     R3,#0FFH
+002D 7A00     F      196             MOV     R2,#HIGH (?SC_14)
+002F 7900     F      197             MOV     R1,#LOW (?SC_14)
+0031 120000   F      198             LCALL   _SerialSendStr
+                     199     ;       SerialSendStr("-----------------------------\r\n");
+                     200                             ; SOURCE LINE # 20
+0034 7BFF            201             MOV     R3,#0FFH
+0036 7A00     F      202             MOV     R2,#HIGH (?SC_19)
+0038 7900     F      203             MOV     R1,#LOW (?SC_19)
+003A 120000   F      204             LCALL   _SerialSendStr
+                     205     ;       SerialSendStr("  The 8051 Hyper Terminal\r\n");
+                     206                             ; SOURCE LINE # 21
+003D 7BFF            207             MOV     R3,#0FFH
+003F 7A00     F      208             MOV     R2,#HIGH (?SC_51)
+0041 7900     F      209             MOV     R1,#LOW (?SC_51)
+0043 120000   F      210             LCALL   _SerialSendStr
+                     211     ;       SerialSendStr("-----------------------------\r\n");
+                     212                             ; SOURCE LINE # 22
+0046 7BFF            213             MOV     R3,#0FFH
+0048 7A00     F      214             MOV     R2,#HIGH (?SC_19)
+004A 7900     F      215             MOV     R1,#LOW (?SC_19)
+004C 020000   F      216             LJMP    _SerialSendStr
+                     217     ; END OF InitHyperTerminal
+                     218     
+                     219     ; }
+                     220     ; 
+                     221     ; void SerialSendByte(char dat)
+                     222     
+----                 223             RSEG  ?PR?_SerialSendByte?HYPERTERMINAL
+0000                 224     _SerialSendByte:
+                     225                             ; SOURCE LINE # 25
+                     226     ;---- Variable 'dat?140' assigned to Register 'R7' ----
+                     227     ; {
+                     228                             ; SOURCE LINE # 26
+                     229     ;       SBUF = dat;
+                     230                             ; SOURCE LINE # 27
+0000 8F99            231             MOV     SBUF,R7
+0002                 232     ?C0002:
+                     233     ;       while(TI == 0);
+                     234                             ; SOURCE LINE # 28
+0002 3099FD          235             JNB     TI,?C0002
+0005                 236     ?C0003:
+                     237     ;       TI = 0;
+                     238                             ; SOURCE LINE # 29
+0005 C299            239             CLR     TI
+                     240     ; }
+                     241                             ; SOURCE LINE # 30
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     5
+
+0007 22              242             RET     
+                     243     ; END OF _SerialSendByte
+                     244     
+                     245     ; 
+                     246     ; void SerialSendStr(char *str)
+                     247     
+----                 248             RSEG  ?PR?_SerialSendStr?HYPERTERMINAL
+0000                 249     _SerialSendStr:
+                     250             USING   0
+                     251                             ; SOURCE LINE # 32
+                     252     ;---- Variable 'str?241' assigned to Register 'R1/R2/R3' ----
+                     253     ; {
+                     254                             ; SOURCE LINE # 33
+0000                 255     ?C0005:
+                     256     ;       while(*str != '\0')
+                     257                             ; SOURCE LINE # 34
+0000 120000   F      258             LCALL   ?C?CLDPTR
+0003 FF              259             MOV     R7,A
+0004 600C            260             JZ      ?C0007
+                     261     ;       {
+                     262                             ; SOURCE LINE # 35
+                     263     ;               SerialSendByte(*str);
+                     264                             ; SOURCE LINE # 36
+0006 120000   F      265             LCALL   _SerialSendByte
+                     266     ;               str++;
+                     267                             ; SOURCE LINE # 37
+0009 7401            268             MOV     A,#01H
+000B 29              269             ADD     A,R1
+000C F9              270             MOV     R1,A
+000D E4              271             CLR     A
+000E 3A              272             ADDC    A,R2
+000F FA              273             MOV     R2,A
+                     274     ;       }
+                     275                             ; SOURCE LINE # 38
+0010 80EE            276             SJMP    ?C0005
+                     277     ; }
+                     278                             ; SOURCE LINE # 39
+0012                 279     ?C0007:
+0012 22              280             RET     
+                     281     ; END OF _SerialSendStr
+                     282     
+----                 283     CSEG    AT      00023H
+0023 020000   F      284             LJMP    SerialInterrupt
+                     285     
+                     286     ; 
+                     287     ; void SerialInterrupt(void) interrupt 4 using 3
+                     288     
+----                 289             RSEG  ?PR?SerialInterrupt?HYPERTERMINAL
+                     290             USING   3
+0000                 291     SerialInterrupt:
+0000 C0E0            292             PUSH    ACC
+0002 C0F0            293             PUSH    B
+0004 C083            294             PUSH    DPH
+0006 C082            295             PUSH    DPL
+0008 C0D0            296             PUSH    PSW
+                     297             USING   3
+000A 75D018          298             MOV     PSW,#018H
+                     299                             ; SOURCE LINE # 41
+                     300     ; {
+                     301     ;       if(RI)
+                     302                             ; SOURCE LINE # 43
+000D 30980F          303             JNB     RI,?C0010
+                     304     ;       {
+                     305                             ; SOURCE LINE # 44
+                     306     ;               RI = 0;
+                     307                             ; SOURCE LINE # 45
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     6
+
+0010 C298            308             CLR     RI
+                     309     ;               if(SBUF == 'a')
+                     310                             ; SOURCE LINE # 46
+0012 E599            311             MOV     A,SBUF
+0014 B46103          312             CJNE    A,#061H,?C0009
+                     313     ;               {
+                     314                             ; SOURCE LINE # 47
+                     315     ;                       (*(void(*)( ))0)(); 
+                     316                             ; SOURCE LINE # 48
+0017 120000          317             LCALL   00H
+                     318     ;               }
+                     319                             ; SOURCE LINE # 49
+001A                 320     ?C0009:
+                     321     ;               SerialSendByte(SBUF);
+                     322                             ; SOURCE LINE # 50
+001A AF99            323             MOV     R7,SBUF
+001C 120000   F      324             LCALL   _SerialSendByte
+                     325     ;       }
+                     326                             ; SOURCE LINE # 51
+                     327     ; }
+                     328                             ; SOURCE LINE # 52
+001F                 329     ?C0010:
+001F D0D0            330             POP     PSW
+0021 D082            331             POP     DPL
+0023 D083            332             POP     DPH
+0025 D0F0            333             POP     B
+0027 D0E0            334             POP     ACC
+0029 32              335             RETI    
+                     336     ; END OF SerialInterrupt
+                     337     
+                     338             END
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                              T Y P E  V A L U E   ATTRIBUTES
+
+?C0002. . . . . . . . . . . . . . .  C ADDR   0002H   R   SEG=?PR?_SERIALSENDBYTE?HYPERTERMINAL
+?C0003. . . . . . . . . . . . . . .  C ADDR   0005H   R   SEG=?PR?_SERIALSENDBYTE?HYPERTERMINAL
+?C0005. . . . . . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_SERIALSENDSTR?HYPERTERMINAL
+?C0007. . . . . . . . . . . . . . .  C ADDR   0012H   R   SEG=?PR?_SERIALSENDSTR?HYPERTERMINAL
+?C0009. . . . . . . . . . . . . . .  C ADDR   001AH   R   SEG=?PR?SERIALINTERRUPT?HYPERTERMINAL
+?C0010. . . . . . . . . . . . . . .  C ADDR   001FH   R   SEG=?PR?SERIALINTERRUPT?HYPERTERMINAL
+?C?CLDPTR . . . . . . . . . . . . .  C ADDR   -----       EXT
+?CO?HYPERTERMINAL . . . . . . . . .  C SEG    004FH       REL=UNIT
+?PR?INITHYPERTERMINAL?HYPERTERMINAL  C SEG    004FH       REL=UNIT
+?PR?SERIALINTERRUPT?HYPERTERMINAL .  C SEG    002AH       REL=UNIT
+?PR?_SERIALSENDBYTE?HYPERTERMINAL .  C SEG    0008H       REL=UNIT
+?PR?_SERIALSENDSTR?HYPERTERMINAL. .  C SEG    0013H       REL=UNIT
+?SC_0 . . . . . . . . . . . . . . .  C ADDR   0000H   R   SEG=?CO?HYPERTERMINAL
+?SC_14. . . . . . . . . . . . . . .  C ADDR   000EH   R   SEG=?CO?HYPERTERMINAL
+?SC_19. . . . . . . . . . . . . . .  C ADDR   0013H   R   SEG=?CO?HYPERTERMINAL
+?SC_51. . . . . . . . . . . . . . .  C ADDR   0033H   R   SEG=?CO?HYPERTERMINAL
+?SC_8 . . . . . . . . . . . . . . .  C ADDR   0008H   R   SEG=?CO?HYPERTERMINAL
+AC. . . . . . . . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC . . . . . . . . . . . . . . . .  D ADDR   00E0H   A   
+B . . . . . . . . . . . . . . . . .  D ADDR   00F0H   A   
+CY. . . . . . . . . . . . . . . . .  B ADDR   00D0H.7 A   
+DPH . . . . . . . . . . . . . . . .  D ADDR   0083H   A   
+DPL . . . . . . . . . . . . . . . .  D ADDR   0082H   A   
+EA. . . . . . . . . . . . . . . . .  B ADDR   00A8H.7 A   
+ES. . . . . . . . . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0 . . . . . . . . . . . . . . . .  B ADDR   00A8H.1 A   
+ET1 . . . . . . . . . . . . . . . .  B ADDR   00A8H.3 A   
+ET2 . . . . . . . . . . . . . . . .  B ADDR   00A8H.5 A   
+EX0 . . . . . . . . . . . . . . . .  B ADDR   00A8H.0 A   
+EX1 . . . . . . . . . . . . . . . .  B ADDR   00A8H.2 A   
+F0. . . . . . . . . . . . . . . . .  B ADDR   00D0H.5 A   
+FL. . . . . . . . . . . . . . . . .  B ADDR   00D0H.1 A   
+HYPERTERMINAL . . . . . . . . . . .  N NUMB   -----       
+IE. . . . . . . . . . . . . . . . .  D ADDR   00A8H   A   
+IE0 . . . . . . . . . . . . . . . .  B ADDR   0088H.1 A   
+IE1 . . . . . . . . . . . . . . . .  B ADDR   0088H.3 A   
+INITHYPERTERMINAL . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?INITHYPERTERMINAL?HYPERTERMINAL
+INT0. . . . . . . . . . . . . . . .  B ADDR   00B0H.2 A   
+INT1. . . . . . . . . . . . . . . .  B ADDR   00B0H.3 A   
+IP. . . . . . . . . . . . . . . . .  D ADDR   00B8H   A   
+IT0 . . . . . . . . . . . . . . . .  B ADDR   0088H.0 A   
+IT1 . . . . . . . . . . . . . . . .  B ADDR   0088H.2 A   
+OV. . . . . . . . . . . . . . . . .  B ADDR   00D0H.2 A   
+P . . . . . . . . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0. . . . . . . . . . . . . . . . .  D ADDR   0080H   A   
+P0_0. . . . . . . . . . . . . . . .  B ADDR   0080H.0 A   
+P0_1. . . . . . . . . . . . . . . .  B ADDR   0080H.1 A   
+P0_2. . . . . . . . . . . . . . . .  B ADDR   0080H.2 A   
+P0_3. . . . . . . . . . . . . . . .  B ADDR   0080H.3 A   
+P0_4. . . . . . . . . . . . . . . .  B ADDR   0080H.4 A   
+P0_5. . . . . . . . . . . . . . . .  B ADDR   0080H.5 A   
+P0_6. . . . . . . . . . . . . . . .  B ADDR   0080H.6 A   
+P0_7. . . . . . . . . . . . . . . .  B ADDR   0080H.7 A   
+P1. . . . . . . . . . . . . . . . .  D ADDR   0090H   A   
+P1_0. . . . . . . . . . . . . . . .  B ADDR   0090H.0 A   
+P1_1. . . . . . . . . . . . . . . .  B ADDR   0090H.1 A   
+P1_2. . . . . . . . . . . . . . . .  B ADDR   0090H.2 A   
+P1_3. . . . . . . . . . . . . . . .  B ADDR   0090H.3 A   
+P1_4. . . . . . . . . . . . . . . .  B ADDR   0090H.4 A   
+P1_5. . . . . . . . . . . . . . . .  B ADDR   0090H.5 A   
+A51 MACRO ASSEMBLER  HYPERTERMINAL                                                        04/10/2006 15:01:15 PAGE     8
+
+P1_6. . . . . . . . . . . . . . . .  B ADDR   0090H.6 A   
+P1_7. . . . . . . . . . . . . . . .  B ADDR   0090H.7 A   
+P2. . . . . . . . . . . . . . . . .  D ADDR   00A0H   A   
+P2_0. . . . . . . . . . . . . . . .  B ADDR   00A0H.0 A   
+P2_1. . . . . . . . . . . . . . . .  B ADDR   00A0H.1 A   
+P2_2. . . . . . . . . . . . . . . .  B ADDR   00A0H.2 A   
+P2_3. . . . . . . . . . . . . . . .  B ADDR   00A0H.3 A   
+P2_4. . . . . . . . . . . . . . . .  B ADDR   00A0H.4 A   
+P2_5. . . . . . . . . . . . . . . .  B ADDR   00A0H.5 A   
+P2_6. . . . . . . . . . . . . . . .  B ADDR   00A0H.6 A   
+P2_7. . . . . . . . . . . . . . . .  B ADDR   00A0H.7 A   
+P3. . . . . . . . . . . . . . . . .  D ADDR   00B0H   A   
+P3_0. . . . . . . . . . . . . . . .  B ADDR   00B0H.0 A   
+P3_1. . . . . . . . . . . . . . . .  B ADDR   00B0H.1 A   
+P3_2. . . . . . . . . . . . . . . .  B ADDR   00B0H.2 A   
+P3_3. . . . . . . . . . . . . . . .  B ADDR   00B0H.3 A   
+P3_4. . . . . . . . . . . . . . . .  B ADDR   00B0H.4 A   
+P3_5. . . . . . . . . . . . . . . .  B ADDR   00B0H.5 A   
+P3_6. . . . . . . . . . . . . . . .  B ADDR   00B0H.6 A   
+P3_7. . . . . . . . . . . . . . . .  B ADDR   00B0H.7 A   
+PCON. . . . . . . . . . . . . . . .  D ADDR   0087H   A   
+PS. . . . . . . . . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW . . . . . . . . . . . . . . . .  D ADDR   00D0H   A   
+PT0 . . . . . . . . . . . . . . . .  B ADDR   00B8H.1 A   
+PT1 . . . . . . . . . . . . . . . .  B ADDR   00B8H.3 A   
+PT2 . . . . . . . . . . . . . . . .  B ADDR   00B8H.5 A   
+PX0 . . . . . . . . . . . . . . . .  B ADDR   00B8H.0 A   
+PX1 . . . . . . . . . . . . . . . .  B ADDR   00B8H.2 A   
+RB8 . . . . . . . . . . . . . . . .  B ADDR   0098H.2 A   
+RD. . . . . . . . . . . . . . . . .  B ADDR   00B0H.7 A   
+REN . . . . . . . . . . . . . . . .  B ADDR   0098H.4 A   
+RI. . . . . . . . . . . . . . . . .  B ADDR   0098H.0 A   
+RS0 . . . . . . . . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1 . . . . . . . . . . . . . . . .  B ADDR   00D0H.4 A   
+RXD . . . . . . . . . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF. . . . . . . . . . . . . . . .  D ADDR   0099H   A   
+SCON. . . . . . . . . . . . . . . .  D ADDR   0098H   A   
+SERIALINTERRUPT . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?SERIALINTERRUPT?HYPERTERMINAL
+SM0 . . . . . . . . . . . . . . . .  B ADDR   0098H.7 A   
+SM1 . . . . . . . . . . . . . . . .  B ADDR   0098H.6 A   
+SM2 . . . . . . . . . . . . . . . .  B ADDR   0098H.5 A   
+SP. . . . . . . . . . . . . . . . .  D ADDR   0081H   A   
+T0. . . . . . . . . . . . . . . . .  B ADDR   00B0H.4 A   
+T1. . . . . . . . . . . . . . . . .  B ADDR   00B0H.5 A   
+TB8 . . . . . . . . . . . . . . . .  B ADDR   0098H.3 A   
+TCON. . . . . . . . . . . . . . . .  D ADDR   0088H   A   
+TF0 . . . . . . . . . . . . . . . .  B ADDR   0088H.5 A   
+TF1 . . . . . . . . . . . . . . . .  B ADDR   0088H.7 A   
+TH0 . . . . . . . . . . . . . . . .  D ADDR   008CH   A   
+TH1 . . . . . . . . . . . . . . . .  D ADDR   008DH   A   
+TI. . . . . . . . . . . . . . . . .  B ADDR   0098H.1 A   
+TL0 . . . . . . . . . . . . . . . .  D ADDR   008AH   A   
+TL1 . . . . . . . . . . . . . . . .  D ADDR   008BH   A   
+TMOD. . . . . . . . . . . . . . . .  D ADDR   0089H   A   
+TR0 . . . . . . . . . . . . . . . .  B ADDR   0088H.4 A   
+TR1 . . . . . . . . . . . . . . . .  B ADDR   0088H.6 A   
+TXD . . . . . . . . . . . . . . . .  B ADDR   00B0H.1 A   
+WR. . . . . . . . . . . . . . . . .  B ADDR   00B0H.6 A   
+_SERIALSENDBYTE . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_SERIALSENDBYTE?HYPERTERMINAL
+_SERIALSENDSTR. . . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_SERIALSENDSTR?HYPERTERMINAL
+
+
+REGISTER BANK(S) USED: 0 3 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,143 @@
+C51 COMPILER V8.02   TEMPERATURE                                                           11/01/2006 20:56:43 PAGE 1   
+
+
+C51 COMPILER V8.02, COMPILATION OF MODULE TEMPERATURE
+OBJECT MODULE PLACED IN temperature.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE temperature.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          
+   3          char disp[11]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x40};
+   4          char disp_dot[11]={0xbf,0x86,0xdb,0xcf,0xe6,0xed,0xfd,0x87,0xff,0xef,0xc0};
+   5          
+   6          sbit DQ = P1^3;   //定义通信端口 
+   7          
+   8          //晶振12MHz  
+   9          void delay_18B20(unsigned int i)
+  10          {
+  11   1              while(i--);
+  12   1      }
+  13          
+  14          //初始化函数
+  15          Init_DS18B20(void) 
+  16          {
+  17   1               unsigned char x=0;
+  18   1               DQ = 1;          //DQ复位
+  19   1               delay_18B20(8);  //稍做延时
+  20   1               DQ = 0;          //单片机将DQ拉低
+  21   1               delay_18B20(80); //精确延时 大于 480us
+  22   1               DQ = 1;          //拉高总线
+  23   1               delay_18B20(14);
+  24   1               x=DQ;            //稍做延时后 如果x=0则初始化成功 x=1则初始化失败
+  25   1               delay_18B20(20);
+  26   1      }
+  27          
+  28          
+  29          //读一个字节  
+  30          ReadOneChar(void)
+  31          {
+  32   1              unsigned char i=0;
+  33   1              unsigned char dat = 0;
+  34   1              for (i=8;i>0;i--)
+  35   1               {
+  36   2                        DQ = 0; // 给脉冲信号
+  37   2                        dat>>=1;
+  38   2                        DQ = 1; // 给脉冲信号
+  39   2                        if(DQ)
+  40   2                        dat|=0x80;
+  41   2                        delay_18B20(4);
+  42   2               }
+  43   1              return(dat);
+  44   1      }
+  45          
+  46          //写一个字节  
+  47          WriteOneChar(unsigned char dat)
+  48          {
+  49   1       unsigned char i=0;
+  50   1       for (i=8; i>0; i--)
+  51   1       {
+  52   2        DQ = 0;
+  53   2        DQ = dat&0x01;
+  54   2        delay_18B20(5);
+  55   2        DQ = 1;
+C51 COMPILER V8.02   TEMPERATURE                                                           11/01/2006 20:56:43 PAGE 2   
+
+  56   2        dat>>=1;
+  57   2       }
+  58   1      }
+  59          
+  60          //读取温度
+  61          ReadTemperature(void)
+  62          {
+  63   1              unsigned char a=0;
+  64   1              unsigned char b=0;
+  65   1              unsigned int  t=0;
+  66   1              
+  67   1              Init_DS18B20();
+  68   1              WriteOneChar(0xCC); // 跳过读序号列号的操作
+  69   1              WriteOneChar(0x44); // 启动温度转换
+  70   1              delay_18B20(100);
+  71   1              Init_DS18B20();
+  72   1              WriteOneChar(0xCC); //跳过读序号列号的操作
+  73   1              WriteOneChar(0xBE); //读取温度寄存器等（共可读9个寄存器） 前两个就是温度
+  74   1              a=ReadOneChar();
+  75   1              b=ReadOneChar();
+  76   1                      
+  77   1              //传感器返回值除16得实际温度值
+  78   1              //为了得到2位小数位，先乘100，再除16，考虑整型数据长度，
+  79   1              //技巧处理后先乘25，再除4，除4用右移实现
+  80   1      
+  81   1              t = (b*256+a)*25;       
+  82   1              return( t >> 2  );
+  83   1      }
+  84          
+  85          main()
+  86          {
+  87   1              unsigned int tmp;
+  88   1              unsigned char counter;
+  89   1              while(1)
+  90   1              {
+  91   2                      //温度测量频率没有必要太高，太高反而影响数码显示
+  92   2                      //所以用计数器加以控制
+  93   2                      if(counter-- == 0)
+  94   2                      {
+  95   3                              tmp = ReadTemperature();                        
+  96   3                              counter = 20;
+  97   3                      }
+  98   2      
+  99   2                      P2 = 0xff;
+ 100   2                      P0 = disp[tmp%10];
+ 101   2                      P2 = 0xfb;
+ 102   2                      delay_18B20(1000);
+ 103   2                      P2 = 0xff;
+ 104   2                      P0 = disp[tmp/10%10];
+ 105   2                      P2 = 0xf7;
+ 106   2                      delay_18B20(1000);
+ 107   2                      P2 = 0xff;
+ 108   2                      P0 = disp_dot[tmp/100%10];
+ 109   2                      P2 = 0xef;
+ 110   2                      delay_18B20(1000);
+ 111   2                      P2 = 0xff;
+ 112   2                      P0 = disp[tmp/1000%10];
+ 113   2                      P2 = 0xdf;
+ 114   2                      delay_18B20(1000);
+ 115   2              }
+ 116   1      }
+
+C51 COMPILER V8.02   TEMPERATURE                                                           11/01/2006 20:56:43 PAGE 3   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    331    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

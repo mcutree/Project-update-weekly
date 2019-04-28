@@ -1,0 +1,28 @@
+CodeVisionAVR C Compiler V1.24.7d Professional
+(C) Copyright 1998-2005 Pavel Haiduc, HP InfoTech s.r.l.
+http://www.hpinfotech.com
+
+File: E:\proteus\Èí¼þ\Êý¿ØÔÆÌ¨master\skytmain.c
+Global variables memory map:
+
+Variable                          Address   Size
+rx_buffer                            160h      8
+rx_wr_index                            R4      1
+rx_rd_index                            R5      1
+rx_counter                             R6      1
+rx_buffer_overflow                   R2.0    1/8
+b_ComEnable                          R2.1    1/8
+uc_syssta                              R7      1
+tx_buffer                            168h      8
+tx_wr_index                            R8      1
+tx_rd_index                            R9      1
+tx_counter                            R10      1
+ucInputValue                          R11      1
+uiLastADValue                        170h      6
+ucInputParam0                         R12      1
+ucChannelN                            R13      1
+uc_ReceiveSta                         R14      1
+bInputChange                         R2.2    1/8
+bMotorSpeed                          R2.3    1/8
+bLight                               R2.4    1/8
+bReceiveOpend                        R2.5    1/8

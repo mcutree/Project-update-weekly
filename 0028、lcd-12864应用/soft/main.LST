@@ -1,0 +1,207 @@
+C51 COMPILER V7.06   MAIN                                                                  10/06/2008 18:55:23 PAGE 1   
+
+
+C51 COMPILER V7.06, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          #include <reg51.h>
+   2          #include <intrins.h>
+   3          typedef unsigned int WORD;
+   4          const  WORD code encoding_00[] =                //神
+   5          {
+   6                  0x0208, 0x0108, 0x0089, 0xffce, 0x00a8, 0x0318, 0x0000, 0x07f8,
+   7                  0x0248, 0x0248, 0xffff, 0x0248, 0x0248, 0x07f8, 0x0000, 0x0000,
+   8                  0x0000, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x0040, 0x3ffe,
+   9                  0x4020, 0x4020, 0x4020, 0x4020, 0x4020, 0x3820, 0x0020, 0x0000,
+  10                  0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002, 0x0002,
+  11                  0x0002, 0x03fe, 0x0c60, 0x1090, 0x2108, 0x4000, 0x7800, 0x0000,
+  12                  0x8080, 0x6080, 0x1ffc, 0x4296, 0x84a5, 0x7ffc, 0x0080, 0x0040,
+  13                  0x7e3e, 0x2202, 0x2202, 0x2202, 0x227e, 0x7e40, 0x0040, 0x0000
+  14          
+  15          };
+  16          
+  17          const WORD code encoding_01[] =                 //Pic
+  18          {
+  19                  0x0103, 0x0706, 0x8a00, 0x0000, 0x0000, 0x0007, 0xc000, 0x0000,
+  20                  0x0000, 0x0003, 0xe000, 0x0000, 0x0000, 0x0001, 0x7000, 0x0000,
+  21                  0x0000, 0x0000, 0xf000, 0x1800, 0x0000, 0x0000, 0xf000, 0x0e00,
+  22                  0x0000, 0x0000, 0x0000, 0x1e00, 0x0000, 0x0000, 0x0000, 0x1700,
+  23                  0x0000, 0x0000, 0x0000, 0x1780, 0x0000, 0x0300, 0x03e0, 0x1bc0,
+  24                  0x0000, 0x0380, 0x03b0, 0xfdc0, 0x0000, 0x01c0, 0x061f, 0x97e0,
+  25                  0x0000, 0x00f0, 0x0e03, 0x1bf0, 0x0000, 0x0070, 0x1fff, 0x89f0,
+  26                  0x0000, 0x0010, 0x3000, 0xd8f8, 0x0000, 0x0001, 0xe000, 0x7068,
+  27                  0x0000, 0x0003, 0x2001, 0xe028, 0x0000, 0x0002, 0xe3ff, 0xa038,
+  28                  0x0000, 0x0003, 0xa203, 0xe000, 0x0000, 0x0001, 0xa280, 0x6000,
+  29                  0x0000, 0x0000, 0xe2c0, 0x3000, 0x0000, 0x0000, 0x6260, 0x3800,
+  30                  0x0000, 0x0000, 0x7aa0, 0x2c00, 0x0000, 0x0000, 0x7150, 0x3400,
+  31                  0x0000, 0x0000, 0x71f8, 0x1e00, 0x0000, 0x0000, 0x303c, 0x2a00,
+  32                  0x0000, 0x0000, 0x781e, 0x3b00, 0x0000, 0x0030, 0xc81f, 0x0d00,
+  33                  0x0000, 0x0038, 0x8c07, 0x8580, 0x0000, 0x003c, 0x8603, 0x8680,
+  34                  0xff00, 0x001e, 0x8301, 0xc380, 0x3d80, 0x001e, 0x8780, 0x0180,
+  35                  0x67e0, 0x000b, 0xfc80, 0x01c0, 0x3ffe, 0x000d, 0x80c0, 0x01c0,
+  36                  0x003f, 0x0007, 0xc060, 0x01e0, 0x010f, 0x0007, 0xc020, 0x01e0,
+  37                  0x7c07, 0xf003, 0xe030, 0x01e0, 0x1033, 0xe801, 0xf81b, 0x00e0,
+  38                  0x179f, 0xe000, 0x780f, 0x80e0, 0x1802, 0xf400, 0x7807, 0x80a0,
+  39                  0x0713, 0x7c00, 0x1801, 0xffe0, 0x0300, 0x3e00, 0x0000, 0xfff0,
+  40                  0x0060, 0x0f80, 0x0000, 0x3ff0, 0x0067, 0xa780, 0x0000, 0x1ff0,
+  41                  0x0012, 0x23c0, 0x0000, 0x00f0, 0x0001, 0x31c0, 0x0000, 0x0000,
+  42                  0x0000, 0x23c0, 0x0000, 0x0000, 0x0000, 0x0640, 0x0000, 0x0000,
+  43                  0x0000, 0x8c60, 0x0000, 0x0000, 0x0000, 0x2520, 0x0000, 0x0000,
+  44                  0x0000, 0x1230, 0x0000, 0x0000, 0x0000, 0x7120, 0x0000, 0x0000,
+  45                  0x0000, 0x1170, 0x0000, 0x0000, 0x0000, 0x1030, 0x0000, 0x0000,
+  46                  0x0000, 0x0230, 0x0000, 0x0000, 0x0000, 0x02b8, 0x0000, 0x0000,
+  47                  0x0000, 0x0ab0, 0x0000, 0x0000, 0x0000, 0x00f8, 0x0000, 0x0000,
+  48                  0x0000, 0x0c30, 0x0000, 0x0000, 0x0000, 0x04b0, 0x0000, 0x0000,
+  49                  0x0000, 0x0130, 0x0000, 0x0000, 0x0000, 0x0020, 0x0000, 0x0000,
+  50                  0x0000, 0x0020, 0x0000, 0x0000, 0x0000, 0x0020, 0x0000, 0x0000
+  51          };
+  52          
+  53          #define uchar unsigned char 
+  54          #define uint unsigned int 
+  55          sbit p3_0=P3^0;
+C51 COMPILER V7.06   MAIN                                                                  10/06/2008 18:55:23 PAGE 2   
+
+  56          sbit p3_1=P3^1;
+  57          sbit p3_2=P3^2;
+  58          sbit p3_3=P3^3;
+  59          sbit p3_4=P3^4;
+  60          sbit p3_5=P3^5;
+  61          sbit p2_7=P2^7;
+  62          
+  63          
+  64          #define LCD_RW   p3_1  
+  65          #define LCD_DI   p3_2
+  66          #define LCD_E    p3_0
+  67          #define LCD_CS1  p3_4
+  68          #define LCD_CS2  p3_3
+  69          #define LCD_RES  p3_5
+  70          
+  71          #define LCD_BUSY p2_7
+  72          #define LCDPORT P2
+  73          
+  74          #define LCDSTARTROW 0xC0
+  75          
+  76          delay_ms(int ms)
+  77          {uchar i;
+  78   1       uint  j;
+  79   1       for(j=2*ms;j>0;j--) 
+  80   1        for(i=250;i>0;i--);
+  81   1       
+  82   1      }
+  83          
+  84          
+  85          bit ChechBusy()
+  86          {
+  87   1      
+  88   1              LCDPORT=0xFF;
+  89   1              LCD_RW=1;
+  90   1              LCD_DI=0;
+  91   1              LCD_E=1;
+  92   1      
+  93   1              LCD_E=0;
+  94   1              return LCD_BUSY;
+  95   1      }
+  96          
+  97          
+  98          void write_cmd(uchar cmd)
+  99          {
+ 100   1              while(ChechBusy());
+ 101   1          
+ 102   1          LCD_E=0;
+ 103   1              LCD_RW=0;
+ 104   1              LCD_DI=0;
+ 105   1              LCDPORT=cmd;
+ 106   1              LCD_E=1;
+ 107   1          LCD_E=0;
+ 108   1      }
+ 109          
+ 110          
+ 111          void write_data(uchar d)
+ 112          {
+ 113   1              while(ChechBusy());
+ 114   1      
+ 115   1          LCD_E=0;
+ 116   1              LCD_RW=0;
+ 117   1              LCD_DI=1;
+C51 COMPILER V7.06   MAIN                                                                  10/06/2008 18:55:23 PAGE 3   
+
+ 118   1              LCDPORT=d;
+ 119   1              LCD_E=1;
+ 120   1              LCD_E=0;
+ 121   1      
+ 122   1      }
+ 123          
+ 124          void LCD_init()
+ 125          {
+ 126   1          LCD_CS1=1;
+ 127   1              LCD_CS2=1;
+ 128   1      
+ 129   1              write_cmd(0x3F);                //开显示。
+ 130   1              write_cmd(LCDSTARTROW); //设置起始行。
+ 131   1      }
+ 132          
+ 133          
+ 134          void main()
+ 135          {
+ 136   1       int i,j;
+ 137   1       uchar u, *p=encoding_01;
+ 138   1       LCD_init();
+ 139   1       LCD_CS1=1;
+ 140   1       LCD_CS2=1;
+ 141   1       P1=0;
+ 142   1       for (i=0;i<64;i++)
+ 143   1       { write_cmd(0xb9);
+ 144   2         
+ 145   2         write_data(encoding_00[i]);
+ 146   2       }
+ 147   1      write_cmd(0x40);
+ 148   1       for (i=0;i<64;i++)
+ 149   1       { write_cmd(0xba);
+ 150   2         
+ 151   2         write_data(encoding_00[i]>>8);
+ 152   2       }
+ 153   1      
+ 154   1      
+ 155   1       LCD_CS1=0;
+ 156   1       LCD_CS2=1;
+ 157   1      
+ 158   1       for (i=0;i<64*8;i++)
+ 159   1       { 
+ 160   2         
+ 161   2         u=0xb8+(7-i%8);
+ 162   2         write_cmd(u);
+ 163   2         u=0x40+i/8;
+ 164   2         write_cmd(u);
+ 165   2         u=*((uchar *)encoding_01+i);
+ 166   2         write_data(u);
+ 167   2       }
+ 168   1      
+ 169   1       for (u=0;u<64;u++)
+ 170   1       {
+ 171   2        write_cmd(0xc0+u);
+ 172   2      
+ 173   2        delay_ms(500);
+ 174   2       }
+ 175   1       while(1);
+ 176   1      }
+*** WARNING C280 IN LINE 136 OF MAIN.C: 'j': unreferenced local variable
+ 177          
+
+C51 COMPILER V7.06   MAIN                                                                  10/06/2008 18:55:23 PAGE 4   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    309    ----
+   CONSTANT SIZE    =    640    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

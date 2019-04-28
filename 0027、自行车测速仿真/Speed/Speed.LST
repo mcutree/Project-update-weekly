@@ -1,0 +1,246 @@
+C51 COMPILER V8.08   SPEED                                                                 04/25/2007 10:41:21 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE SPEED
+OBJECT MODULE PLACED IN Speed.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE Speed.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "d:\c51\reg51.h"
+   2          #include "d:\c51\intrins.h"
+   3          
+   4          
+   5          sbit LCM_RS=P3^0;
+   6          sbit LCM_RW=P3^1;
+   7          sbit LCM_EN=P3^7;
+   8          
+   9          #define BUSY            0x80              //常量定义
+  10          #define DATAPORT        P1
+  11          #define uchar           unsigned char
+  12          #define uint            unsigned int
+  13          #define L                       50
+  14          
+  15          uchar str0[16],str1[16],count;
+  16          uint speed;
+  17          unsigned long time;
+  18          
+  19          void ddelay(uint);
+  20          void lcd_wait(void);
+  21          void display();
+  22          void initLCM();
+  23          void WriteCommandLCM(uchar WCLCM,uchar BusyC);
+  24          void STR();
+  25          void account();
+  26          
+  27          
+  28          /*********延时K*1ms,12.000mhz**********/
+  29          
+  30          void int0_isr(void) interrupt 0         /*遥控使用外部中断0,接P3.2口*/
+  31          {
+  32   1          unsigned int temp;
+  33   1              time=count;
+  34   1          TR0=0;
+  35   1              temp=TH0;
+  36   1              temp=((temp << 8) | TL0);
+  37   1          TH0=0x3c;
+  38   1          TL0=0xaf;
+  39   1              count=0;
+  40   1          TR0=1;
+  41   1              time=time*50000+temp;
+  42   1      }
+  43          
+  44          void time0_isr(void) interrupt 1        /*遥控使用定时计数器1 */
+  45          {
+  46   1         TH0 =0x3c;
+  47   1         TL0 =0xaf;
+  48   1         count++;
+  49   1      }
+  50          
+  51          void main(void)
+  52          {
+  53   1              TMOD=0x01;                       /*TMOD T0选用方式1(16位定时) */
+  54   1          IP|=0x01;                           /*INT0 中断优先*/
+  55   1          TCON|=0x11;                         /*TCON  EX0下降沿触发,启动T0*/
+C51 COMPILER V8.08   SPEED                                                                 04/25/2007 10:41:21 PAGE 2   
+
+  56   1          IE|=0x83;  
+  57   1          TH0=0x3c;
+  58   1          TL0=0xaf;
+  59   1        
+  60   1              initLCM();
+  61   1              WriteCommandLCM(0x01,1);                    //清显示屏
+  62   1              for(;;)
+  63   1              {
+  64   2                      account();
+  65   2                      display();
+  66   2              }
+  67   1      }
+  68          
+  69          void account()
+  70          {
+  71   1              unsigned long a; 
+  72   1              if (time!=0)
+  73   1              {
+  74   2                      a=L*360000000/time;
+  75   2              }
+  76   1              speed=a;
+  77   1      }
+  78          
+  79          
+  80          
+  81          void STR()
+  82          {
+  83   1              str0[0]='S';
+  84   1              str0[1]='p';
+  85   1              str0[2]='e';
+  86   1          str0[3]='e';
+  87   1              str0[4]='d';
+  88   1              str0[5]=' ';    
+  89   1              str0[6]=(speed%100000)/10000+0x30;
+  90   1              str0[7]=(speed%10000)/1000+0x30;
+  91   1              str0[8]=(speed%1000)/100+0x30;
+  92   1              str0[9]='.';
+  93   1              str0[10]=(speed%100)/10+0x30;
+  94   1              str0[11]=speed%10+0x30;
+  95   1              str0[12]='k';
+  96   1              str0[13]='m';
+  97   1              str0[14]='/';
+  98   1              str0[15]='h';
+  99   1      }
+ 100          
+ 101          void ddelay(uint k)
+ 102          {
+ 103   1          uint i,j;
+ 104   1          for(i=0;i<k;i++)
+ 105   1          {
+ 106   2              for(j=0;j<60;j++)
+ 107   2                      {;}
+ 108   2          }
+ 109   1      }
+ 110          /**********写指令到LCD子函数************/
+ 111          
+ 112          void WriteCommandLCM(uchar WCLCM,uchar BusyC)
+ 113          {
+ 114   1          if(BusyC)lcd_wait();
+ 115   1              DATAPORT=WCLCM;
+ 116   1          LCM_RS=0;                   /* 选中指令寄存器*/
+ 117   1          LCM_RW=0;                   // 写模式
+C51 COMPILER V8.08   SPEED                                                                 04/25/2007 10:41:21 PAGE 3   
+
+ 118   1          LCM_EN=1;
+ 119   1              _nop_();
+ 120   1              _nop_();
+ 121   1              _nop_();
+ 122   1          LCM_EN=0;
+ 123   1      
+ 124   1      }
+ 125          
+ 126          /**********写数据到LCD子函数************/
+ 127          
+ 128          void WriteDataLCM(uchar WDLCM)
+ 129          {
+ 130   1          lcd_wait( );            //检测忙信号
+ 131   1              DATAPORT=WDLCM;
+ 132   1          LCM_RS=1;               /* 选中数据寄存器  */
+ 133   1          LCM_RW=0;                   // 写模式
+ 134   1          LCM_EN=1;
+ 135   1          _nop_();
+ 136   1              _nop_();
+ 137   1              _nop_();
+ 138   1          LCM_EN=0;
+ 139   1      }
+ 140          
+ 141          /***********lcd内部等待函数*************/
+ 142          
+ 143          void lcd_wait(void)
+ 144          {
+ 145   1          DATAPORT=0xff;           //读LCD前若单片机输出低电平,而读出LCD为高电平,则冲突,Proteus仿真会有显示逻辑黄色
+ 146   1              LCM_EN=1;
+ 147   1          LCM_RS=0;
+ 148   1          LCM_RW=1;
+ 149   1          _nop_();
+ 150   1          _nop_();
+ 151   1              _nop_();
+ 152   1          while(DATAPORT&BUSY)
+ 153   1              {  LCM_EN=0;
+ 154   2                 _nop_();
+ 155   2                 _nop_();
+ 156   2                 LCM_EN=1;
+ 157   2                 _nop_();
+ 158   2                 _nop_();
+ 159   2              }
+ 160   1              LCM_EN=0;
+ 161   1      
+ 162   1      }
+ 163          
+ 164          /**********LCD初始化子函数***********/
+ 165          void initLCM( )
+ 166          {
+ 167   1              DATAPORT=0;
+ 168   1              ddelay(15);
+ 169   1              WriteCommandLCM(0x38,0);    //三次显示模式设置，不检测忙信号
+ 170   1          ddelay(5);
+ 171   1          WriteCommandLCM(0x38,0);
+ 172   1          ddelay(5);
+ 173   1          WriteCommandLCM(0x38,0);
+ 174   1          ddelay(5);
+ 175   1      
+ 176   1          WriteCommandLCM(0x38,1);    //8bit数据传送，2行显示，5*7字型，检测忙信号
+ 177   1          WriteCommandLCM(0x08,1);    //关闭显示，检测忙信号
+ 178   1          WriteCommandLCM(0x01,1);    //清屏，检测忙信号
+ 179   1          WriteCommandLCM(0x06,1);    //显示光标右移设置，检测忙信号
+C51 COMPILER V8.08   SPEED                                                                 04/25/2007 10:41:21 PAGE 4   
+
+ 180   1          WriteCommandLCM(0x0c,1);    //显示屏打开，光标不显示，不闪烁，检测忙信号
+ 181   1      }
+ 182          
+ 183          /****显示指定坐标的一个字符子函数****/
+ 184          
+ 185          void DisplayOneChar(uchar X,uchar Y,uchar DData)
+ 186          {
+ 187   1          Y&=1;
+ 188   1          X&=15;
+ 189   1          if(Y)X|=0x40;               //若y为1（显示第二行），地址码+0X40
+ 190   1          X|=0x80;                    //指令码为地址码+0X80
+ 191   1          WriteCommandLCM(X,0);
+ 192   1          WriteDataLCM(DData);
+ 193   1      }
+ 194          
+ 195          /*******显示指定坐标的一串字符子函数*****/
+ 196          
+ 197          void DisplayListChar(uchar X,uchar Y,uchar *DData)
+ 198          {
+ 199   1          uchar ListLength=0;
+ 200   1          Y&=0x01;
+ 201   1          X&=0x0f;
+ 202   1          while(X<16)
+ 203   1          {
+ 204   2              DisplayOneChar(X,Y,DData[ListLength]);
+ 205   2              ListLength++;
+ 206   2              X++;
+ 207   2          }
+ 208   1      }
+ 209          
+ 210          
+ 211          void display()
+ 212          {
+ 213   1      
+ 214   1              STR(); 
+ 215   1              DisplayListChar(0,0,str0);
+ 216   1              DisplayListChar(0,1,str1);
+ 217   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    696    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     39      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

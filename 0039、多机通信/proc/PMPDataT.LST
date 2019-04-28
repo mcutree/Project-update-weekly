@@ -1,0 +1,180 @@
+C51 COMPILER V7.50   PMPDATAT                                                              11/05/2007 01:09:39 PAGE 1   
+
+
+C51 COMPILER V7.50, COMPILATION OF MODULE PMPDATAT
+OBJECT MODULE PLACED IN PMPDataT.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE PMPDataT.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*****************************************/
+   2          /* Copyright (c) 2005, 通信工程学院      */
+   3          /* All rights reserved.                  */
+   4          /* 作    者：戴 佳                                               */
+   5          /*****************************************/
+   6          
+   7          #include "PMPDataT.h"
+   8          
+   9          /* 延时t毫秒 */
+  10          void delay(uint t)
+  11          {
+  12   1              uint i;
+  13   1              while(t--)
+  14   1              {
+  15   2                      /* 对于11.0592M时钟，约延时1ms */
+  16   2                      for (i=0;i<125;i++)
+  17   2                      {}
+  18   2              }
+  19   1      } 
+  20          uchar keyscan(void)
+  21          {
+  22   1              uchar scancode,tmpcode;
+  23   1              P1 = 0xf0;                                                              // 发全0行扫描码
+  24   1              if ((P1&0xf0)!=0xf0)                                    // 若有键按下
+  25   1              {
+  26   2                      delay(10);                                                      // 延时去抖动
+  27   2                      if ((P1&0xf0)!=0xf0)                            // 延时后再判断一次，去除抖动影响
+  28   2                      {
+  29   3                              scancode = 0xfe;
+  30   3                              while((scancode&0x10)!=0)               // 逐行扫描
+  31   3                              {
+  32   4                                      P1 = scancode;                          // 输出行扫描码
+  33   4                                      if ((P1&0xf0)!=0xf0)            // 本行有键按下
+  34   4                                      {
+  35   5                                              tmpcode = (P1&0xf0)|0x0f;
+  36   5      
+  37   5                                              /* 返回特征字节码，为1的位即对应于行和列 */
+  38   5                                              return((~scancode)+(~tmpcode));
+  39   5                                      }
+  40   4                                      else scancode = (scancode<<1)|0x01;             // 行扫描码左移一位
+  41   4                              }
+  42   3                      }
+  43   2              }
+  44   1              return(0);                                                              // 无键按下，返回值为0  
+  45   1      }
+  46          
+  47          /* 发送数据函数 */
+  48          void senddata(uchar buf)
+  49          {
+  50   1      
+  51   1              /* 发送数据 */
+  52   1                      TI = 0;
+  53   1                      TB8 = 0;                                // 发送数据帧
+  54   1                      SBUF =buf;      
+  55   1                      while(!TI);
+C51 COMPILER V7.50   PMPDATAT                                                              11/05/2007 01:09:39 PAGE 2   
+
+  56   1                      TI = 0;
+  57   1      }
+  58          
+  59          /* 串口初始化函数 */
+  60          void init_serial()
+  61          {
+  62   1              TMOD = 0x20;                            // 定时器T1使用工作方式2
+  63   1              TH1 = 250;
+  64   1              TL1 = 250;
+  65   1              TR1 = 1;                                        // 开始计时
+  66   1              PCON = 0x80;                            // SMOD = 1
+  67   1              SCON = 0xd0;                            // 工作方式，9位数据位，波特率9600kbit/s，允许接收 
+  68   1      }
+  69          void Getkey()
+  70          {
+  71   1          switch(get_key)
+  72   1                      {
+  73   2                      case 0x11:                                              // 1行1列，数字0
+  74   2                                    key=0xc0;
+  75   2                                        break;
+  76   2                              case 0x21:                                              // 1行2列，数字1
+  77   2                       key=0xf9;
+  78   2                                      break;                  
+  79   2                              case 0x41:                                              // 1行3列，数字2
+  80   2                                      key=0xa4;
+  81   2                                      break;
+  82   2                      case 0x81:                                              // 1行4列，数字3
+  83   2                                      key=0xb0;
+  84   2                                      break;
+  85   2                              case 0x12:                                              // 2行1列，数字4
+  86   2                      key=0x99;
+  87   2                                      break;
+  88   2                              case 0x22:                                              // 2行2列，数字5
+  89   2                                        key=0x92;
+  90   2                                      break;
+  91   2                              case 0x42:                                              // 2行3列，数字6
+  92   2                                         key=0x82;
+  93   2                                      break;
+  94   2                              case 0x82:                                              // 2行4列，数字7
+  95   2                                         key=0xf8;
+  96   2                                      break;
+  97   2                              case 0x14:                                              // 3行1列，数字8
+  98   2                                         key=0x80;
+  99   2                                         break;
+ 100   2                              case 0x24:                                              // 3行2列，数字9
+ 101   2                                       key=0x90;
+ 102   2                                      break;
+ 103   2                              case 0x44:                                              // 3行3列，10
+ 104   2                                        key=0x88;
+ 105   2                                      break;
+ 106   2                              case 0x84:                                              // 3行4列，11
+ 107   2                                       key=0x83;
+ 108   2                                      break;
+ 109   2                              case 0x18:                                              // 4行1列，12
+ 110   2                                       key=0xc6;
+ 111   2                                      break;
+ 112   2                              case 0x28:                                              // 4行2列，13
+ 113   2                                       key=0xa1;
+ 114   2                                      break;
+ 115   2                              case 0x48:                                              // 4行3列，14
+ 116   2                                       key=0x86;
+ 117   2                                      break;
+C51 COMPILER V7.50   PMPDATAT                                                              11/05/2007 01:09:39 PAGE 3   
+
+ 118   2                              case 0x88:                                              // 3行4列，15
+ 119   2                                       key=0x8e;
+ 120   2                                      break;
+ 121   2                              default:break;
+ 122   2                      }
+ 123   1      
+ 124   1      
+ 125   1      }
+ 126          /* 主程序 */
+ 127          void main()
+ 128          { 
+ 129   1              uchar i = 0;
+ 130   1              key=0xc0; 
+ 131   1              while(1)
+ 132   1          {
+ 133   2                       get_key = keyscan();                           // 调用键盘扫描函数 
+ 134   2                   Getkey();
+ 135   2                       buf=key;
+ 136   2      
+ 137   2              /* 通过P0口读要访问的从机地址 */
+ 138   2                P0 = 0xff;
+ 139   2                addr = P0&0x0f;
+ 140   2                init_serial();                                // 串口初始化 
+ 141   2      
+ 142   2                EA = 1;                                               // 关闭所有中断
+ 143   2              
+ 144   2                      TI = 0;
+ 145   2                          TB8 = 1;                            // 发送地址帧   
+ 146   2                          SBUF = addr;
+ 147   2                          while(!TI);
+ 148   2                          TI = 0;
+ 149   2                       senddata(buf);                 // 发送数据
+ 150   2               
+ 151   2              } 
+ 152   1              
+ 153   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    297    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,72 @@
+C51 COMPILER V7.09   LCD1602                                                               09/18/2005 23:41:53 PAGE 1   
+
+
+C51 COMPILER V7.09, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN LCD1602.OBJ
+COMPILER INVOKED BY: C:\Program Files\Keil\C51\BIN\C51.EXE LCD1602.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <REGX52.H>
+   2          #include "LCD1602.h"
+   3          
+   4          unsigned char TempBuffer[10];
+   5          void IntToStr(unsigned int t, unsigned char *str, unsigned char n) 
+   6          {
+   7   1              unsigned char a[5]; char i, j;                                  
+   8   1              a[0]=(t/10000)%10;         //取得整数值到数组           
+   9   1              a[1]=(t/1000)%10;                                       
+  10   1              a[2]=(t/100)%10;                                        
+  11   1              a[3]=(t/10)%10;                                         
+  12   1              a[4]=(t/1)%10;                                          
+  13   1                                                            
+  14   1              for(i=0; i<5; i++)         //转成ASCII码                
+  15   1                      a[i]=a[i]+'0';                                          
+  16   1              for(i=0; a[i]=='0' && i<=3; i++);                       
+  17   1              for(j=5-n; j<i; j++)       //填充空格                   
+  18   1                      { *str=' ';  str++; }                                   
+  19   1              for(; i<5; i++)                                         
+  20   1                      { *str=a[i]; str++; }  //加入有效的数字                 
+  21   1              *str='\0'; 
+  22   1      } 
+  23          
+  24          void Delay1ms(unsigned int count)
+  25          {
+  26   1              unsigned int i,j;
+  27   1              for(i=0;i<count;i++)
+  28   1              for(j=0;j<120;j++);
+  29   1      }
+  30          
+  31          main()
+  32          {
+  33   1              unsigned int Count = 0;
+  34   1              LCD_Initial();
+  35   1              GotoXY(0,0);
+  36   1              Print("The 1602LCD Test");
+  37   1              GotoXY(0,1);
+  38   1              Print("GO:       by JJJ");
+  39   1      
+  40   1              while(1)
+  41   1              {
+  42   2                      IntToStr(Count++,&TempBuffer[0],5);
+  43   2                      GotoXY(3,1);
+  44   2                      Print(&TempBuffer[0]);
+  45   2                      Delay1ms(100);
+  46   2              }
+  47   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    484    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     10      14
+C51 COMPILER V7.09   LCD1602                                                               09/18/2005 23:41:53 PAGE 2   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

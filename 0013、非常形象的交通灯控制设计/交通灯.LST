@@ -1,0 +1,298 @@
+C51 COMPILER V7.00  交_ǖ_                                                                 05/01/2007 13:06:49 PAGE 1   
+
+
+C51 COMPILER V7.00, COMPILATION OF MODULE 交_ǖ_
+OBJECT MODULE PLACED IN 交通灯.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 交通灯.C BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          /*****************************************************
+   2                 十字路口交通灯控制 C 程序
+   3          *****************************************************
+   4          编写：万程云
+   5          论文：冯周帅
+   6          硬件：李志军
+   7          时间：2007年5月1日 
+   8          指导老师：李显圣
+   9          广西职业技术学院
+  10          ******************************************************/
+  11          
+  12          #define uchar   unsigned char
+  13          #define uint    unsigned int
+  14          #include        <reg52.h>
+  15          /*****定义控制位**********************/
+  16          sbit    Time_Show_LED2=P2^5;//Time_Show_LED2控制位
+  17          sbit    Time_Show_LED1=P2^4;//Time_Show_LED1控制位
+  18          sbit    EW_LED2=P2^3;   //EW_LED2控制位
+  19          sbit    EW_LED1=P2^2;   //EW_LED1控制位
+  20          sbit    SN_LED2=P2^1;   //SN_LED2控制位
+  21          sbit    SN_LED1=P2^0;   //SN_LED1控制位
+  22          sbit    SN_Yellow=P1^6;//SN黄灯
+  23          sbit    EW_Yellow=P1^2;//EW黄灯
+  24          sbit    EW_Red=P1^3;//EW红灯
+  25          sbit    SN_Red=P1^7;//SN红灯
+  26          sbit    EW_ManGreen=P3^0;//EW人行道绿灯
+  27          sbit    SN_ManGreen=P3^1;//SN人行道绿灯
+  28          sbit    Special_LED=P2^6;//交通正常指示灯
+  29          sbit    Busy_LED=P2^7;//交通繁忙指示灯
+  30          sbit    Nomor_Button=P3^5;//交通正常按键
+  31          sbit    Busy_Btton=P3^6;//交通繁忙按键
+  32          sbit    Special_Btton=P3^7;//交通特殊按键  
+  33          sbit    Add_Button=P3^3;//时间加
+  34          sbit    Reduces_Button=P3^4;//时间减
+  35          bit     Flag_SN_Yellow; //SN黄灯标志位
+  36          bit     Flag_EW_Yellow;//EW黄灯标志位
+  37          char    Time_EW;//东西方向倒计时单元
+  38          char    Time_SN;//南北方向倒计时单元
+  39          uchar EW=60,SN=40,EWL=19,SNL=19; //程序初始化赋值，正常模式
+  40          uchar EW1=60,SN1=40,EWL1=19,SNL1=19;//用于存放修改值的变量
+  41          uchar code table[10]={0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};//1~~~~9段选码
+  42          uchar code S[8]={0X28,0X48,0X18,0X48,0X82,0X84,0X81,0X84};//交通信号灯控制代码
+  43          /**********************延时子程序************************/
+  44          void    Delay(uchar      a)
+  45                  {
+  46   1                      uchar   i;
+  47   1                      i=a;
+  48   1                      while(i--){;}
+  49   1              }
+  50          /*****************显示子函数**************************/
+  51          void    Display(void)
+  52                  {
+  53   1                      char h,l;
+  54   1                      h=Time_EW/10;
+  55   1                      l=Time_EW%10;
+C51 COMPILER V7.00  交_ǖ_                                                                 05/01/2007 13:06:49 PAGE 2   
+
+  56   1                  P0=table[l];
+  57   1                      EW_LED2=1;
+  58   1                      Delay(2);
+  59   1                      EW_LED2=0;
+  60   1                  P0=table[h];
+  61   1                      EW_LED1=1;
+  62   1                      Delay(2);
+  63   1                      EW_LED1=0;
+  64   1      
+  65   1                      h=Time_SN/10;
+  66   1                      l=Time_SN%10;
+  67   1                      P0=table[l];
+  68   1                      SN_LED2=1;
+  69   1                      Delay(2);
+  70   1                      SN_LED2=0;
+  71   1                  P0=table[h];
+  72   1                      SN_LED1=1;
+  73   1                      Delay(2);
+  74   1                      SN_LED1=0;
+  75   1                      
+  76   1      
+  77   1                      h= EW1/10;
+  78   1                      l= EW1%10;
+  79   1                      P0=table[l];
+  80   1                      Time_Show_LED1=1;
+  81   1                      Delay(2);
+  82   1              Time_Show_LED1=0;
+  83   1                      P0=table[h];
+  84   1                      Time_Show_LED2=1;
+  85   1                      Delay(2);
+  86   1                  Time_Show_LED2=0;
+  87   1      } 
+  88          /**********************外部0中断服务程序************************/
+  89          
+  90          void    EXINT0(void)interrupt 0 using 1
+  91                  {
+  92   1                      EX0=0; //关中断
+  93   1      
+  94   1      if(Add_Button==0) //时间加
+  95   1             { 
+  96   2                  EW1+=5;
+  97   2                  SN1+=5;
+  98   2                    if(EW1>=100)
+  99   2                                 {
+ 100   3                                   EW1=99;
+ 101   3                                   SN1=79;
+ 102   3                     }
+ 103   2                  }
+ 104   1      if(Reduces_Button==0) //时间减
+ 105   1             {
+ 106   2                  EW1-=5;
+ 107   2                  SN1-=5;
+ 108   2                  if(EW1<=40)
+ 109   2                    { 
+ 110   3                                   EW1=40;
+ 111   3                       SN1=20;
+ 112   3                     }
+ 113   2                                      
+ 114   2                          } 
+ 115   1      
+ 116   1      if(Nomor_Button==0)//测试按键是否按下，按下为正常状态
+ 117   1              {
+C51 COMPILER V7.00  交_ǖ_                                                                 05/01/2007 13:06:49 PAGE 3   
+
+ 118   2                  EW1=60;
+ 119   2                  SN1=40;
+ 120   2                              EWL1=19;
+ 121   2                              SNL1=19;
+ 122   2                              Busy_LED=0;//关繁忙信号灯
+ 123   2                              Special_LED =0;//关特殊信号灯
+ 124   2                  }
+ 125   1      if(Busy_Btton==0) //测试按键是否按下，按下为繁忙状态
+ 126   1              {
+ 127   2                          EW1=45;
+ 128   2                  SN1=30;
+ 129   2                              EWL1=14;
+ 130   2                              SNL1=14;
+ 131   2                              Special_LED=0;//关特殊信号灯
+ 132   2                              Busy_LED=1;//开繁忙信号灯
+ 133   2                      
+ 134   2              }
+ 135   1      if(Special_Btton==0)//测试按键是否按下，按下为特殊状态
+ 136   1              {
+ 137   2                          EW1=75;
+ 138   2                  SN1=55;
+ 139   2                              EWL1=19;
+ 140   2                              SNL1=19;
+ 141   2                              Busy_LED=0;//关繁忙信号灯
+ 142   2                          Special_LED =1;//开特殊信号灯
+ 143   2                        
+ 144   2                  }                                   
+ 145   1                      EX0=1;//开中断
+ 146   1              }
+ 147          /**********************T0中断服务程序*******************/
+ 148                  void timer0(void)interrupt 1 using 1
+ 149          {
+ 150   1              static uchar count;
+ 151   1              TH0=(65536-50000)/256;
+ 152   1              TL0=(65536-50000)%256;
+ 153   1              count++;
+ 154   1              
+ 155   1              if(count==10)
+ 156   1              {
+ 157   2                if(Flag_SN_Yellow==1) //测试南北黄灯标志位
+ 158   2                {SN_Yellow=~SN_Yellow;}
+ 159   2                if(Flag_EW_Yellow==1)  //测试东西黄灯标志位
+ 160   2                {EW_Yellow=~EW_Yellow;} 
+ 161   2              }
+ 162   1              if(count==20)
+ 163   1              {
+ 164   2              Time_EW--;
+ 165   2              Time_SN--;
+ 166   2              if(Flag_SN_Yellow==1)//测试南北黄灯标志位
+ 167   2                  {SN_Yellow=~SN_Yellow;}
+ 168   2              if(Flag_EW_Yellow==1)//测试东西黄灯标志位
+ 169   2                  {EW_Yellow=~EW_Yellow;}
+ 170   2              count=0;
+ 171   2              }
+ 172   1              
+ 173   1      }
+ 174          /*********************主程序开始**********************/
+ 175          void    main(void)
+ 176          
+ 177          { 
+ 178   1              Busy_LED=0;
+ 179   1              Special_LED=0;
+C51 COMPILER V7.00  交_ǖ_                                                                 05/01/2007 13:06:49 PAGE 4   
+
+ 180   1              IT0=1;  //INT0负跳变触发        
+ 181   1          TMOD=0x01;//定时器工作于方式1
+ 182   1              TH0=(65536-50000)/256;//定时器赋初值
+ 183   1              TL0=(65536-50000)%256;
+ 184   1              EA=1; //CPU开中断总允许
+ 185   1              ET0=1;//开定时中断
+ 186   1              EX0=1;//开外部INTO中断
+ 187   1          TR0=1;//启动定时
+ 188   1      
+ 189   1           while(1)
+ 190   1      
+ 191   1      {                               /*******S0状态**********/
+ 192   2                                      EW_ManGreen=0;  //EW人行道禁止
+ 193   2                          SN_ManGreen=1;//SN人行道通行
+ 194   2                      Flag_EW_Yellow=0;          //EW关黄灯显示信号
+ 195   2                                      Time_EW=EW;     
+ 196   2                                      Time_SN=SN;             
+ 197   2                                      while(Time_SN>=5)
+ 198   2                                  {P1=S[0];    //SN通行，EW红灯
+ 199   3                               Display();}
+ 200   2                                      /*******S1状态**********/
+ 201   2                                  P1=0x00;
+ 202   2                                      while(Time_SN>=0)
+ 203   2                                 {Flag_SN_Yellow=1;    //SN开黄灯信号位
+ 204   3                                  EW_Red=1;      //SN黄灯亮，等待左拐信号，EW红灯
+ 205   3                               
+ 206   3                                   Display();
+ 207   3                                      }
+ 208   2                                      /*******S2状态**********/
+ 209   2                                  Flag_SN_Yellow=0; //SN关黄灯显示信号
+ 210   2                                      Time_SN=SNL;
+ 211   2                                      while(Time_SN>=5)
+ 212   2                                      {P1=S[2];//SN左拐绿灯亮，EW红灯
+ 213   3                                       Display();}
+ 214   2      
+ 215   2                                /*******S3状态**********/
+ 216   2                                      P1=0x00;
+ 217   2                                      while(Time_SN>=0)
+ 218   2                                 {Flag_SN_Yellow=1;   //SN开黄灯信号位
+ 219   3                                  EW_Red=1;      //SN黄灯亮,等待停止信号，EW红灯
+ 220   3                                      
+ 221   3                                  Display();}
+ 222   2      
+ 223   2      
+ 224   2                                 /***********赋值**********/
+ 225   2                                      EW=EW1;
+ 226   2                                      SN=SN1;
+ 227   2                                      EWL=EWL1;
+ 228   2                                      SNL=SNL1;
+ 229   2      
+ 230   2      
+ 231   2                                      /*******S4状态**********/
+ 232   2                                      EW_ManGreen=~EW_ManGreen;//EW人行道通行
+ 233   2                          SN_ManGreen=~SN_ManGreen;//SN人行道禁止
+ 234   2                                      Flag_SN_Yellow=0;  //SN关黄灯显示信号
+ 235   2                                      Time_EW=SN;
+ 236   2                                      Time_SN=EW;
+ 237   2                                  while(Time_EW>=5)
+ 238   2                                  {P1=S[4];    //EW通行，SN红灯
+ 239   3                                       Display();}
+ 240   2                                      /*******S5状态**********/
+ 241   2                                      P1=0X00;
+C51 COMPILER V7.00  交_ǖ_                                                                 05/01/2007 13:06:49 PAGE 5   
+
+ 242   2                                      while(Time_EW>=0)
+ 243   2                                 {Flag_EW_Yellow=1;//EW开黄灯信号位
+ 244   3                                  SN_Red=1;//EW黄灯亮，等待左拐信号，SN红灯   
+ 245   3                                  Display();}
+ 246   2                                      /*******S6状态**********/
+ 247   2                                      Flag_EW_Yellow=0;           //EW关黄灯显示信号
+ 248   2                                      Time_EW=EWL;
+ 249   2                                      while(Time_EW>=5)
+ 250   2                                      {P1=S[6];//EW左拐绿灯亮，SN红灯
+ 251   3                                       Display();}
+ 252   2      
+ 253   2                                      /*******S7状态**********/
+ 254   2                                      P1=0X00;
+ 255   2                                      while(Time_EW>=0)
+ 256   2                                 {Flag_EW_Yellow=1; //EN开黄灯信号位
+ 257   3                                  SN_Red=1;//EW黄灯亮，等待停止信号，SN红灯   
+ 258   3                                  Display();}
+ 259   2                              
+ 260   2                                       /***********赋值**********/
+ 261   2                                  EW=EW1;
+ 262   2                                      SN=SN1;
+ 263   2                                      EWL=EWL1;
+ 264   2                                      SNL=SNL1;
+ 265   2                              }
+ 266   1      
+ 267   1              }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    653    ----
+   CONSTANT SIZE    =     18    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

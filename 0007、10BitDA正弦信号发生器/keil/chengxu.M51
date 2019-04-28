@@ -1,0 +1,148 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        03/20/2011  21:28:39  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, chengxu.obj TO chengxu RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  chengxu.obj (CHENGXU)
+
+
+LINK MAP OF MODULE:  chengxu (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         _DATA_GROUP_
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0800H     UNIT         ?CO?CHENGXU
+            CODE    0803H     0035H     UNIT         ?PR?MAIN?CHENGXU
+            CODE    0838H     0029H     UNIT         ?PR?_DA5615?CHENGXU
+            CODE    0861H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   chengxu (?C_STARTUP)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?CHENGXU
+
+?PR?MAIN?CHENGXU               0008H    0002H
+  +--> ?CO?CHENGXU
+  +--> ?PR?_DA5615?CHENGXU
+
+
+
+SYMBOL TABLE OF MODULE:  chengxu (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0861H         SEGMENT       ?C_C51STARTUP
+  I:000AH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+BL51 BANKED LINKER/LOCATER V6.00                                                      03/20/2011  21:28:39  PAGE 2
+
+
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0864H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0861H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0861H         LINE#         133
+  C:0863H         LINE#         134
+  C:0864H         LINE#         135
+  C:0865H         LINE#         136
+  C:0867H         LINE#         185
+  C:086AH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        CHENGXU
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:0090H.1       PUBLIC        DA
+  B:0090H.2       PUBLIC        CK
+  D:00A8H         PUBLIC        IE
+  B:0090H.4       PUBLIC        CS
+  C:0838H         PUBLIC        _da5615
+  D:00B8H         PUBLIC        IP
+  C:0803H         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0003H         PUBLIC        sine_dot
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          _DA5615
+  D:0006H         SYMBOL        da
+  -------         DO            
+  D:0005H         SYMBOL        i
+  -------         ENDDO         
+  C:0838H         LINE#         63
+  C:0838H         LINE#         64
+  C:0838H         LINE#         66
+  C:0843H         LINE#         67
+  C:0845H         LINE#         68
+  C:0847H         LINE#         69
+  C:0849H         LINE#         70
+  C:0849H         LINE#         71
+BL51 BANKED LINKER/LOCATER V6.00                                                      03/20/2011  21:28:39  PAGE 3
+
+
+  C:084DH         LINE#         72
+  C:084FH         LINE#         73
+  C:0856H         LINE#         74
+  C:0858H         LINE#         75
+  C:085CH         LINE#         76
+  C:085EH         LINE#         77
+  C:0860H         LINE#         78
+  -------         ENDPROC       _DA5615
+  -------         PROC          MAIN
+  -------         DO            
+  D:0008H         SYMBOL        j
+  -------         ENDDO         
+  C:0803H         LINE#         80
+  C:0803H         LINE#         81
+  C:0803H         LINE#         83
+  C:0803H         LINE#         84
+  C:0803H         LINE#         85
+  C:0820H         LINE#         86
+  C:0836H         LINE#         87
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        CHENGXU
+
+Program Size: data=11.0 xdata=0 code=2157
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

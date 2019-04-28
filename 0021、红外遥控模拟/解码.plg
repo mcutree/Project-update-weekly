@@ -1,0 +1,164 @@
+<html>
+<body>
+<pre>
+<h1>礦ision3 Build Log</h1>
+<h2>Project:</h2>
+D:\Down\Proteus\红外遥控模拟\解码.uv2
+Project File Date:  01/15/2008
+
+<h2>Output:</h2>
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+解码.C(109): 错误 C141: syntax error near 'case', expected '('
+解码.C(110): 错误 C141: syntax error near '{'
+解码.C(111): 错误 C172: 'case': missing enclosing switch
+解码.C(113): 错误 C202: 'barak': undefined identifier
+解码.C(114): 错误 C172: 'case': missing enclosing switch
+解码.C(116): 错误 C202: 'barak': undefined identifier
+解码.C(117): 错误 C172: 'case': missing enclosing switch
+解码.C(119): 错误 C202: 'barak': undefined identifier
+解码.C(120): 错误 C172: 'case': missing enclosing switch
+解码.C(122): 错误 C202: 'barak': undefined identifier
+解码.C(123): 错误 C172: 'case': missing enclosing switch
+解码.C(125): 错误 C202: 'barak': undefined identifier
+解码.C(126): 错误 C172: 'case': missing enclosing switch
+解码.C(128): 错误 C202: 'barak': undefined identifier
+解码.C(130): 错误 C172: 'case': missing enclosing switch
+解码.C(132): 错误 C202: 'barak': undefined identifier
+解码.C(133): 错误 C172: 'case': missing enclosing switch
+解码.C(135): 错误 C202: 'barak': undefined identifier
+解码.C(136): 错误 C172: 'case': missing enclosing switch
+解码.C(138): 错误 C202: 'barak': undefined identifier
+解码.C(139): 错误 C172: 'case': missing enclosing switch
+解码.C(141): 错误 C202: 'barak': undefined identifier
+解码.C(142): 错误 C172: 'case': missing enclosing switch
+解码.C(144): 错误 C202: 'barak': undefined identifier
+解码.C(146): 错误 C172: 'case': missing enclosing switch
+解码.C(148): 错误 C202: 'barak': undefined identifier
+解码.C(149): 错误 C172: 'case': missing enclosing switch
+解码.C(151): 错误 C202: 'barak': undefined identifier
+解码.C(152): 错误 C172: 'case': missing enclosing switch
+解码.C(154): 错误 C202: 'barak': undefined identifier
+解码.C(155): 错误 C172: 'case': missing enclosing switch
+解码.C(157): 错误 C202: 'barak': undefined identifier
+解码.C(158): 错误 C172: 'case': missing enclosing switch
+解码.C(160): 错误 C202: 'barak': undefined identifier
+解码.C(161): 错误 C172: 'case': missing enclosing switch
+解码.C(163): 错误 C202: 'barak': undefined identifier
+解码.C(165): 错误 C172: 'case': missing enclosing switch
+解码.C(167): 错误 C202: 'barak': undefined identifier
+解码.C(168): 错误 C172: 'case': missing enclosing switch
+解码.C(170): 错误 C202: 'barak': undefined identifier
+解码.C(171): 错误 C172: 'case': missing enclosing switch
+解码.C(173): 错误 C202: 'barak': undefined identifier
+解码.C(174): 错误 C172: 'case': missing enclosing switch
+解码.C(176): 错误 C202: 'barak': undefined identifier
+解码.C(177): 错误 C172: 'case': missing enclosing switch
+解码.C(179): 错误 C202: 'barak': undefined identifier
+解码.C(180): 错误 C172: 'case': missing enclosing switch
+解码.C(182): 错误 C202: 'barak': undefined identifier
+目标未产生
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+解码.C(109): 错误 C141: syntax error near 'case', expected '('
+解码.C(110): 错误 C141: syntax error near '{'
+解码.C(111): 错误 C172: 'case': missing enclosing switch
+解码.C(114): 错误 C172: 'case': missing enclosing switch
+解码.C(117): 错误 C172: 'case': missing enclosing switch
+解码.C(120): 错误 C172: 'case': missing enclosing switch
+解码.C(123): 错误 C172: 'case': missing enclosing switch
+解码.C(126): 错误 C172: 'case': missing enclosing switch
+解码.C(130): 错误 C172: 'case': missing enclosing switch
+解码.C(133): 错误 C172: 'case': missing enclosing switch
+解码.C(136): 错误 C172: 'case': missing enclosing switch
+解码.C(139): 错误 C172: 'case': missing enclosing switch
+解码.C(142): 错误 C172: 'case': missing enclosing switch
+解码.C(146): 错误 C172: 'case': missing enclosing switch
+解码.C(149): 错误 C172: 'case': missing enclosing switch
+解码.C(152): 错误 C172: 'case': missing enclosing switch
+解码.C(155): 错误 C172: 'case': missing enclosing switch
+解码.C(158): 错误 C172: 'case': missing enclosing switch
+解码.C(161): 错误 C172: 'case': missing enclosing switch
+解码.C(165): 错误 C172: 'case': missing enclosing switch
+解码.C(168): 错误 C172: 'case': missing enclosing switch
+解码.C(171): 错误 C172: 'case': missing enclosing switch
+解码.C(174): 错误 C172: 'case': missing enclosing switch
+解码.C(177): 错误 C172: 'case': missing enclosing switch
+解码.C(180): 错误 C172: 'case': missing enclosing switch
+目标未产生
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=101.1 xdata=0 code=2423
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=101.1 xdata=0 code=2423
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+解码.C(186): 错误 C141: syntax error near 'DisplayListChar'
+目标未产生
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=101.1 xdata=0 code=2459
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+解码.C(185): 警告 C206: 'strlen': missing function-prototype
+解码.C(185): 错误 C267: 'strlen': requires ANSI-style prototype
+目标未产生
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=101.1 xdata=0 code=2462
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=101.1 xdata=0 code=2457
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=101.1 xdata=0 code=2465
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=106.1 xdata=0 code=2474
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=106.1 xdata=0 code=2475
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。
+创建目标 '目标 1'
+编译 解码LCD.c ...
+编译 解码.c ...
+连接 ...
+Program Size: data=106.1 xdata=0 code=2475
+创建 HEX 文件 "解码" ...
+"解码" - 0 个错误, 0 个警告。

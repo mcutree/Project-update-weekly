@@ -1,0 +1,15 @@
+#include <reg51.h>
+#include <intrins.h>
+#define uchar unsigned char
+#define unit  unsigned int
+
+uchar table[][21]={
+                 {}
+                 {} 
+				  }
+				  
+sbit ds=P1^1;//数据打入口
+sbit shcp=P1^0;//移位数据脉冲
+sbit stcp=P1^3;//数据打出脉冲
+
+//*****************************

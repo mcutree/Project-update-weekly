@@ -1,0 +1,500 @@
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 1   
+
+
+C51 COMPILER V7.09, COMPILATION OF MODULE LIWAN
+OBJECT MODULE PLACED IN LiWan.OBJ
+COMPILER INVOKED BY: C:\Program Files\Keil\C51\BIN\C51.EXE LiWan.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <REG52.H>
+   2          #include "SoundPlay.h"
+   3          
+   4          unsigned char RunMode;
+   5          
+   6          //**********************************System Fuction*************************************************
+   7          void Delay1ms(unsigned int count)
+   8          {
+   9   1              unsigned int i,j;
+  10   1              for(i=0;i<count;i++)
+  11   1              for(j=0;j<120;j++);
+  12   1      }
+  13          
+  14          unsigned char code LEDDisplayCode[] = { 0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,        //0~7
+  15                                                                  0x80,0x90,0x88,0x83,0xC6,0xA1,0x86,0x8E,0xFF};
+  16          
+  17          void Display(unsigned char Value)
+  18          {
+  19   1              P3 = LEDDisplayCode[Value];
+  20   1      }
+  21          
+  22          void LEDFlash(unsigned char Count)
+  23          {
+  24   1              unsigned char i;
+  25   1              bit Flag;
+  26   1              for(i = 0; i<Count;i++)
+  27   1              {
+  28   2                      Flag = !Flag;
+  29   2                      if(Flag)
+  30   2                              Display(RunMode);
+  31   2                      else
+  32   2                              Display(0x10);
+  33   2                      Delay1ms(100);
+  34   2              }
+  35   1              Display(RunMode);
+  36   1      }
+  37          
+  38          unsigned char GetKey(void)
+  39          {
+  40   1              unsigned char KeyTemp,CheckValue,Key = 0x00;
+  41   1              CheckValue = P2&0x32;
+  42   1              if(CheckValue==0x32)
+  43   1                      return 0x00;
+  44   1              
+  45   1              Delay1ms(10);
+  46   1              KeyTemp = P2&0x32;
+  47   1              if(KeyTemp==CheckValue)
+  48   1                      return 0x00;
+  49   1      
+  50   1              if(!(CheckValue&0x02))
+  51   1                      Key|=0x01;
+  52   1              if(!(CheckValue&0x10))
+  53   1                      Key|=0x02;
+  54   1              if(!(CheckValue&0x20))
+  55   1                      Key|=0x04;
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 2   
+
+  56   1              return Key;
+  57   1      }
+  58          
+  59          unsigned int Timer0Count,SystemSpeed,SystemSpeedIndex;
+  60          void InitialTimer2(void)
+  61          {
+  62   1              T2CON  = 0x00;                  //16 Bit Auto-Reload Mode
+  63   1              TH2 = RCAP2H = 0xFC;    //重装值,初始值 TL2 = RCAP2L = 0x18;
+  64   1              ET2=1;                                  //定时器 2 中断允许
+  65   1              TR2 = 1;                                //定时器 2 启动
+  66   1              EA=1;
+  67   1      }
+  68          
+  69          unsigned int code SpeedCode[]={   1,   2,   3,   5,   8,  10,  14,  17,  20,  30,
+  70                                                                       40,  50,  60,  70,  80,  90, 100, 120, 140, 160,
+  71                                                                          180, 200, 300, 400, 500, 600, 700, 800, 900,1000};//30
+  72          void SetSpeed(unsigned char Speed)
+  73          {
+  74   1              SystemSpeed =SpeedCode[Speed];
+  75   1      }
+  76          
+  77          void LEDShow(unsigned int LEDStatus)
+  78          {
+  79   1              P1 = ~(LEDStatus&0x00FF);
+  80   1              P0 = ~((LEDStatus>>8)&0x00FF);
+  81   1      }
+  82          
+  83          void InitialCPU(void)
+  84          {
+  85   1              RunMode = 0x00;
+  86   1              Timer0Count = 0;
+  87   1              SystemSpeedIndex = 9;
+  88   1      
+  89   1              P1 = 0x00;
+  90   1              P0 = 0x00;
+  91   1              P2 = 0xFF;
+  92   1              P3 = 0x00;
+  93   1              Delay1ms(500);
+  94   1              P1 = 0xFF;
+  95   1              P0 = 0xFF;
+  96   1              P2 = 0xFF;
+  97   1              P3 = 0xFF;
+  98   1              SetSpeed(SystemSpeedIndex);
+  99   1              Display(RunMode);
+ 100   1      }
+ 101          
+ 102          //Mode 0
+ 103          unsigned int LEDIndex = 0;
+ 104          bit LEDDirection = 1,LEDFlag = 1;
+ 105          void Mode_0(void)
+ 106          {
+ 107   1              LEDShow(0x0001<<LEDIndex);
+ 108   1              LEDIndex = (LEDIndex+1)%16;
+ 109   1      }
+ 110          //Mode 1
+ 111          void Mode_1(void)
+ 112          {
+ 113   1              LEDShow(0x8000>>LEDIndex);
+ 114   1              LEDIndex = (LEDIndex+1)%16;
+ 115   1      }
+ 116          //Mode 2
+ 117          void Mode_2(void)
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 3   
+
+ 118          {
+ 119   1              if(LEDDirection)
+ 120   1                      LEDShow(0x0001<<LEDIndex);
+ 121   1              else
+ 122   1                      LEDShow(0x8000>>LEDIndex);
+ 123   1              if(LEDIndex==15)
+ 124   1                      LEDDirection = !LEDDirection;
+ 125   1         LEDIndex = (LEDIndex+1)%16;
+ 126   1      }
+ 127          //Mode 3
+ 128          void Mode_3(void)
+ 129          {
+ 130   1              if(LEDDirection)
+ 131   1                      LEDShow(~(0x0001<<LEDIndex));
+ 132   1              else
+ 133   1                      LEDShow(~(0x8000>>LEDIndex));
+ 134   1              if(LEDIndex==15)
+ 135   1                      LEDDirection = !LEDDirection;
+ 136   1         LEDIndex = (LEDIndex+1)%16;
+ 137   1      }
+ 138          
+ 139          //Mode 4
+ 140          void Mode_4(void)
+ 141          {
+ 142   1              if(LEDDirection)
+ 143   1              {
+ 144   2                      if(LEDFlag)
+ 145   2                              LEDShow(0xFFFE<<LEDIndex);
+ 146   2                      else
+ 147   2                              LEDShow(~(0x7FFF>>LEDIndex));
+ 148   2              }
+ 149   1              else
+ 150   1              {
+ 151   2                      if(LEDFlag)
+ 152   2                              LEDShow(0x7FFF>>LEDIndex);
+ 153   2                      else
+ 154   2                              LEDShow(~(0xFFFE<<LEDIndex));
+ 155   2              }
+ 156   1              if(LEDIndex==15)
+ 157   1              {
+ 158   2                      LEDDirection = !LEDDirection;
+ 159   2                      if(LEDDirection)        LEDFlag = !LEDFlag;
+ 160   2              }
+ 161   1              LEDIndex = (LEDIndex+1)%16;
+ 162   1      }
+ 163          
+ 164          //Mode 5
+ 165          void Mode_5(void)
+ 166          {
+ 167   1              if(LEDDirection)
+ 168   1                      LEDShow(0x000F<<LEDIndex);
+ 169   1              else
+ 170   1                      LEDShow(0xF000>>LEDIndex);
+ 171   1              if(LEDIndex==15)
+ 172   1                      LEDDirection = !LEDDirection;
+ 173   1          LEDIndex = (LEDIndex+1)%16;
+ 174   1      }
+ 175          
+ 176          //Mode 6
+ 177          void Mode_6(void)
+ 178          {
+ 179   1              if(LEDDirection)
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 4   
+
+ 180   1                      LEDShow(~(0x000F<<LEDIndex));
+ 181   1              else
+ 182   1                      LEDShow(~(0xF000>>LEDIndex));
+ 183   1              if(LEDIndex==15)
+ 184   1                      LEDDirection = !LEDDirection;
+ 185   1              LEDIndex = (LEDIndex+1)%16;
+ 186   1      }
+ 187          
+ 188          //Mode 7
+ 189          void Mode_7(void)
+ 190          {
+ 191   1              if(LEDDirection)
+ 192   1                      LEDShow(0x003F<<LEDIndex);
+ 193   1              else
+ 194   1                      LEDShow(0xFC00>>LEDIndex);
+ 195   1              if(LEDIndex==9)
+ 196   1                      LEDDirection = !LEDDirection;
+ 197   1          LEDIndex = (LEDIndex+1)%10;
+ 198   1      }
+ 199          
+ 200          //Mode 8
+ 201          void Mode_8(void)
+ 202          {
+ 203   1              LEDShow(++LEDIndex);
+ 204   1      }
+ 205          
+ 206          void Timer0EventRun(void)
+ 207          {
+ 208   1              if(RunMode==0x00)
+ 209   1              {
+ 210   2                      Mode_0();       
+ 211   2              }
+ 212   1              else if(RunMode ==0x01)
+ 213   1              {
+ 214   2                      Mode_1();
+ 215   2              }
+ 216   1              else if(RunMode ==0x02)
+ 217   1              {
+ 218   2                      Mode_2();
+ 219   2              }
+ 220   1              else if(RunMode ==0x03)
+ 221   1              {
+ 222   2                      Mode_3();
+ 223   2              }
+ 224   1              else if(RunMode ==0x04)
+ 225   1              {
+ 226   2                      Mode_4();
+ 227   2              }
+ 228   1              else if(RunMode ==0x05)
+ 229   1              {
+ 230   2                      Mode_5();
+ 231   2              }
+ 232   1              else if(RunMode ==0x06)
+ 233   1              {
+ 234   2                      Mode_6();
+ 235   2              }
+ 236   1              else if(RunMode ==0x07)
+ 237   1              {
+ 238   2                      Mode_7();
+ 239   2              }
+ 240   1              else if(RunMode ==0x08)
+ 241   1              {
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 5   
+
+ 242   2                      Mode_8();
+ 243   2              }
+ 244   1      }
+ 245          
+ 246          void Timer2(void) interrupt 5 using 3
+ 247          {
+ 248   1              TF2 = 0;        //中断标志清除( Timer2 必须软件清标志!)
+ 249   1              if(++Timer0Count>=SystemSpeed)
+ 250   1              {
+ 251   2                      Timer0Count = 0;
+ 252   2                      Timer0EventRun();
+ 253   2              }
+ 254   1      }
+ 255          unsigned char MusicIndex = 0;
+ 256          void KeyDispose(unsigned char Key)
+ 257          {
+ 258   1              if(Key&0x01)
+ 259   1              {
+ 260   2                      LEDDirection = 1;
+ 261   2                      LEDIndex = 0;
+ 262   2                      LEDFlag = 1;
+ 263   2                      RunMode = (RunMode+1)%10;
+ 264   2                      Display(RunMode);
+ 265   2                      if(RunMode==0x09)
+ 266   2                              TR2 = 0;
+ 267   2                      else
+ 268   2                              TR2 = 1;
+ 269   2              }
+ 270   1              if(Key&0x02)
+ 271   1              {
+ 272   2                      if(RunMode==0x09)
+ 273   2                      {
+ 274   3                              MusicIndex =(MusicIndex+MUSICNUMBER-1)%MUSICNUMBER;
+ 275   3                      }
+ 276   2                      else
+ 277   2                      {
+ 278   3                              if(SystemSpeedIndex>0)
+ 279   3                              {
+ 280   4                                      --SystemSpeedIndex;
+ 281   4                                      SetSpeed(SystemSpeedIndex);
+ 282   4                              }
+ 283   3                              else
+ 284   3                              {
+ 285   4                                      LEDFlash(6);
+ 286   4                              }
+ 287   3                      }
+ 288   2              }
+ 289   1              if(Key&0x04)
+ 290   1              {
+ 291   2                      if(RunMode==0x09)
+ 292   2                      {
+ 293   3                              MusicIndex =(MusicIndex+1)%MUSICNUMBER;
+ 294   3                      }
+ 295   2                      else
+ 296   2                      {
+ 297   3                              if(SystemSpeedIndex<28)
+ 298   3                              {
+ 299   4                                      ++SystemSpeedIndex;
+ 300   4                                      SetSpeed(SystemSpeedIndex);
+ 301   4                              }
+ 302   3                              else
+ 303   3                              {
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 6   
+
+ 304   4                                      LEDFlash(6);
+ 305   4                              }
+ 306   3                      }
+ 307   2              }       
+ 308   1      }
+ 309          //*****************************Music******************************************************
+ 310          //挥着翅膀的女孩
+ 311          unsigned char code Music_Girl[]={ 0x17,0x02, 0x17,0x03, 0x18,0x03, 0x19,0x02, 0x15,0x03,
+ 312                                            0x16,0x03, 0x17,0x03, 0x17,0x03, 0x17,0x03, 0x18,0x03,
+ 313                                            0x19,0x02, 0x16,0x03, 0x17,0x03, 0x18,0x02, 0x18,0x03,
+ 314                                            0x17,0x03, 0x15,0x02, 0x18,0x03, 0x17,0x03, 0x18,0x02,
+ 315                                            0x10,0x03, 0x15,0x03, 0x16,0x02, 0x15,0x03, 0x16,0x03,
+ 316                                            0x17,0x02, 0x17,0x03, 0x18,0x03, 0x19,0x02, 0x1A,0x03,
+ 317                                            0x1B,0x03, 0x1F,0x03, 0x1F,0x03, 0x17,0x03, 0x18,0x03,
+ 318                                            0x19,0x02, 0x16,0x03, 0x17,0x03, 0x18,0x03, 0x17,0x03,
+ 319                                            0x18,0x03, 0x1F,0x03, 0x1F,0x02, 0x16,0x03, 0x17,0x03,
+ 320                                            0x18,0x03, 0x17,0x03, 0x18,0x03, 0x20,0x03, 0x20,0x02,
+ 321                                            0x1F,0x03, 0x1B,0x03, 0x1F,0x66, 0x20,0x03, 0x21,0x03,
+ 322                                            0x20,0x03, 0x1F,0x03, 0x1B,0x03, 0x1F,0x66, 0x1F,0x03,
+ 323                                            0x1B,0x03, 0x19,0x03, 0x19,0x03, 0x15,0x03, 0x1A,0x66,
+ 324                                            0x1A,0x03, 0x19,0x03, 0x15,0x03, 0x15,0x03, 0x17,0x03,
+ 325                                            0x16,0x66, 0x17,0x04, 0x18,0x04, 0x18,0x03, 0x19,0x03,
+ 326                                            0x1F,0x03, 0x1B,0x03, 0x1F,0x66, 0x20,0x03, 0x21,0x03,
+ 327                                            0x20,0x03, 0x1F,0x03, 0x1B,0x03, 0x1F,0x66, 0x1F,0x03,
+ 328                                            0x1B,0x03, 0x19,0x03, 0x19,0x03, 0x15,0x03, 0x1A,0x66,
+ 329                                            0x1A,0x03, 0x19,0x03, 0x19,0x03, 0x1F,0x03, 0x1B,0x03,
+ 330                                            0x1F,0x00, 0x1A,0x03, 0x1A,0x03, 0x1A,0x03, 0x1B,0x03,
+ 331                                            0x1B,0x03, 0x1A,0x03, 0x19,0x03, 0x19,0x02, 0x17,0x03,
+ 332                                            0x15,0x17, 0x15,0x03, 0x16,0x03, 0x17,0x03, 0x18,0x03,
+ 333                                            0x17,0x04, 0x18,0x0E, 0x18,0x03, 0x17,0x04, 0x18,0x0E,
+ 334                                            0x18,0x66, 0x17,0x03, 0x18,0x03, 0x17,0x03, 0x18,0x03,
+ 335                                            0x20,0x03, 0x20,0x02, 0x1F,0x03, 0x1B,0x03, 0x1F,0x66,
+ 336                                            0x20,0x03, 0x21,0x03, 0x20,0x03, 0x1F,0x03, 0x1B,0x03,
+ 337                                            0x1F,0x66, 0x1F,0x04, 0x1B,0x0E, 0x1B,0x03, 0x19,0x03,
+ 338                                            0x19,0x03, 0x15,0x03, 0x1A,0x66, 0x1A,0x03, 0x19,0x03,
+ 339                                            0x15,0x03, 0x15,0x03, 0x17,0x03, 0x16,0x66, 0x17,0x04,
+ 340                                            0x18,0x04, 0x18,0x03, 0x19,0x03, 0x1F,0x03, 0x1B,0x03,
+ 341                                            0x1F,0x66, 0x20,0x03, 0x21,0x03, 0x20,0x03, 0x1F,0x03,
+ 342                                            0x1B,0x03, 0x1F,0x66, 0x1F,0x03, 0x1B,0x03, 0x19,0x03,
+ 343                                            0x19,0x03, 0x15,0x03, 0x1A,0x66, 0x1A,0x03, 0x19,0x03,
+ 344                                            0x19,0x03, 0x1F,0x03, 0x1B,0x03, 0x1F,0x00, 0x18,0x02,
+ 345                                            0x18,0x03, 0x1A,0x03, 0x19,0x0D, 0x15,0x03, 0x15,0x02,
+ 346                                            0x18,0x66, 0x16,0x02, 0x17,0x02, 0x15,0x00, 0x00,0x00};
+ 347          //同一首歌
+ 348          unsigned char code Music_Same[]={ 0x0F,0x01, 0x15,0x02, 0x16,0x02, 0x17,0x66, 0x18,0x03,
+ 349                                            0x17,0x02, 0x15,0x02, 0x16,0x01, 0x15,0x02, 0x10,0x02,
+ 350                                            0x15,0x00, 0x0F,0x01, 0x15,0x02, 0x16,0x02, 0x17,0x02,
+ 351                                            0x17,0x03, 0x18,0x03, 0x19,0x02, 0x15,0x02, 0x18,0x66,
+ 352                                            0x17,0x03, 0x19,0x02, 0x16,0x03, 0x17,0x03, 0x16,0x00,
+ 353                                            0x17,0x01, 0x19,0x02, 0x1B,0x02, 0x1B,0x70, 0x1A,0x03,
+ 354                                            0x1A,0x01, 0x19,0x02, 0x19,0x03, 0x1A,0x03, 0x1B,0x02,
+ 355                                            0x1A,0x0D, 0x19,0x03, 0x17,0x00, 0x18,0x66, 0x18,0x03,
+ 356                                            0x19,0x02, 0x1A,0x02, 0x19,0x0C, 0x18,0x0D, 0x17,0x03,
+ 357                                            0x16,0x01, 0x11,0x02, 0x11,0x03, 0x10,0x03, 0x0F,0x0C,
+ 358                                            0x10,0x02, 0x15,0x00, 0x1F,0x01, 0x1A,0x01, 0x18,0x66,
+ 359                                            0x19,0x03, 0x1A,0x01, 0x1B,0x02, 0x1B,0x03, 0x1B,0x03,
+ 360                                            0x1B,0x0C, 0x1A,0x0D, 0x19,0x03, 0x17,0x00, 0x1F,0x01,
+ 361                                            0x1A,0x01, 0x18,0x66, 0x19,0x03, 0x1A,0x01, 0x10,0x02,
+ 362                                            0x10,0x03, 0x10,0x03, 0x1A,0x0C, 0x18,0x0D, 0x17,0x03,
+ 363                                            0x16,0x00, 0x0F,0x01, 0x15,0x02, 0x16,0x02, 0x17,0x70,
+ 364                                            0x18,0x03, 0x17,0x02, 0x15,0x03, 0x15,0x03, 0x16,0x66,
+ 365                                            0x16,0x03, 0x16,0x02, 0x16,0x03, 0x15,0x03, 0x10,0x02,
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 7   
+
+ 366                                            0x10,0x01, 0x11,0x01, 0x11,0x66, 0x10,0x03, 0x0F,0x0C,
+ 367                                            0x1A,0x02, 0x19,0x02, 0x16,0x03, 0x16,0x03, 0x18,0x66,
+ 368                                            0x18,0x03, 0x18,0x02, 0x17,0x03, 0x16,0x03, 0x19,0x00,
+ 369                                            0x00,0x00 };
+ 370          //两只蝴蝶                                  
+ 371          unsigned char code Music_Two[] ={ 0x17,0x03, 0x16,0x03, 0x17,0x01, 0x16,0x03, 0x17,0x03,
+ 372                                            0x16,0x03, 0x15,0x01, 0x10,0x03, 0x15,0x03, 0x16,0x02,
+ 373                                            0x16,0x0D, 0x17,0x03, 0x16,0x03, 0x15,0x03, 0x10,0x03,
+ 374                                            0x10,0x0E, 0x15,0x04, 0x0F,0x01, 0x17,0x03, 0x16,0x03,
+ 375                                            0x17,0x01, 0x16,0x03, 0x17,0x03, 0x16,0x03, 0x15,0x01,
+ 376                                            0x10,0x03, 0x15,0x03, 0x16,0x02, 0x16,0x0D, 0x17,0x03,
+ 377                                            0x16,0x03, 0x15,0x03, 0x10,0x03, 0x15,0x03, 0x16,0x01,
+ 378                                            0x17,0x03, 0x16,0x03, 0x17,0x01, 0x16,0x03, 0x17,0x03,
+ 379                                            0x16,0x03, 0x15,0x01, 0x10,0x03, 0x15,0x03, 0x16,0x02,
+ 380                                            0x16,0x0D, 0x17,0x03, 0x16,0x03, 0x15,0x03, 0x10,0x03,
+ 381                                            0x10,0x0E, 0x15,0x04, 0x0F,0x01, 0x17,0x03, 0x19,0x03,
+ 382                                            0x19,0x01, 0x19,0x03, 0x1A,0x03, 0x19,0x03, 0x17,0x01,
+ 383                                            0x16,0x03, 0x16,0x03, 0x16,0x02, 0x16,0x0D, 0x17,0x03,
+ 384                                            0x16,0x03, 0x15,0x03, 0x10,0x03, 0x10,0x0D, 0x15,0x00,
+ 385                                            0x19,0x03, 0x19,0x03, 0x1A,0x03, 0x1F,0x03, 0x1B,0x03,
+ 386                                            0x1B,0x03, 0x1A,0x03, 0x17,0x0D, 0x16,0x03, 0x16,0x03,
+ 387                                            0x16,0x0D, 0x17,0x01, 0x17,0x03, 0x17,0x03, 0x19,0x03,
+ 388                                            0x1A,0x02, 0x1A,0x02, 0x10,0x03, 0x17,0x0D, 0x16,0x03,
+ 389                                            0x16,0x01, 0x17,0x03, 0x19,0x03, 0x19,0x03, 0x17,0x03,
+ 390                                            0x19,0x02, 0x1F,0x02, 0x1B,0x03, 0x1A,0x03, 0x1A,0x0E,
+ 391                                            0x1B,0x04, 0x17,0x02, 0x1A,0x03, 0x1A,0x03, 0x1A,0x0E,
+ 392                                            0x1B,0x04, 0x1A,0x03, 0x19,0x03, 0x17,0x03, 0x16,0x03,
+ 393                                            0x17,0x0D, 0x16,0x03, 0x17,0x03, 0x19,0x01, 0x19,0x03,
+ 394                                            0x19,0x03, 0x1A,0x03, 0x1F,0x03, 0x1B,0x03, 0x1B,0x03,
+ 395                                            0x1A,0x03, 0x17,0x0D, 0x16,0x03, 0x16,0x03, 0x16,0x03,
+ 396                                            0x17,0x01, 0x17,0x03, 0x17,0x03, 0x19,0x03, 0x1A,0x02,
+ 397                                            0x1A,0x02, 0x10,0x03, 0x17,0x0D, 0x16,0x03, 0x16,0x01,
+ 398                                            0x17,0x03, 0x19,0x03, 0x19,0x03, 0x17,0x03, 0x19,0x03,
+ 399                                            0x1F,0x02, 0x1B,0x03, 0x1A,0x03, 0x1A,0x0E, 0x1B,0x04,
+ 400                                            0x17,0x02, 0x1A,0x03, 0x1A,0x03, 0x1A,0x0E, 0x1B,0x04,
+ 401                                            0x17,0x16, 0x1A,0x03, 0x1A,0x03, 0x1A,0x0E, 0x1B,0x04,
+ 402                                            0x1A,0x03, 0x19,0x03, 0x17,0x03, 0x16,0x03, 0x0F,0x02,
+ 403                                            0x10,0x03, 0x15,0x00, 0x00,0x00 };
+ 404          //***********************************************************************************
+ 405          unsigned char * SelectMusic(unsigned char SoundIndex)
+ 406          {
+ 407   1              unsigned char *MusicAddress = 0;
+ 408   1              switch (SoundIndex)
+ 409   1              {       
+ 410   2                      case 0x00:
+ 411   2                              MusicAddress = &Music_Girl[0];  //挥着翅膀的女孩                
+ 412   2                              break;
+ 413   2                      case 0x01:
+ 414   2                              MusicAddress = &Music_Same[0];  //同一首歌              
+ 415   2                              break;
+ 416   2                      case 0x02:
+ 417   2                              MusicAddress = &Music_Two[0];   //两只蝴蝶  
+ 418   2                              break;
+ 419   2                      case 0x03:
+ 420   2                              break;
+ 421   2                      case 0x04:
+ 422   2                              break;
+ 423   2                      case 0x05:
+ 424   2                              break;
+ 425   2                      case 0x06:
+ 426   2                              break;
+ 427   2                      case 0x07:
+C51 COMPILER V7.09   LIWAN                                                                 09/17/2005 04:05:51 PAGE 8   
+
+ 428   2                              break;
+ 429   2                      case 0x08:
+ 430   2                              break;
+ 431   2                      case 0x09:
+ 432   2                              break;
+ 433   2                      default:break;
+ 434   2              }
+ 435   1              return MusicAddress;
+ 436   1      }
+ 437          
+ 438          void PlayMusic(void)
+ 439          {       
+ 440   1              Delay1ms(200);
+ 441   1              Play(SelectMusic(MusicIndex),0,3,360);
+ 442   1      }
+ 443          //***********************************************************************************
+ 444          main()
+ 445          {
+ 446   1              unsigned char Key;
+ 447   1              InitialCPU();
+ 448   1              InitialSound();
+ 449   1              InitialTimer2();
+ 450   1      
+ 451   1              while(1)
+ 452   1              {
+ 453   2                      Key = GetKey();
+ 454   2                      if(RunMode==0x09)
+ 455   2                      {
+ 456   3                              PlayMusic();
+ 457   3                      }
+ 458   2                      if(Key!=0x00)
+ 459   2                      {
+ 460   3                              KeyDispose(Key);
+ 461   3                      }
+ 462   2              }
+ 463   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2042    ----
+   CONSTANT SIZE    =   1013    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14      60
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

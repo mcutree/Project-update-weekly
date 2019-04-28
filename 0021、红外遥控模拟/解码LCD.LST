@@ -1,0 +1,172 @@
+C51 COMPILER V8.08   絖_隠CD                                                               01/15/2008 20:25:59 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE 絖_隠CD
+OBJECT MODULE PLACED IN 解码LCD.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 解码LCD.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*******************************************************************/
+   2          //Name of this design:     LCD show Electric Clock
+   3          //Author:                  Huangxiang
+   4          //Date:                    2007-10-02
+   5          /*******************************************************************/
+   6          
+   7          #include <reg51.h>
+   8          #include <intrins.h>
+   9          #include <string.h>
+  10          #include <absacc.h>
+  11          #define uchar  unsigned char
+  12          #define uint   unsigned int
+  13          
+  14          #define BUSY  0x80                               //lcd忙检测标志
+  15          #define DATAPORT P0                             //定义P0口为LCD通讯端口
+  16          
+  17          sbit light=P1^3;
+  18          sbit LCM_RS=P2^0;                                                                //数据/命令端
+  19          sbit LCM_RW=P2^1;                                                                //读/写选择端
+  20          sbit LCM_EN=P2^2;
+  21                                                          
+  22          
+  23          void delay_LCM(uint);                                                                                                   //LCD延时子程序
+  24          void lcd_wait(void);                                                                                                    //LCD检测忙子程序
+  25          void WriteCommandLCM(uchar WCLCM,uchar BusyC);                              //写指令到ICM子函数
+  26          void WriteDataLCM(uchar WDLCM);                                             //写数据到LCM子函数
+  27          void DisplayOneChar(uchar X,uchar Y,uchar DData);                           //显示指定坐标的一个字符子函数
+  28          void initLCM( void);                                                                                                    //LCD初始化子程序
+  29          void DisplayListChar(uchar X,uchar Y, unsigned char *DData);                    //显示指定坐标的一串字符子
+             -函数
+  30          
+  31          
+  32          /*********延时K*1ms,12.000mhz**********/
+  33          
+  34          void delay_LCM(uint k)
+  35          {
+  36   1          uint i,j;
+  37   1          for(i=0;i<k;i++)
+  38   1          {
+  39   2              for(j=0;j<60;j++)
+  40   2                      {;}
+  41   2          }
+  42   1      }
+  43          /**********写指令到LCM子函数************/
+  44          
+  45          void WriteCommandLCM(uchar WCLCM,uchar BusyC)
+  46          {
+  47   1          if(BusyC)lcd_wait();
+  48   1              DATAPORT=WCLCM;
+  49   1          LCM_RS=0;                   // 选中指令寄存器
+  50   1          LCM_RW=0;                   // 写模式       
+  51   1          LCM_EN=1;
+  52   1              _nop_();
+  53   1              _nop_();
+  54   1              _nop_();
+C51 COMPILER V8.08   絖_隠CD                                                               01/15/2008 20:25:59 PAGE 2   
+
+  55   1          LCM_EN=0;
+  56   1      }
+  57          
+  58          /**********写数据到LCM子函数************/
+  59          
+  60          void WriteDataLCM(uchar WDLCM)
+  61          {
+  62   1          lcd_wait( );                //检测忙信号
+  63   1              DATAPORT=WDLCM;
+  64   1          LCM_RS=1;                   // 选中数据寄存器
+  65   1          LCM_RW=0;                       // 写模式
+  66   1          LCM_EN=1;
+  67   1          _nop_();
+  68   1              _nop_();
+  69   1              _nop_();
+  70   1          LCM_EN=0;
+  71   1      }
+  72          
+  73          /***********lcm内部等待函数*************/
+  74          
+  75          
+  76          void lcd_wait(void)
+  77          {
+  78   1          DATAPORT=0xff;      
+  79   1              LCM_EN=1;
+  80   1          LCM_RS=0;                           
+  81   1          LCM_RW=1;                           
+  82   1          _nop_();
+  83   1          while(DATAPORT&BUSY)
+  84   1              {  LCM_EN=0;
+  85   2                 _nop_();
+  86   2                 _nop_();
+  87   2                 LCM_EN=1;
+  88   2                 _nop_();
+  89   2                 _nop_();
+  90   2                 }
+  91   1              LCM_EN=0;
+  92   1              
+  93   1      }
+  94          
+  95          
+  96          /**********LCM初始化子函数***********/
+  97          
+  98          void initLCM( )
+  99          {
+ 100   1              DATAPORT=0;     
+ 101   1              delay_LCM(15);
+ 102   1              WriteCommandLCM(0x38,0);    //三次显示模式设置，不检测忙信号
+ 103   1          delay_LCM(5);
+ 104   1          WriteCommandLCM(0x38,0);
+ 105   1          delay_LCM(5);
+ 106   1          WriteCommandLCM(0x38,0);
+ 107   1          delay_LCM(5);
+ 108   1      
+ 109   1          WriteCommandLCM(0x38,1);    //8bit数据传送，2行显示，5*7字型，检测忙信号
+ 110   1          WriteCommandLCM(0x08,1);    //关闭显示，检测忙信号
+ 111   1          WriteCommandLCM(0x01,1);    //清屏，检测忙信号
+ 112   1          WriteCommandLCM(0x06,1);    //显示光标右移设置，检测忙信号
+ 113   1          WriteCommandLCM(0x0c,1);    //显示屏打开，光标不显示，不闪烁，检测忙信号
+ 114   1      }
+ 115          
+ 116          /****************显示指定坐标的一个字符子函数*************/
+C51 COMPILER V8.08   絖_隠CD                                                               01/15/2008 20:25:59 PAGE 3   
+
+ 117          
+ 118          void DisplayOneChar(uchar X,uchar Y,uchar DData)
+ 119          {
+ 120   1      uchar mx,my;
+ 121   1              my=Y&1;
+ 122   1              mx=X&0xf;
+ 123   1          if(my>0)mx+=0x40;               //若y为1（显示第二行），地址码+0X40
+ 124   1          mx+=0x80;                    //指令码为地址码+0X80
+ 125   1          WriteCommandLCM(mx,0);
+ 126   1          WriteDataLCM(DData);
+ 127   1      }
+ 128          
+ 129          /***********显示指定坐标的一串字符子函数***********/
+ 130          
+ 131          void DisplayListChar(uchar X,uchar Y, unsigned char *DData)
+ 132          {
+ 133   1          uchar i=0,n;
+ 134   1          Y&=0x01;
+ 135   1          X&=0x0f;
+ 136   1              n=strlen(DData);
+ 137   1          while(i<n)
+ 138   1          {
+ 139   2              DisplayOneChar(X,Y,DData[i]);
+ 140   2              i++;
+ 141   2              X++;
+ 142   2          }
+ 143   1      }
+ 144          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    266    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      10
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

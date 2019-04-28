@@ -1,0 +1,128 @@
+BL51 BANKED LINKER/LOCATER V6.00                                                        10/31/2006  19:50:16  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE clock.obj TO clock
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  clock.obj (CLOCK)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  clock (CLOCK)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     004BH     UNIT         ?PR?_DISP?CLOCK
+            CODE    004EH     000EH     UNIT         ?PR?_DELAY?CLOCK
+            CODE    005CH     000DH     UNIT         ?PR?MAIN?CLOCK
+            CODE    0069H     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   clock (CLOCK)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?CLOCK
+
+?PR?MAIN?CLOCK
+  +--> ?PR?_DISP?CLOCK
+
+?PR?_DISP?CLOCK
+  +--> ?PR?_DELAY?CLOCK
+
+
+
+SYMBOL TABLE OF MODULE:  clock (CLOCK)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        CLOCK
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+BL51 BANKED LINKER/LOCATER V6.00                                                      10/31/2006  19:50:16  PAGE 2
+
+
+  C:0003H         PUBLIC        _disp
+  C:005CH         PUBLIC        main
+  C:0052H         PUBLIC        _delay
+  B:0090H.0       PUBLIC        key0
+  C:004EH         SYMBOL        L?0011
+  -------         PROC          L?0010
+  -------         ENDPROC       L?0010
+  C:004EH         SYMBOL        L?0011
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        dd
+  C:0052H         LINE#         5
+  C:0052H         LINE#         6
+  C:0052H         LINE#         7
+  C:005BH         LINE#         8
+  -------         ENDPROC       _DELAY
+  -------         PROC          _DISP
+  D:0007H         SYMBOL        aa
+  C:0003H         LINE#         10
+  C:0003H         LINE#         11
+  C:0003H         LINE#         12
+  C:0006H         LINE#         13
+  C:0008H         LINE#         14
+  C:000BH         LINE#         16
+  C:000EH         LINE#         18
+  C:0011H         LINE#         19
+  C:0014H         LINE#         20
+  C:0017H         LINE#         21
+  C:001AH         LINE#         23
+  C:001DH         LINE#         24
+  C:0020H         LINE#         25
+  C:0023H         LINE#         27
+  C:0026H         LINE#         29
+  C:0029H         LINE#         30
+  C:002CH         LINE#         31
+  C:002FH         LINE#         32
+  C:0032H         LINE#         33
+  C:0035H         LINE#         34
+  C:0038H         LINE#         35
+  C:003BH         LINE#         37
+  C:003EH         LINE#         39
+  C:0041H         LINE#         40
+  C:0044H         LINE#         41
+  C:0047H         LINE#         42
+  -------         ENDPROC       _DISP
+  -------         PROC          MAIN
+  -------         DO            
+  D:0005H         SYMBOL        aa
+  -------         ENDDO         
+  C:005CH         LINE#         45
+  C:005CH         LINE#         46
+  C:005CH         LINE#         47
+  C:005EH         LINE#         48
+  C:005EH         LINE#         49
+  C:005EH         LINE#         50
+  C:0062H         LINE#         51
+  C:0067H         LINE#         52
+  -------         ENDPROC       MAIN
+BL51 BANKED LINKER/LOCATER V6.00                                                      10/31/2006  19:50:16  PAGE 3
+
+
+  -------         ENDMOD        CLOCK
+
+Program Size: data=9.0 xdata=0 code=117
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

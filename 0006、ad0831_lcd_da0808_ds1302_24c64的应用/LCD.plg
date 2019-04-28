@@ -1,0 +1,408 @@
+<html>
+<body>
+<pre>
+<h1>µVision2 Build Log</h1>
+<h2>Project:</h2>
+F:\proteus\try\ad0831_lcd_da0808_ds1302\LCD.uv2
+Project File Date:  04/16/2006
+
+<h2>Output:</h2>
+compiling LCD.C...
+LCD.C - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_START?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_INIT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_I_SEND?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_RECEIVE?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_ACK?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+Program Size: data=50.2 xdata=0 code=2396
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 12 Warning(s).
+Build target 'Target 1'
+compiling LCD.C...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_START?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_INIT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_I_SEND?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_RECEIVE?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_ACK?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+Program Size: data=50.2 xdata=0 code=2396
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 12 Warning(s).
+Build target 'Target 1'
+compiling LCD.C...
+24C64.H(19): error C202: 'date_time': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling LCD.C...
+I2C.H(10): error C231: 'SCL': redefinition
+I2C.H(11): error C231: 'SDA': redefinition
+I2C.H(20): error C237: 'delay': function already has a body
+I2C.H(33): error C237: 'I_start': function already has a body
+I2C.H(45): error C237: 'I_stop': function already has a body
+I2C.H(51): error C237: 'I_init': function already has a body
+I2C.H(62): error C237: 'I_clock': function already has a body
+I2C.H(78): error C237: '_I_send': function already has a body
+I2C.H(92): error C237: 'I_receive': function already has a body
+I2C.H(99): error C237: 'I_Ack': function already has a body
+24C64.H(19): error C202: 'date_time': undefined identifier
+Target not created
+Build target 'Target 1'
+compiling LCD.C...
+I2C.H(10): error C231: 'SCL': redefinition
+I2C.H(11): error C231: 'SDA': redefinition
+I2C.H(20): error C237: 'delay': function already has a body
+I2C.H(33): error C237: 'I_start': function already has a body
+I2C.H(45): error C237: 'I_stop': function already has a body
+I2C.H(51): error C237: 'I_init': function already has a body
+I2C.H(62): error C237: 'I_clock': function already has a body
+I2C.H(78): error C237: '_I_send': function already has a body
+I2C.H(92): error C237: 'I_receive': function already has a body
+I2C.H(99): error C237: 'I_Ack': function already has a body
+24C64.H(19): error C202: 'date_time': undefined identifier
+Target not created
+compiling LCD.C...
+I2C.H(10): error C231: 'SCL': redefinition
+I2C.H(11): error C231: 'SDA': redefinition
+I2C.H(20): error C237: 'delay': function already has a body
+I2C.H(33): error C237: 'I_start': function already has a body
+I2C.H(45): error C237: 'I_stop': function already has a body
+I2C.H(51): error C237: 'I_init': function already has a body
+I2C.H(62): error C237: 'I_clock': function already has a body
+I2C.H(78): error C237: '_I_send': function already has a body
+I2C.H(92): error C237: 'I_receive': function already has a body
+I2C.H(99): error C237: 'I_Ack': function already has a body
+24C64.H(19): error C202: 'date_time': undefined identifier
+LCD.C - 11 Error(s), 0 Warning(s).
+compiling LCD.C...
+24C64.H(19): error C202: 'date_time': undefined identifier
+LCD.C - 1 Error(s), 0 Warning(s).
+compiling LCD.C...
+24C64.H(69): warning C173: missing return-expression
+24C64.H(85): warning C206: 'delay_8ms': missing function-prototype
+LCD.C - 0 Error(s), 2 Warning(s).
+Build target 'Target 1'
+compiling LCD.C...
+24C64.H(69): warning C173: missing return-expression
+24C64.H(85): warning C206: 'delay_8ms': missing function-prototype
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_INIT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_DATA?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_DATA?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_SERIAL?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_SERIAL?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  DELAY_8MS
+    MODULE:  LCD.obj (LCD)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  DELAY_8MS
+    MODULE:  LCD.obj (LCD)
+    ADDRESS: 06AFH
+Program Size: data=58.2 xdata=0 code=2643
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 16 Warning(s).
+compiling LCD.C...
+24C64.H(69): warning C173: missing return-expression
+24C64.H(85): warning C206: 'delay_8ms': missing function-prototype
+LCD.C - 0 Error(s), 2 Warning(s).
+compiling LCD.C...
+24C64.H(77): warning C173: missing return-expression
+LCD.C - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling LCD.C...
+24C64.H(49): warning C280: 'data_r': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?I_INIT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_DATA?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_DATA?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_SERIAL?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_SERIAL?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+Program Size: data=57.2 xdata=0 code=2663
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 13 Warning(s).
+Build target 'Target 1'
+"LCD" - 0 Error(s), 0 Warning(s).
+compiling LCD.C...
+24C64.H(49): warning C280: 'data_r': unreferenced local variable
+LCD.C - 0 Error(s), 1 Warning(s).
+compiling LCD.C...
+24C64.H(49): warning C280: 'data_r': unreferenced local variable
+LCD.C - 0 Error(s), 1 Warning(s).
+compiling LCD.C...
+LCD.C - 0 Error(s), 0 Warning(s).
+compiling LCD.C...
+LCD.C - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling LCD.C...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_1302?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?START_1302?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_DATA?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_DATA?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_SERIAL?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_SERIAL?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+Program Size: data=56.2 xdata=0 code=2642
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 13 Warning(s).
+compiling LCD.C...
+KEY.H(17): warning C206: 'w_24c64_data': missing function-prototype
+KEY.H(17): error C267: 'w_24c64_data': requires ANSI-style prototype
+KEY.H(17): error C141: syntax error near 'unsigned'
+KEY.H(17): error C202: 'a': undefined identifier
+24C64.H(21): error C231: '_w_24c64_data': redefinition
+LCD.C - 4 Error(s), 1 Warning(s).
+compiling LCD.C...
+KEY.H(18): error C141: syntax error near 'unsigned'
+LCD.C - 1 Error(s), 0 Warning(s).
+compiling LCD.C...
+KEY.H(18): error C202: 'a': undefined identifier
+I2C.H(10): error C231: 'SCL': redefinition
+I2C.H(11): error C231: 'SDA': redefinition
+I2C.H(20): error C237: 'delay': function already has a body
+I2C.H(33): error C237: 'I_start': function already has a body
+I2C.H(45): error C237: 'I_stop': function already has a body
+I2C.H(51): error C237: 'I_init': function already has a body
+I2C.H(62): error C237: 'I_clock': function already has a body
+I2C.H(78): error C237: '_I_send': function already has a body
+I2C.H(91): error C237: 'I_receive': function already has a body
+I2C.H(98): error C237: 'I_Ack': function already has a body
+24C64.H(17): error C237: 'delay_8ms': function already has a body
+24C64.H(45): error C237: '_w_24c64_data': function already has a body
+24C64.H(76): error C237: '_r_24c64_data': function already has a body
+24C64.H(105): error C237: '_w_24c64_serial': function already has a body
+24C64.H(142): error C237: '_r_24c64_serial': function already has a body
+LCD.C - 16 Error(s), 0 Warning(s).
+compiling LCD.C...
+KEY.H(18): error C202: 'a': undefined identifier
+LCD.C - 1 Error(s), 0 Warning(s).
+compiling LCD.C...
+LCD.C - 0 Error(s), 0 Warning(s).
+compiling LCD.C...
+KEY.H(26): error C202: 'p_a': undefined identifier
+LCD.C - 1 Error(s), 0 Warning(s).
+compiling LCD.C...
+LCD.C - 0 Error(s), 0 Warning(s).
+compiling LCD.C...
+LCD.C - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_1302?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?START_1302?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_SERIAL?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_SERIAL?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+Program Size: data=58.2 xdata=0 code=2694
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 11 Warning(s).
+Build target 'Target 1'
+compiling LCD.C...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DS1302_SETPROTECT?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP_1302?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?START_1302?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WRITE_DATE_TIME?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_W_24C64_SERIAL?LCD
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_R_24C64_SERIAL?LCD
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?CHECKSTATE?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWCHINA?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOW8X8?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_READ_SERIAL?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_SHOWNUMBER?LCD
+    CALLER1: ?PR?TIME0_INTERRUPT?LCD
+    CALLER2: ?C_C51STARTUP
+Program Size: data=58.2 xdata=0 code=2694
+creating hex file from "LCD"...
+"LCD" - 0 Error(s), 11 Warning(s).

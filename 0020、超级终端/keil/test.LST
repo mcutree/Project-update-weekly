@@ -1,0 +1,171 @@
+C51 COMPILER V7.09   TEST                                                                  04/08/2006 14:37:30 PAGE 1   
+
+
+C51 COMPILER V7.09, COMPILATION OF MODULE TEST
+OBJECT MODULE PLACED IN test.OBJ
+COMPILER INVOKED BY: C:\Program Files\Keil\C51\BIN\C51.EXE test.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "REG52.H"
+   2          #include "stdio.h"
+   3          #include "string.h"
+   4          #define    ESC "\033"
+   5          #define    CSI ESC"["
+   6          /* 前景色 */
+   7          #define    BLK ESC"[30m" /* 黑色 */
+   8          #define    RED ESC"[31m" /* 红色 */
+   9          #define    GRN ESC"[32m" /* 绿色 */
+  10          #define    YEL ESC"[33m" /* 黄色 */
+  11          #define    BLU ESC"[34m" /* 蓝色 */
+  12          #define    MAG ESC"[35m" /* 紫色 */
+  13          #define    CYN ESC"[36m" /* 青色 */
+  14          #define    WHT ESC"[37m" /* 白色 */
+  15          /* 加强前景色 */
+  16          #define    HIR ESC"[1;31m"    /* 亮红    */
+  17          #define    HIG ESC"[1;32m"    /* 亮绿    */
+  18          #define    HIY ESC"[1;33m"    /* 亮黄    */
+  19          #define    HIB ESC"[1;34m"    /* 亮蓝    */
+  20          #define    HIM ESC"[1;35m"    /* 亮紫    */
+  21          #define    HIC ESC"[1;36m"    /* 亮青    */
+  22          #define    HIW ESC"[1;37m"    /* 亮白    */
+  23          /* 加强背景色 */
+  24          #define    HBRED ESC"[41;1m" /* 亮红 */
+  25          #define    HBGRN ESC"[42;1m" /* 亮绿 */
+  26          #define    HBYEL ESC"[43;1m" /* 亮黄 */
+  27          #define    HBBLU ESC"[44;1m" /* 亮蓝 */
+  28          #define    HBMAG ESC"[45;1m" /* 亮紫 */
+  29          #define    HBCYN ESC"[46;1m" /* 亮青 */
+  30          #define    HBWHT ESC"[47;1m" /* 亮白 */
+  31          /* 背景色 */
+  32          #define    BBLK ESC"[40m" /*黑色 */
+  33          #define    BRED ESC"[41m" /*红色 */
+  34          #define    BGRN ESC"[42m" /*绿色 */
+  35          #define    BYEL ESC"[43m" /* 黄色 */
+  36          #define    BBLU ESC"[44m" /*蓝色 */
+  37          #define    BMAG ESC"[45m" /*紫色 */
+  38          #define    BCYN ESC"[46m" /*青色 */
+  39          #define    NOR ESC+"[2;37;0m" /* 返回原色 */
+  40          #define    BOLD ESC"[1m" /* 打开粗体 */
+  41          #define    CLR ESC"[2J" /*    清屏 */
+  42          #define    HOME ESC"[H" /*    发送光标到原处 */
+  43          //#define REF CLRHOME /* 清屏和清除光标    */
+  44          #define    BIGTOP ESC"#3" /* Dbl height characters, top half */
+  45          #define    BIGBOT ESC"#4" /* Dbl height characters, bottem    half */
+  46          #define    SAVEC ESC"[s" /* Save cursor position */
+  47          #define    REST ESC"[u" /*    Restore    cursor to saved    position */
+  48          #define    SINGW ESC"#5" /* Normal, single-width characters */
+  49          #define    DBL ESC"#6" /* Creates double-width characters */
+  50          #define    FRTOP ESC"[2;25r" /* 冻结首行 */
+  51          #define    FRBOT ESC"[1;24r" /* 冻结底部一行 */
+  52          #define    UNFR ESC"[r" /*    首行和底部一行解冻 */
+  53          #define    BLINK ESC"[5m" /* 不断闪亮模式 */
+  54          #define    U ESC+"[4m" /* 下划线模式 */
+  55          #define    REV ESC"[7m" /*    打开反白模式 */
+C51 COMPILER V7.09   TEST                                                                  04/08/2006 14:37:30 PAGE 2   
+
+  56          #define    HIREV ESC"[1,7m" /* 亮色彩反白显示 */
+  57          sbit    T2MOD    =0xC9;
+  58          #define    uchar    unsigned char
+  59          #define    uint    unsigned int
+  60          #define    ulong    unsigned long
+  61          char    i_su;
+  62          char    buff[21];
+  63          char code m1[]="***** 89C52 mem serial  monitor ! *****  |WXKY|\n\r";
+  64          void Send(uchar    buff)
+  65          {
+  66   1          SBUF    =buff;
+  67   1          while(!TI);
+  68   1          TI    =0;
+  69   1      }
+  70          void sco_msg(char *strg)
+  71          {
+  72   1          while(*strg!='\0')
+  73   1          {
+  74   2              Send(*strg);
+  75   2              strg++;
+  76   2      
+  77   2          };
+  78   1      
+  79   1      
+  80   1      }
+  81          
+  82          void receive(void) interrupt 4
+  83          {      if(RI)
+  84   1             {            
+  85   2                RI    =0;
+  86   2                buff[i_su]    =SBUF;
+  87   2                    if(i_su<=20){i_su++;}else{i_su=0;};
+  88   2              };
+  89   1      }
+  90          void main(void)
+  91          {
+  92   1          char i,ii;
+  93   1          char data *point;
+  94   1          char tmp;
+  95   1      
+  96   1          SCON    =0x50;        //WORK WITH MODE ONE
+  97   1          TMOD    =0x11;
+  98   1          T2CON    =0x30;
+  99   1          T2MOD    =0x01;
+ 100   1          TH2    =0xFF;        //9600BPS
+ 101   1          TL2    =0xDC;
+ 102   1          RCAP2H    =0xFF;
+ 103   1          RCAP2L    =0xDC;
+ 104   1          T2CON    =0x34;
+ 105   1          ET2    =0;
+ 106   1          EA    =1;
+ 107   1          ES    =1;
+ 108   1          sco_msg(UNFR);
+ 109   1          sco_msg(CLR);
+ 110   1          sco_msg(DBL);
+ 111   1          sco_msg(FRTOP);
+ 112   1              sco_msg(BLINK);
+ 113   1          sco_msg(m1);
+ 114   1              sco_msg(ESC"[0m");
+ 115   1              sco_msg(SAVEC);
+ 116   1              sco_msg(HBGRN);
+ 117   1          while(1)
+C51 COMPILER V7.09   TEST                                                                  04/08/2006 14:37:30 PAGE 3   
+
+ 118   1          {
+ 119   2                      P1++;
+ 120   2                 point=0;
+ 121   2                 for(i=0;i<8;i++)
+ 122   2                 {
+ 123   3                    for(ii=0;ii<16;ii++)
+ 124   3                    {
+ 125   4                   tmp    =*point;
+ 126   4                               tmp    >>=4;
+ 127   4                               tmp    &=0x0f;
+ 128   4                               if(tmp>9){tmp+='0'+7;}else{tmp+='0';};
+ 129   4                   Send(tmp);
+ 130   4                   tmp    =*point;
+ 131   4                   tmp    &=0x0f;
+ 132   4                   if(tmp>9){tmp+='0'+7;}else{tmp+='0';};
+ 133   4                   Send(tmp);
+ 134   4                   Send(' ');
+ 135   4                   point++;
+ 136   4      
+ 137   4                     };
+ 138   3                             Send('\n');
+ 139   3                             Send('\r');
+ 140   3                 };
+ 141   2                     sco_msg(REST);
+ 142   2           };
+ 143   1      } 
+ 144          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    278    ----
+   CONSTANT SIZE    =     97    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

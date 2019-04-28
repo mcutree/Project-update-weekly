@@ -1,0 +1,169 @@
+BL51 BANKED LINKER/LOCATER V5.03                                                        08/08/2007  16:36:58  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.03, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE robot.obj TO robot
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  robot.obj (ROBOT)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  robot (ROBOT)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+                    0008H     0008H                  *** GAP ***
+            REG     0010H     0008H     ABSOLUTE     "REG BANK 2"
+            DATA    0018H     0024H     UNIT         ?DT?ROBOT
+            IDATA   003CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0005H     UNIT         ?PR?MAIN?ROBOT
+                    0008H     0003H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0196H     UNIT         ?CO?ROBOT
+            CODE    01A4H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0230H     007CH     UNIT         ?PR?SETALLSPEEDS?ROBOT
+            CODE    02ACH     004CH     UNIT         ?PR?ONTIMER?ROBOT
+            CODE    02F8H     0032H     UNIT         ?C_INITSEG
+            CODE    032AH     0010H     UNIT         ?PR?INITTIMER?ROBOT
+
+
+
+OVERLAY MAP OF MODULE:   robot (ROBOT)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?ONTIMER?ROBOT
+  +--> ?PR?SETALLSPEEDS?ROBOT
+  +--> ?PR?INITTIMER?ROBOT
+  +--> ?CO?ROBOT
+
+?PR?SETALLSPEEDS?ROBOT
+  +--> ?CO?ROBOT
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?ROBOT
+BL51 BANKED LINKER/LOCATER V5.03                                                      08/08/2007  16:36:58  PAGE 2
+
+
+  +--> ?C_INITSEG
+
+?PR?MAIN?ROBOT
+  +--> ?PR?INITTIMER?ROBOT
+
+
+
+SYMBOL TABLE OF MODULE:  robot (ROBOT)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ROBOT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:00A0H         PUBLIC        P2
+  D:0018H         PUBLIC        data_pointer
+  D:0019H         PUBLIC        time_t
+  B:00A8H.7       PUBLIC        EA
+  D:001AH         PUBLIC        speeds
+  C:032AH         PUBLIC        InitTimer
+  C:000EH         PUBLIC        dancedata
+  C:0003H         PUBLIC        main
+  C:0230H         PUBLIC        SetAllSpeeds
+  D:0022H         PUBLIC        steps
+  D:0089H         PUBLIC        TMOD
+  C:02ACH         PUBLIC        OnTimer
+  C:019CH         PUBLIC        pin
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  D:002AH         PUBLIC        MAX_SPEED_TICKER
+  D:002BH         PUBLIC        i
+  D:002CH         PUBLIC        cur_step
+  D:0034H         PUBLIC        speed_tickers
+  -------         PROC          INITTIMER
+  C:032AH         LINE#         33
+  C:032AH         LINE#         34
+  C:032AH         LINE#         35
+  C:032DH         LINE#         36
+  C:0330H         LINE#         37
+  C:0333H         LINE#         38
+  C:0335H         LINE#         39
+  C:0337H         LINE#         40
+  C:0339H         LINE#         41
+  -------         ENDPROC       INITTIMER
+  -------         PROC          SETALLSPEEDS
+  -------         DO            
+  D:0007H         SYMBOL        delta
+  -------         ENDDO         
+  C:0230H         LINE#         43
+  C:0230H         LINE#         44
+  C:0230H         LINE#         46
+  C:0233H         LINE#         47
+  C:0233H         LINE#         48
+  C:023BH         LINE#         49
+BL51 BANKED LINKER/LOCATER V5.03                                                      08/08/2007  16:36:58  PAGE 3
+
+
+  C:024AH         LINE#         50
+  C:025DH         LINE#         51
+  C:025DH         LINE#         52
+  C:0264H         LINE#         53
+  C:0266H         LINE#         54
+  C:0268H         LINE#         55
+  C:0276H         LINE#         56
+  C:0276H         LINE#         57
+  C:027DH         LINE#         58
+  C:027FH         LINE#         59
+  C:0281H         LINE#         60
+  C:0283H         LINE#         61
+  C:028BH         LINE#         62
+  C:0294H         LINE#         63
+  C:02A0H         LINE#         64
+  C:02A3H         LINE#         65
+  C:02ABH         LINE#         66
+  -------         ENDPROC       SETALLSPEEDS
+  -------         PROC          ONTIMER
+  -------         DO            
+  D:0017H         SYMBOL        j
+  -------         ENDDO         
+  C:02ACH         LINE#         68
+  C:02B7H         LINE#         71
+  C:02BAH         LINE#         72
+  C:02BDH         LINE#         73
+  C:02BFH         LINE#         74
+  C:02C5H         LINE#         75
+  C:02C5H         LINE#         76
+  C:02C6H         LINE#         77
+  C:02E6H         LINE#         78
+  C:02ECH         LINE#         79
+  C:02EFH         LINE#         80
+  C:02EFH         LINE#         81
+  -------         ENDPROC       ONTIMER
+  -------         PROC          MAIN
+  C:0003H         LINE#         83
+  C:0003H         LINE#         84
+  C:0003H         LINE#         85
+  C:0006H         LINE#         86
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        ROBOT
+
+Program Size: data=53.0 xdata=0 code=823
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
