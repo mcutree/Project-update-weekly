@@ -1,0 +1,22 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\LLDN\Desktop\电梯仿真\矩阵按键C程序\LED_KEY.uvproj
+Project File Date:  <unknown>
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling LED_KEY.C...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?INT_MCU?LED_KEY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SCAN1?LED_KEY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?LED_KEY
+Program Size: data=41.1 xdata=0 code=534
+creating hex file from "LED_KEY"...
+"LED_KEY" - 0 Error(s), 3 Warning(s).
