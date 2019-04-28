@@ -1,0 +1,72 @@
+C51 COMPILER V9.56.0.0   ____1_______                                                      12/20/2018 19:38:14 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ____1_______
+OBJECT MODULE PLACED IN .\Objects\实验1 - 副本.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE 实验1 - 副本.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\实验1 - 副本.lst) TABS(2) OBJECT(.\Objects\实验1 - 副本.obj)
+
+line level    source
+
+   1          #include <reg52.h>//头文件
+   2          #include "yanshims.h"
+   3          #define uint unsigned int//宏定义
+   4          #define uchar unsigned char
+   5          sbit k=P3^0;//总控制按键接P3.0端口
+   6          sbit g1=P3^4;
+   7          sbit g2=P3^5;
+   8          uchar code tab[]={
+   9          0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90
+  10          };
+  11          uchar buf[]={
+  12            1,0
+  13          };
+  14          uchar miao=10;
+  15          void fuzhi()
+  16          {
+  17   1        buf[0]=miao/10%10;
+  18   1        buf[1]=miao%10;
+  19   1      }
+  20          void kai(a)
+  21          {
+  22   1        switch(a)
+  23   1        {
+  24   2          case 0:g1=g2=0;break;
+  25   2          case 1:g1=1;g2=0;break;
+  26   2          case 2:g1=0;g2=1;break;
+  27   2          default:break;
+  28   2        }
+  29   1      }
+  30          void xianshi()
+  31          {
+  32   1        kai(1);
+  33   1        P0=tab[buf[0]];
+  34   1        yanshi(1);
+  35   1        kai(2);
+  36   1        P0=tab[buf[1]];
+  37   1        yanshi(1);
+  38   1        kai(0);
+  39   1      }
+  40          mian()
+  41          {
+  42   1        while(1)
+  43   1        {
+  44   2        xianshi();
+  45   2        }
+  46   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    122    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+C51 COMPILER V9.56.0.0   ____1_______                                                      12/20/2018 19:38:14 PAGE 2   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,187 @@
+C51 COMPILER V9.56.0.0   ____1                                                             12/20/2018 19:59:17 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ____1
+OBJECT MODULE PLACED IN .\Objects\ÊµÑé1.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ÊµÑé1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\ÊµÑ
+                    -é1.lst) TABS(2) OBJECT(.\Objects\ÊµÑé1.obj)
+
+line level    source
+
+   1          #include <reg52.h>//Í·ÎÄ¼þ
+   2          #define uint unsigned int//ºê¶¨Òå
+   3          #define uchar unsigned char
+   4          sbit k=P3^0;//×Ü¿ØÖÆ°´¼ü½ÓP3.0¶Ë¿Ú
+   5          sbit qingling=P3^1;//×Ü¿ØÖÆ°´¼ü½ÓP3.0¶Ë¿Ú
+   6          sbit g1=P3^2;
+   7          sbit g2=P3^3;
+   8          sbit feng=P3^7;
+   9          uchar fangui;
+  10          uchar com=0;
+  11          uchar miao=10;
+  12          uchar miaoshi=0;
+  13          uchar qdb;
+  14          uchar code tab[]={//ÊýÂë¹ÜµÄÊýÂë Ò»Î¬Êý×é
+  15            0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff,0xbf
+  16          };
+  17          uchar buf[]={
+  18            0,0
+  19          };
+  20          uchar xuanshou=10;//Ñ¡ÊÖºÅ  ³õÖµÎªÊ²Ã´Ò²²»ÏÖÏÔÊ¾
+  21          void yanshi(uint x)//ºÁÃëÑÓÊ±º¯Êý
+  22          {
+  23   1        uchar i;
+  24   1        while(x--)
+  25   1          for(i=0;i<123;i++);
+  26   1      }
+  27          void fuzhi()
+  28          {
+  29   1        buf[0]=miao/10%10;
+  30   1        buf[1]=miao%10;
+  31   1      }
+  32          void xuanshouhaofuzhi()
+  33          {
+  34   1        buf[0]=xuanshou/10%10;
+  35   1        buf[1]=xuanshou%10;
+  36   1      }
+  37          void xianshi()//ÏÔÊ¾º¯Êý
+  38          {
+  39   1        g1=1;
+  40   1        g2=0;
+  41   1        P0=tab[buf[0]];
+  42   1        yanshi(1);
+  43   1        g1=0;
+  44   1        P0=0xff;
+  45   1        g2=1;
+  46   1        P0=tab[buf[1]];
+  47   1        yanshi(1);
+  48   1        g2=0;
+  49   1      }
+  50          void qingchu()//Çå³þ×Óº¯Êý
+  51          {
+  52   1        xuanshou=10;//Ñ¡ÊÖºÅÎª10£¬ÊýÂë¹Ü²»ÏÔÊ¾
+  53   1        P1=0xff;//ËùÓÐµÄÖ¸Ê¾µÆÃð
+  54   1        miao=0;
+C51 COMPILER V9.56.0.0   ____1                                                             12/20/2018 19:59:17 PAGE 2   
+
+  55   1        qdb=0;
+  56   1      }
+  57          void sss()interrupt 3
+  58          {
+  59   1        TH1=(65536-50000)/256;//50msÖÐ¶ÏÒÀÒ»´Î
+  60   1        TL1=(65536-50000)%256;
+  61   1        if(qdb==1)
+  62   1        {
+  63   2          miaoshi++;
+  64   2          if(miaoshi==20&miao>0&com==0)
+  65   2          {
+  66   3            miaoshi=0;
+  67   3            miao--;
+  68   3          }
+  69   2          if(com==1)
+  70   2            xuanshouhaofuzhi();
+  71   2          else
+  72   2            fuzhi();
+  73   2        }
+  74   1        xianshi();//ÊýÂë¹ÜÏÔÊ¾³ÌÐò·ÅÔÚÖÐ¶ÏÀïÎªÁË·ÀÖ¹ÊýÂë¹ÜÉÁË¸
+  75   1      }
+  76          void xs()interrupt 1//¶¨Ê±Æ÷ÖÐ¶Ï0
+  77          {
+  78   1        uchar i;
+  79   1        TH0=(65536-5000)/256;//50msÖÐ¶ÏÒÀÒ»´Î
+  80   1        TL0=(65536-5000)%256;
+  81   1        if(fangui==1)
+  82   1        {
+  83   2          i++;
+  84   2          feng=!feng;
+  85   2          if(i==100)
+  86   2          {
+  87   3            i=0;
+  88   3            fangui=0;
+  89   3          }
+  90   2        }
+  91   1      }
+  92          void main()
+  93          {
+  94   1        TMOD=0x11;//ÉèÖÃÖÐ¶Ï·½Ê½ÎªT0 16Îª¼ÆÊ±Æ÷ÖÐ¶Ï
+  95   1        TH0=(65536-5000)/256;//¸³³õÊ¼Öµ50msÖÐ¶ÏÒ»´Î
+  96   1        TL0=(65536-5000)%256;
+  97   1        TH1=(65536-50000)/256;//¸³³õÊ¼Öµ50msÖÐ¶ÏÒ»´Î
+  98   1        TL1=(65536-50000)%256;
+  99   1        EA=1; //¿ª×ÜÔÊÐíÎ»
+ 100   1        ET0=1;//ÔÊÐíT0ÖÐ¶Ï
+ 101   1        ET1=1;
+ 102   1        TR1=1;
+ 103   1        TR0=1;//´ò¿ªT0£¬¿ªÊ¼¼ÆÊ±
+ 104   1        while(1)//ËÀÑ­»·
+ 105   1        {
+ 106   2      LL:
+ 107   2          if((P2&0x0f)!=0x0f)
+ 108   2            fangui=1;
+ 109   2          if(!k)//Èç¹û×Ü°´¼ü°´ÏÂ
+ 110   2          {
+ 111   3            yanshi(50);//ÑÓÊ±100msÏû¶¶
+ 112   3            if(!k)//Èç¹û×Ü°´¼ü»¹°´ÏÂ
+ 113   3            {
+ 114   4              miao=10;
+ 115   4              miaoshi=0;
+ 116   4              qdb=1;
+C51 COMPILER V9.56.0.0   ____1                                                             12/20/2018 19:59:17 PAGE 3   
+
+ 117   4              while(!k);//µ±×Ü°´¼üËÉ¿ª¼ÌÐøÖ´ÐÐ
+ 118   4              while(1)//ËÀÑ­»·
+ 119   4              {
+ 120   5                if(!qingling&com==1)//
+ 121   5                {
+ 122   6      L1:
+ 123   6                  qingchu();//Çå³ýÒ»ÇÐÊý¾Ý
+ 124   6                  fuzhi();
+ 125   6                  com=0;//Çå³ýÇÀ´ðºÛ¼£
+ 126   6                  goto LL;
+ 127   6                }
+ 128   5                if(miao==0)
+ 129   5                {
+ 130   6                  com=1;
+ 131   6                  goto L1;
+ 132   6                }
+ 133   5                if(com==0&miao>0)//Èç¹û¿ªÊ¼ÇÀ´ð²¢ÇÒÃ»ÈËÇÀ´ðÍê³É
+ 134   5                {
+ 135   6                  switch(P2)//ÅÐ¶ÏP2¶Ë¿Ú
+ 136   6                  {
+ 137   7                    case 0xfe:xuanshou=1;com=1;break;//1ºÅÑ¡ÊÖÇÀ´ð³É¹¦
+ 138   7                    case 0xfd:xuanshou=2;com=1;break;//2ºÅÑ¡ÊÖÇÀ´ð³É¹¦
+ 139   7                    case 0xfb:xuanshou=3;com=1;break;//3ºÅÑ¡ÊÖÇÀ´ð³É¹¦
+ 140   7                    case 0xf7:xuanshou=4;com=1;break;//4ºÅÑ¡ÊÖÇÀ´ð³É¹¦
+ 141   7                    default: xuanshou=11;break;//Èç¹ûÇÀ´ðÇ°¾ÍÓÐ¶àÈË°´ÏÂ×Ô¼ºµÄ¼üÔòÎÞÐ§
+ 142   7                  }
+ 143   6                }
+ 144   5                if(com==1)//Èç¹ûÇÀ´ðÍê³É
+ 145   5                {
+ 146   6                  switch(xuanshou)//ÅÐ¶ÏÑ¡ÊÖºÅ
+ 147   6                  {
+ 148   7                    case 1:P1=0xfe;break;//1ºÅÑ¡ÊÖÑ¡ÊÖÔò1ºÅµÆÁÁ
+ 149   7                    case 2:P1=0xfd;break;//2ºÅÑ¡ÊÖÑ¡ÊÖÔò1ºÅµÆÁÁ
+ 150   7                    case 3:P1=0xfb;break;//3ºÅÑ¡ÊÖÑ¡ÊÖÔò1ºÅµÆÁÁ
+ 151   7                    case 4:P1=0xf7;break;//4ºÅÑ¡ÊÖÑ¡ÊÖÔò1ºÅµÆÁÁ
+ 152   7                    default: break;//¶¼²»ÊÇÔòÎÞ±ä»¯
+ 153   7                  }
+ 154   6                }
+ 155   5              }
+ 156   4            }
+ 157   3          }
+ 158   2        }
+ 159   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    490    ----
+   CONSTANT SIZE    =     12    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
