@@ -1,0 +1,459 @@
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN led.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE led.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uchar unsigned char 
+   3          #define uint unsigned int
+   4          #define ulong unsigned long
+   5          unsigned char code dispbitcode[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+   6          unsigned char dispbuf[4];
+   7          unsigned int i;
+   8          unsigned int j;
+   9          unsigned char getdata;
+  10          unsigned int temp,Num1,Num2,Num3;
+  11          unsigned int temp1;
+  12          unsigned char count;
+  13          unsigned char d,a,b,c,e,f,g;
+  14          //unsigned char tab_H[8]={100,100,100,100,100,100,100,100};
+  15          unsigned char tab_8[9]={0,0,0,0,0,0,0,0,0};
+  16          
+  17          unsigned char wen_H[9]={100,100,100,100,100,100,100,100,100};
+  18          unsigned char wen_L[9]={60,60,60,60,60,60,60,60,60};
+  19          
+  20          unsigned char tab_flag[9]={0,0,0,0,0,0,0,0,0};
+  21          
+  22          sbit ST=P1^2;
+  23          sbit OE=P1^0;
+  24          sbit EOC=P1^1;
+  25          sbit CLK=P1^3;
+  26          
+  27          
+  28          
+  29          sbit A5=P3^0;
+  30          sbit A1=P1^4;
+  31          sbit A2=P1^5;
+  32          sbit A3=P1^6;
+  33          sbit A4=P1^7;
+  34          sbit ADD_A=P3^1;
+  35          sbit ADD_B=P3^2;
+  36          sbit ADD_C=P3^3;
+  37          sbit K1=P3^4;
+  38          sbit K2=P3^5;
+  39          sbit K3=P3^6;
+  40          //sbit K4=P3^7;
+  41          sbit LED_R=P3^7;
+  42          bit flag0,flag1,flag2,flag3;
+  43          
+  44          
+  45          void TimeInitial();
+  46          void Delay(unsigned int i);//
+  47          void TimeInitial()
+  48          {  
+  49   1        TMOD=0x10;
+  50   1        TH1=(65536-200)/256;//定时时间为2us,亦即CLK周期为0.4us
+  51   1        TL1=(65536-200)%256;
+  52   1        EA=1;
+  53   1        ET1=1;
+  54   1        TR1=1;
+  55   1       }
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 2   
+
+  56          
+  57          void Delay(unsigned int i)//延时函数
+  58          {
+  59   1        unsigned int j;
+  60   1        for(;i>0;i--)
+  61   1        {
+  62   2         for(j=0;j<125;j++)
+  63   2        {;}
+  64   2        }
+  65   1      }
+  66          void scan(uint data_ad)
+  67          { 
+  68   1        dispbuf[0]=data_ad%10;//百分位
+  69   1        dispbuf[1]=data_ad/10%10;//十分位
+  70   1        dispbuf[2]=data_ad/100%10;//个位
+  71   1        dispbuf[3]=data_ad/1000;//十位   
+  72   1      } 
+  73          void Display()//
+  74          
+  75          { 
+  76   1        P0=0xff;   
+  77   1        if(b==1)
+  78   1        P0=0xc7;
+  79   1        else if(b==2)
+  80   1        P0=0x89;
+  81   1        A1=1;
+  82   1        A2=0;
+  83   1        A3=0;
+  84   1        A4=0;
+  85   1        A5=0;
+  86   1        Delay(1);
+  87   1        P0=0xff;
+  88   1        if(b!=0&&flag1==1)
+  89   1        P0=0xff;//百分位
+  90   1        else
+  91   1        {
+  92   2        if(dispbuf[2]==0)
+  93   2        P0=0xff;
+  94   2        else
+  95   2        P0=dispbitcode[dispbuf[2]];//个位
+  96   2        }
+  97   1        A1=0;
+  98   1        A2=1;
+  99   1        A3=0;
+ 100   1        A4=0;
+ 101   1        A5=0;
+ 102   1        Delay(1); 
+ 103   1        P0=0xff;
+ 104   1          if(b!=0&&flag1==1)
+ 105   1        P0=0xff;//百分位
+ 106   1        else
+ 107   1        P0=dispbitcode[dispbuf[1]];//十分位
+ 108   1        A1=0;
+ 109   1        A2=0;
+ 110   1        A3=1;
+ 111   1        A4=0;
+ 112   1        A5=0;
+ 113   1        Delay(1);
+ 114   1        P0=0xff;
+ 115   1          if(b!=0&&flag1==1)
+ 116   1        P0=0xff;//百分位
+ 117   1        else
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 3   
+
+ 118   1        P0=dispbitcode[dispbuf[0]];//百分位
+ 119   1        A1=0;
+ 120   1        A2=0;
+ 121   1        A3=0;
+ 122   1        A4=1;
+ 123   1        A5=0;
+ 124   1        Delay(1);
+ 125   1        P0=0xff;
+ 126   1        if(b==0)
+ 127   1        {
+ 128   2        if(tab_flag[a]==0)
+ 129   2                      P0=dispbitcode[a];//百分位
+ 130   2        else
+ 131   2        {
+ 132   3                if(flag1==1)
+ 133   3                P0=0xff;//百分位
+ 134   3                else
+ 135   3                P0=dispbitcode[a];//百分位
+ 136   3        }
+ 137   2        
+ 138   2        
+ 139   2        }
+ 140   1        else
+ 141   1        P0=dispbitcode[a];
+ 142   1        
+ 143   1        
+ 144   1        A1=0;
+ 145   1        A2=0;
+ 146   1        A3=0;
+ 147   1        A4=0;
+ 148   1        A5=1;
+ 149   1        Delay(1);
+ 150   1      }
+ 151          
+ 152          void main()//主函数
+ 153          {
+ 154   1       TimeInitial();
+ 155   1       a=1;
+ 156   1       ADD_A=0;
+ 157   1        ADD_B=0;
+ 158   1         ADD_C=0;
+ 159   1         //wen_H=100;
+ 160   1         //wen_L=60;
+ 161   1         LED_R=0;
+ 162   1       while(1)
+ 163   1       {
+ 164   2        ST=0;//关闭转换
+ 165   2        OE=0;//关闭输出
+ 166   2        ST=1;//开启转换
+ 167   2        ST=0;//关闭转换
+ 168   2      
+ 169   2        while(EOC==0);//判断是否转换结束:是则执行以下语句,否则等待
+ 170   2        OE=1;//开启数据输出允许
+ 171   2        getdata=P2;//将数据取走,存放在变量getdata中
+ 172   2        OE=0;//关闭输出
+ 173   2        temp=getdata/1.7;//电压值转换,5V作为参考电压,分成256份
+ 174   2      
+ 175   2        Display(); 
+ 176   2        if(K1==0)
+ 177   2        {
+ 178   3              while(K1==0);
+ 179   3              b++;
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 4   
+
+ 180   3              if(b>2)
+ 181   3              b=0;
+ 182   3              Num2=0;
+ 183   3              if(b!=0)
+ 184   3              LED_R=1;
+ 185   3      
+ 186   3        }
+ 187   2          if(LED_R==0&&b!=0)
+ 188   2        {
+ 189   3              while(LED_R==0);
+ 190   3              a++;
+ 191   3              if(a>8)
+ 192   3              a=1;
+ 193   3              
+ 194   3        }
+ 195   2        /*
+ 196   2        if(K4==0&&flag0==1)
+ 197   2        {
+ 198   2         while(K4==0);
+ 199   2         a++;
+ 200   2         if(a>8)
+ 201   2              a=1;
+ 202   2        }
+ 203   2        */
+ 204   2        if(b==1)
+ 205   2        scan(wen_L[a]);
+ 206   2        else if(b==2)
+ 207   2        scan(wen_H[a]);
+ 208   2      
+ 209   2      
+ 210   2      
+ 211   2        if(b==2&&K2==0)
+ 212   2        {
+ 213   3           while(K2==0);
+ 214   3               if( wen_H[a]<150)
+ 215   3                wen_H[a]= wen_H[a]+10;
+ 216   3         }
+ 217   2         else if(b==1&&K2==0)
+ 218   2        {
+ 219   3           while(K2==0);
+ 220   3               if(wen_H[a]>wen_L[a]&&(wen_H[a]-wen_L[a]>10))
+ 221   3               wen_L[a]=wen_L[a]+10;
+ 222   3         }
+ 223   2         else if(b==1&&K3==0)
+ 224   2        {
+ 225   3           while(K3==0);
+ 226   3               if(wen_L[a]>10)
+ 227   3               wen_L[a]=wen_L[a]-10;
+ 228   3         }
+ 229   2        else if(b==2&&K3==0)
+ 230   2        {
+ 231   3           while(K3==0);
+ 232   3               
+ 233   3               if(wen_H[a]>wen_L[a]&&(wen_H[a]-wen_L[a]>10))
+ 234   3               wen_H[a]=wen_H[a]-10;
+ 235   3         }
+ 236   2         if(b==0&&Num2>10000)
+ 237   2         {
+ 238   3         a++;
+ 239   3         if(a>8)
+ 240   3         a=1;
+ 241   3         Num2=0;
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 5   
+
+ 242   3         
+ 243   3         }
+ 244   2         if(b==0)
+ 245   2         {
+ 246   3          scan(temp);
+ 247   3              tab_8[a]=temp;
+ 248   3              if(a==1)
+ 249   3              {
+ 250   4              
+ 251   4               ADD_A=0;
+ 252   4           ADD_B=0;
+ 253   4           ADD_C=0;   
+ 254   4              }
+ 255   3              else if(a==2)
+ 256   3              {
+ 257   4               ADD_A=1;
+ 258   4           ADD_B=0;
+ 259   4           ADD_C=0;   
+ 260   4              }
+ 261   3                      else if(a==3)
+ 262   3              {
+ 263   4               ADD_A=0;
+ 264   4           ADD_B=1;
+ 265   4           ADD_C=0;   
+ 266   4              }
+ 267   3                      else if(a==4)
+ 268   3              {
+ 269   4               ADD_A=1;
+ 270   4           ADD_B=1;
+ 271   4           ADD_C=0;   
+ 272   4              }
+ 273   3                      else if(a==5)
+ 274   3              {
+ 275   4               ADD_A=0;
+ 276   4           ADD_B=0;
+ 277   4           ADD_C=1;   
+ 278   4              }
+ 279   3                      else if(a==6)
+ 280   3              {
+ 281   4               ADD_A=1;
+ 282   4           ADD_B=0;
+ 283   4           ADD_C=1;   
+ 284   4              }
+ 285   3                      else if(a==7)
+ 286   3              {
+ 287   4               ADD_A=0;
+ 288   4           ADD_B=1;
+ 289   4           ADD_C=1;   
+ 290   4              }
+ 291   3                      else if(a==8)
+ 292   3              {
+ 293   4               ADD_A=1;
+ 294   4           ADD_B=1;
+ 295   4           ADD_C=1;   
+ 296   4              }
+ 297   3               if(tab_8[a]<wen_L[a]||tab_8[a]>wen_H[a])
+ 298   3               {
+ 299   4                
+ 300   4                tab_flag[a] =1;
+ 301   4               
+ 302   4               }
+ 303   3               else if(tab_8[a]>=wen_L[a]&&tab_8[a]<=wen_H[a])
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 6   
+
+ 304   3               tab_flag[a] =0;
+ 305   3      
+ 306   3      
+ 307   3               if(tab_flag[1]||tab_flag[2]||tab_flag[3]||tab_flag[4]||tab_flag[5]||tab_flag[6]||tab_flag[7]||tab_fla
+             -g[8])
+ 308   3               flag2=1;
+ 309   3               else if((tab_flag[1]==0&&tab_flag[2]==0&&tab_flag[3]==0&&tab_flag[4]==0&&tab_flag[5]==0&&tab_flag[6]==0&
+             -&tab_flag[7]==0&&tab_flag[8]==0))
+ 310   3               flag2=0;
+ 311   3         }
+ 312   2              if(flag2==0&&b==0)
+ 313   2              
+ 314   2              LED_R=0;
+ 315   2      
+ 316   2              
+ 317   2      
+ 318   2      
+ 319   2      
+ 320   2        
+ 321   2        
+ 322   2         
+ 323   2       }
+ 324   1      }
+ 325          
+ 326          void t1(void) interrupt 3 using 0//定时器中断服务函数;作用:产生CLK信号
+ 327           {
+ 328   1         TH1=(65536-200)/256;
+ 329   1         TL1=(65536-200)%256;
+ 330   1         CLK=~CLK;
+ 331   1         Num1++;
+ 332   1         if(Num1>2000)
+ 333   1         {
+ 334   2                      Num1=0;
+ 335   2                      flag1=~flag1;   
+ 336   2         }
+ 337   1         
+ 338   1         if(b==0 )
+ 339   1         Num2++;
+ 340   1      
+ 341   1         if(b==0)
+ 342   1         {
+ 343   2         if(Num3<300)
+ 344   2              {
+ 345   3               if(flag2==1)
+ 346   3               LED_R=~LED_R;
+ 347   3               }
+ 348   2               else if(Num3<1000&&b==0)
+ 349   2               LED_R=0;
+ 350   2      
+ 351   2               if(Num3>1000)
+ 352   2               Num3=0;
+ 353   2         }
+ 354   1      
+ 355   1      
+ 356   1      
+ 357   1       } 
+ 358          
+ 359          
+ 360          
+ 361          
+ 362          
+ 363          /*
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 7   
+
+ 364          
+ 365          #include<reg51.h>
+ 366          #define uchar unsigned char
+ 367          #define uint unsigned int
+ 368          //各数字的数码管段码（共阴）
+ 369          uchar code DSY_CODE[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90};
+ 370          sbit CLK=P1^3;          //时钟信号
+ 371          sbit ST=P1^2;           //启动信号
+ 372          sbit EOC=P1^1;          //转换结束信号
+ 373          sbit OE=P1^0;           //输出使能
+ 374          //延时
+ 375          void DelayMS(uint ms)
+ 376          {
+ 377                  uchar i;
+ 378                  while(ms--) for(i=0;i<120;i++);
+ 379          }
+ 380          //显示转换结果
+ 381          void Display_Result(uchar d)
+ 382          {
+ 383                  P2=0x8F;                //第4个数码管显示个位数
+ 384                  P0=DSY_CODE[d%100%10];
+ 385                  //P0=0xc0;
+ 386                  DelayMS(30);
+ 387                  P2=0x4F;                //第3个数码管显示十位数
+ 388                  P0=DSY_CODE[d%100/10];
+ 389                  DelayMS(30);
+ 390                  P2=0x2F;                //第2个数码管显示百位数
+ 391                  P0=DSY_CODE[d/100];
+ 392                  DelayMS(30);
+ 393          }
+ 394          //主程序
+ 395          void main()
+ 396          {
+ 397                  TMOD=0x02;              //T1工作模式2
+ 398                  TH0=0x14;               
+ 399                  TL0=0x00;
+ 400                  IE=0x82;
+ 401                  TR0=1;
+ 402                  //P1=0x3f;              //选择ADC0809的通道3（0111）（P1.4~P1.6）
+ 403                  while(1)
+ 404                  {
+ 405                          ST=0;ST=1;ST=0;         //启动A/D转换
+ 406                          while(EOC==0);          //等待转换完成
+ 407                          OE=1;
+ 408                          Display_Result(P3);
+ 409                          OE=0;
+ 410          
+ 411          
+ 412          
+ 413                  }
+ 414          }
+ 415          //T0定时器中断给ADC0808提供时钟信号
+ 416          void Timer0_INT() interrupt 1
+ 417          {
+ 418                  CLK=~CLK;
+ 419          }
+ 420          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    972    ----
+   CONSTANT SIZE    =     10    ----
+C51 COMPILER V8.08   LED                                                                   06/27/2018 08:58:42 PAGE 8   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     63    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

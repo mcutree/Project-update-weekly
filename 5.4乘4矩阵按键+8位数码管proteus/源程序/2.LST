@@ -1,0 +1,267 @@
+C51 COMPILER V9.01   2                                                                     11/27/2018 23:15:48 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE 2
+OBJECT MODULE PLACED IN 2.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 2.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include "intrins.h"
+   3          #define uchar unsigned char 
+   4          #define uint unsigned int
+   5          #define ulong unsigned long
+   6          sbit wei1 = P1^0;        //数码管的位断开关
+   7          sbit wei2 = P1^1;        
+   8          sbit wei3 = P1^2;
+   9          sbit wei4 = P1^3;
+  10          sbit wei5 = P1^4;        
+  11          sbit wei6 = P1^5;
+  12          sbit wei7 = P1^6;
+  13          sbit wei8 = P1^7;
+  14          bit flag0;
+  15          uchar  key;                //键顺序码
+  16          uchar  dis_buf;            //显示缓存
+  17          uchar  temp;
+  18          unsigned int Num1=0;
+  19          uchar code table_dm[17]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x77,0x7c,0x39,0x5e,0x79,0x71,0
+             -x00};//共阴极数码管断码表      
+  20          //uchar code table_dm[11]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xff};//共阳极数码管断码表
+  21          uint Display_Buffer[8]={16,16,16,16,16,16,16,16}; 
+  22          uint a,n;
+  23          void delayms(uint xms)
+  24          {
+  25   1              int i,j;
+  26   1              for(i=xms;i>0;i--)
+  27   1                      for(j=110;j>0;j--);
+  28   1      }
+  29          void system_Ini()
+  30          {
+  31   1           TMOD = 0x00; //选择模式0  13位计数 最大计数8192
+  32   1               TH0 = (8192 - 1000)/32;
+  33   1               TL0 = (8192 - 1000)%32 ;
+  34   1           IE = 0x8A;   //中断        
+  35   1           TR0  = 1;    //开启T0定时器
+  36   1      }
+  37          void  keyscan(void)
+  38           {      
+  39   1              uchar i;
+  40   1              temp = 0;
+  41   1          P2=0xF0;                 //高四位输入   列为高电平  行为低电平
+  42   1          delayms(1);                          //延时
+  43   1              temp=P2;                 //读P1口 
+  44   1          temp=temp&0xF0;                      //屏蔽低四位
+  45   1          temp=~((temp>>4)|0xF0);       
+  46   1          if(temp==1)   // p1.4 被拉低
+  47   1              key=0;  //第1个按键键值
+  48   1          else if(temp==2)   // p1.5 被拉低
+  49   1              key=1;    //第2个按键键值
+  50   1          else if(temp==4)   // p1.6 被拉低
+  51   1              key=2;   //第3个按键键值
+  52   1          else if(temp==8)   // p1.7 被拉低
+  53   1               key=3;   //第4个按键键值
+  54   1              else
+C51 COMPILER V9.01   2                                                                     11/27/2018 23:15:48 PAGE 2   
+
+  55   1                 key = 16;
+  56   1              
+  57   1          P2=0x0F;             //低四位输入  行为高电平 列为低电平
+  58   1          delayms(1);                  //延时
+  59   1              temp=P2;             //读P1口       
+  60   1          temp=temp&0x0F;
+  61   1          temp=~(temp|0xF0);
+  62   1              if(temp==1)                //第一行  p1.1  被拉低(直接temp==2 是因为我们P1.0空的，是3*4的矩阵键盘)
+  63   1              key=key+0; 
+  64   1          else if(temp==2)               //第一行  p1.1  被拉低(直接temp==2 是因为我们P1.0空的，是3*4的矩阵键盘)
+  65   1              key=key+4; 
+  66   1          else if(temp==4)   //第二行  p1.2  被拉低
+  67   1              key=key+8;
+  68   1          else if(temp==8)   //第三行 p1.3  被拉低
+  69   1              key=key+12;
+  70   1              else
+  71   1                key = 16;
+  72   1                      
+  73   1           dis_buf = key;         //键值入显示缓存
+  74   1               if(dis_buf!=16&&a<3)
+  75   1               a++;
+  76   1           
+  77   1               if(dis_buf!=16&&flag0==0&&a>=2)
+  78   1               {
+  79   2                      flag0=1;
+  80   2                      if(dis_buf==0)
+  81   2                      dis_buf=1;
+  82   2                      else if(dis_buf==1)
+  83   2                      dis_buf=2;
+  84   2                      else if(dis_buf==2)
+  85   2                      dis_buf=3;
+  86   2                      else if(dis_buf==3)
+  87   2                      dis_buf=10;
+  88   2                      else if(dis_buf==7)
+  89   2                      dis_buf=11;
+  90   2                      else if(dis_buf==8)
+  91   2                      dis_buf=7;
+  92   2                      else if(dis_buf==9)
+  93   2                      dis_buf=8;
+  94   2                      else if(dis_buf==10)
+  95   2                      dis_buf=9;
+  96   2                      else if(dis_buf==11)
+  97   2                      dis_buf=12;
+  98   2                      else if(dis_buf==12)
+  99   2                      dis_buf=14;
+ 100   2                      else if(dis_buf==13)
+ 101   2                      dis_buf=0;
+ 102   2                      else if(dis_buf==14)
+ 103   2                      dis_buf=15;
+ 104   2                      else if(dis_buf==15)
+ 105   2                      dis_buf=13;
+ 106   2      
+ 107   2                      for(i=7;i>0;i--)
+ 108   2                      Display_Buffer[i]=Display_Buffer[i-1];
+ 109   2      
+ 110   2                      Display_Buffer[0]=dis_buf;
+ 111   2               }
+ 112   1               if(dis_buf==16)
+ 113   1               {
+ 114   2                      flag0=0;
+ 115   2                      a=0;
+ 116   2               }
+C51 COMPILER V9.01   2                                                                     11/27/2018 23:15:48 PAGE 3   
+
+ 117   1       } 
+ 118          void main(void)
+ 119          { 
+ 120   1              system_Ini();
+ 121   1              while(1)
+ 122   1              {
+ 123   2                      keyscan();
+ 124   2              }
+ 125   1      }
+ 126           void T0zd(void) interrupt 1      //3定时器1的中断号  1定时器0的中断号 0外部中断1 2外部中断2  4串口中断
+ 127          {        
+ 128   1               TH0 = (8192 - 1000)/32;
+ 129   1               TL0 = (8192 - 1000)%32;  
+ 130   1               Num1++;
+ 131   1               if(Num1>2)
+ 132   1               {
+ 133   2                                      Num1=0;
+ 134   2                                      n++;
+ 135   2                                      wei1=wei2=wei3=wei4=wei5=wei6=wei7=wei8=1;      
+ 136   2                                      if(n>7)
+ 137   2                                      n=0;            
+ 138   2                                      if(n==0)
+ 139   2                                      { 
+ 140   3                                              P3=table_dm[Display_Buffer[n]];
+ 141   3                                              wei1=0;
+ 142   3                                              wei2=1;
+ 143   3                                              wei3=1;
+ 144   3                                              wei4=1;
+ 145   3                                              wei5=1;
+ 146   3                                              wei6=1;
+ 147   3                                              wei7=1;
+ 148   3                                              wei8=1;
+ 149   3                                      }
+ 150   2                                      else if(n==1)
+ 151   2                                      {       
+ 152   3                                              P3=table_dm[Display_Buffer[n]];
+ 153   3                                              wei1=1;
+ 154   3                                              wei2=0;
+ 155   3                                              wei3=1;
+ 156   3                                              wei4=1;
+ 157   3                                              wei5=1;
+ 158   3                                              wei6=1;
+ 159   3                                              wei7=1;
+ 160   3                                              wei8=1;
+ 161   3                                      }
+ 162   2                                      else if(n==2)                                   
+ 163   2                                      {                               
+ 164   3                                              P3=table_dm[Display_Buffer[n]];
+ 165   3                                              wei1=1;
+ 166   3                                              wei2=1;
+ 167   3                                              wei3=0;
+ 168   3                                              wei4=1;
+ 169   3                                              wei5=1;
+ 170   3                                              wei6=1;
+ 171   3                                              wei7=1;
+ 172   3                                              wei8=1;
+ 173   3                                      }       
+ 174   2                                      else if(n==3)   
+ 175   2                                      {                                       
+ 176   3                                              P3=table_dm[Display_Buffer[n]];
+ 177   3                                              wei1=1;
+ 178   3                                              wei2=1;
+C51 COMPILER V9.01   2                                                                     11/27/2018 23:15:48 PAGE 4   
+
+ 179   3                                              wei3=1;
+ 180   3                                              wei4=0;
+ 181   3                                              wei5=1;
+ 182   3                                              wei6=1;
+ 183   3                                              wei7=1;
+ 184   3                                              wei8=1;                                 
+ 185   3                                      }
+ 186   2                                      else if(n==4)   
+ 187   2                                      {                                       
+ 188   3                                              P3=table_dm[Display_Buffer[n]];
+ 189   3                                              wei1=1;
+ 190   3                                              wei2=1;
+ 191   3                                              wei3=1;
+ 192   3                                              wei4=1;
+ 193   3                                              wei5=0;
+ 194   3                                              wei6=1;
+ 195   3                                              wei7=1;
+ 196   3                                              wei8=1;                         
+ 197   3                                      }
+ 198   2                                      else if(n==5)   
+ 199   2                                      {
+ 200   3                                              P3=table_dm[Display_Buffer[n]];
+ 201   3                                              wei1=1;
+ 202   3                                              wei2=1;
+ 203   3                                              wei3=1;
+ 204   3                                              wei4=1;
+ 205   3                                              wei5=1;
+ 206   3                                              wei6=0;
+ 207   3                                              wei7=1;
+ 208   3                                              wei8=1;
+ 209   3                                      }
+ 210   2                                      else if(n==6)   
+ 211   2                                      {                       
+ 212   3                                              P3=table_dm[Display_Buffer[n]];
+ 213   3                                              wei1=1;
+ 214   3                                              wei2=1;
+ 215   3                                              wei3=1;
+ 216   3                                              wei4=1;
+ 217   3                                              wei5=1;
+ 218   3                                              wei6=1;
+ 219   3                                              wei7=0;
+ 220   3                                              wei8=1;
+ 221   3                                      }
+ 222   2                                      else if(n==7)   
+ 223   2                                      {                               
+ 224   3                                              P3=table_dm[Display_Buffer[n]];
+ 225   3                                              wei1=1;
+ 226   3                                              wei2=1;
+ 227   3                                              wei3=1;
+ 228   3                                              wei4=1;
+ 229   3                                              wei5=1;
+ 230   3                                              wei6=1;
+ 231   3                                              wei7=1;
+ 232   3                                              wei8=0;
+ 233   3                                      }                                                
+ 234   2                      } 
+ 235   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    799    ----
+   CONSTANT SIZE    =     17    ----
+C51 COMPILER V9.01   2                                                                     11/27/2018 23:15:48 PAGE 5   
+
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     25    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
