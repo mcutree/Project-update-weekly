@@ -1,0 +1,150 @@
+<html>
+<body>
+<pre>
+<h1>礦ision2 Build Log</h1>
+<h2>Project:</h2>
+G:\毕设\proteus仿真\51proteus仿真通过\0708电子时钟\43-数码管闪烁 V0.5\数码管闪烁.uv2
+Project File Date:  05/15/2010
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling 数码管闪烁.c...
+数码管闪烁.C(108): warning C280: 'jay1': unreferenced local variable
+数码管闪烁.C(108): warning C280: 'jay2': unreferenced local variable
+数码管闪烁.C(207): warning C275: expression with possibly no effect
+数码管闪烁.C(221): warning C275: expression with possibly no effect
+数码管闪烁.C(244): warning C275: expression with possibly no effect
+数码管闪烁.C(258): warning C275: expression with possibly no effect
+数码管闪烁.C(282): warning C275: expression with possibly no effect
+数码管闪烁.C(296): warning C275: expression with possibly no effect
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=918
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 9 Warning(s).
+Build target 'Target 1'
+compiling 数码管闪烁.c...
+数码管闪烁.C(108): warning C280: 'jay1': unreferenced local variable
+数码管闪烁.C(108): warning C280: 'jay2': unreferenced local variable
+数码管闪烁.C(207): warning C275: expression with possibly no effect
+数码管闪烁.C(221): warning C275: expression with possibly no effect
+数码管闪烁.C(244): warning C275: expression with possibly no effect
+数码管闪烁.C(258): warning C275: expression with possibly no effect
+数码管闪烁.C(282): warning C275: expression with possibly no effect
+数码管闪烁.C(296): warning C275: expression with possibly no effect
+数码管闪烁.C(357): warning C206: 'relay': missing function-prototype
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RELAY
+    MODULE:  .\obj\数码管闪烁.obj (数码_苌了_)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RELAY
+    MODULE:  .\obj\数码管闪烁.obj (数码_苌了_)
+    ADDRESS: 02D4H
+Program Size: data=64.0 xdata=0 code=902
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 12 Warning(s).
+Build target 'Target 1'
+compiling 数码管闪烁.c...
+数码管闪烁.C(108): warning C280: 'jay1': unreferenced local variable
+数码管闪烁.C(108): warning C280: 'jay2': unreferenced local variable
+数码管闪烁.C(207): warning C275: expression with possibly no effect
+数码管闪烁.C(221): warning C275: expression with possibly no effect
+数码管闪烁.C(244): warning C275: expression with possibly no effect
+数码管闪烁.C(258): warning C275: expression with possibly no effect
+数码管闪烁.C(282): warning C275: expression with possibly no effect
+数码管闪烁.C(296): warning C275: expression with possibly no effect
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 9 Warning(s).
+Build target 'Target 1'
+compiling 数码管闪烁.c...
+数码管闪烁.C(108): warning C280: 'jay1': unreferenced local variable
+数码管闪烁.C(108): warning C280: 'jay2': unreferenced local variable
+数码管闪烁.C(207): warning C275: expression with possibly no effect
+数码管闪烁.C(221): warning C275: expression with possibly no effect
+数码管闪烁.C(244): warning C275: expression with possibly no effect
+数码管闪烁.C(258): warning C275: expression with possibly no effect
+数码管闪烁.C(282): warning C275: expression with possibly no effect
+数码管闪烁.C(296): warning C275: expression with possibly no effect
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 9 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PLAY1?数码_苌了_
+Program Size: data=64.0 xdata=0 code=899
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+compiling 数码管闪烁.c...
+数码管闪烁.C(138): warning C275: expression with possibly no effect
+数码管闪烁.C(152): warning C275: expression with possibly no effect
+数码管闪烁.C(175): warning C275: expression with possibly no effect
+数码管闪烁.C(189): warning C275: expression with possibly no effect
+数码管闪烁.C(213): warning C275: expression with possibly no effect
+数码管闪烁.C(227): warning C275: expression with possibly no effect
+linking...
+Program Size: data=48.0 xdata=0 code=786
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 6 Warning(s).
+Build target 'Target 1'
+linking...
+Program Size: data=48.0 xdata=0 code=786
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling 数码管闪烁.c...
+数码管闪烁.C(138): warning C275: expression with possibly no effect
+数码管闪烁.C(152): warning C275: expression with possibly no effect
+数码管闪烁.C(175): warning C275: expression with possibly no effect
+数码管闪烁.C(189): warning C275: expression with possibly no effect
+数码管闪烁.C(213): warning C275: expression with possibly no effect
+数码管闪烁.C(227): warning C275: expression with possibly no effect
+linking...
+Program Size: data=48.0 xdata=0 code=786
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 6 Warning(s).
+Build target 'Target 1'
+linking...
+Program Size: data=48.0 xdata=0 code=786
+creating hex file from ".\obj\数码管闪烁"...
+".\obj\数码管闪烁" - 0 Error(s), 0 Warning(s).

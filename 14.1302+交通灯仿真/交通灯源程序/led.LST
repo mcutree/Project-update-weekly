@@ -1,0 +1,565 @@
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN led.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE led.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "absacc.h"
+   2          #include"ds1302.h"
+   3          #include <reg51.h>         //此文件中定义了51的一些特殊功能寄存器
+   4          #include<intrins.h>        //头文件
+   5          #define INT8U   unsigned char  //宏定义
+   6          #define INT16U  unsigned int
+   7          #define uchar unsigned char 
+   8          #define uint unsigned int
+   9          #define ulong unsigned long
+  10          
+  11          #define COM8155 XBYTE[0x7ff8]
+  12          #define PA8155 XBYTE[0x7ff9]
+  13          #define PB8155 XBYTE[0x7FFA]
+  14          #define PC8155 XBYTE[0x7ffB]
+  15          
+  16          sbit D0=P0^0;                           //定义IO端口
+  17          sbit D1=P0^1; 
+  18          sbit D2=P0^2;
+  19          sbit D3=P0^3; 
+  20          sbit D4=P0^7; 
+  21          sbit LED_NBZ=P3^0; 
+  22          sbit LED_NBG=P3^1;
+  23          sbit LED_NBY=P3^2; 
+  24          sbit LED_NBR=P3^3;
+  25          
+  26          sbit LED_DXZ=P3^4; 
+  27          sbit LED_DXG=P3^5;
+  28          sbit LED_DXY=P3^6; 
+  29          sbit LED_DXR=P3^7;
+  30          sbit key1=P0^4;
+  31          sbit key2=P0^5;
+  32          sbit key3=P0^6;
+  33          sbit key4=P2^3;
+  34          
+  35          unsigned int LedNumVal;                 //定义变量
+  36          unsigned int Num,Num2,Num3,Num4;
+  37          uchar cent,jishu;
+  38          uchar cent_2;
+  39          uchar cent_shi;
+  40          uchar jishi;
+  41          uchar jishilaba;
+  42          unsigned int nub;
+  43          uchar data1,data2,data3,data4;
+  44          
+  45          bit flag2=0;                              //定义标志
+  46          bit flag3=0;
+  47          bit flag4=0;
+  48          bit flag5=0;
+  49          bit flag6=0;
+  50          bit flag7=0;
+  51          bit flag8=0;
+  52          bit flag_sound=0;
+  53          
+  54          uchar code table_dm[11]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x00};//共阳极数码管断码表   
+  55          uchar code table_dd[10]={0xbf,0x86,0xdb,0xcf,0xe6,0xed,0xfd,0x87,0xff,0xef};//个位带小数点的共阳极数码管断
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 2   
+
+             -码表断码表
+  56          
+  57          
+  58          
+  59          uint Display_Buffer[2]={0,0};                   //定义数组
+  60          uint Display_Buffer2[2]={0,0};
+  61          uint ge,bai,n,k,p,q,abc,aaa,m,bbb,ccc,ddd;
+  62          
+  63          uchar temp,flag,outcomeH,outcomeL,i;  //定义
+  64          
+  65          
+  66          
+  67          
+  68          void delayms(uint xms)                    //延时子程序
+  69          {
+  70   1              uint h,j;
+  71   1              for(h=xms;h>0;h--)
+  72   1                      for(j=110;j>0;j--);
+  73   1      }
+  74          
+  75          
+  76          
+  77          
+  78          void scan(uint data_ad)                   //分解倒计时时间子程序
+  79          {   
+  80   1      
+  81   1              (uint)Display_Buffer[0]=data_ad/10;     
+  82   1              (uint)Display_Buffer[1]=data_ad%10;
+  83   1      
+  84   1         
+  85   1      }
+  86          void scan2(uint data_ad2)                  //分解倒计时时间子程序
+  87          {   
+  88   1      
+  89   1              (uint)Display_Buffer2[0]=data_ad2/10;   
+  90   1              (uint)Display_Buffer2[1]=data_ad2%10;
+  91   1      
+  92   1         
+  93   1      }
+  94          
+  95          
+  96          void system_Ini()                                         //系统初始化
+  97          {
+  98   1           TMOD = 0x01; //选择模式0  13位计数 最大计数8192
+  99   1               TH0 = (8192 - 500)/32;
+ 100   1               TL0 = (8192 - 500)%32  ;
+ 101   1           IE = 0x8A;   //中断        
+ 102   1           TR0  = 1;    //开启T0定时器
+ 103   1      
+ 104   1      
+ 105   1      }
+ 106          
+ 107          
+ 108          
+ 109          main()
+ 110          { 
+ 111   1      
+ 112   1                         system_Ini();                  //系统初始化
+ 113   1                         Ds1302Init();
+ 114   1                              P0=0xff;
+ 115   1                         flag3=0;
+ 116   1                        data1=30;                               //赋予初始值
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 3   
+
+ 117   1                        data2=5;                                      
+ 118   1                        data3=10;
+ 119   1                        data4=45;
+ 120   1      
+ 121   1      
+ 122   1                        m=data1;      
+ 123   1                        p=data4;
+ 124   1                        cent_2=3;
+ 125   1      
+ 126   1      
+ 127   1                 while(1)                     //大循环
+ 128   1              {  
+ 129   2      
+ 130   2                      Ds1302ReadTime();
+ 131   2      
+ 132   2      
+ 133   2                      scan(m);                //拆解数据 //m
+ 134   2                      scan2(p);
+ 135   2      
+ 136   2                if(LedNumVal>250)     //1秒数据处理
+ 137   2                {
+ 138   3                 LedNumVal=0;
+ 139   3                 if(m==1)
+ 140   3                 {
+ 141   4                 cent++;
+ 142   4                 
+ 143   4                if(cent>3)
+ 144   4                cent=0;
+ 145   4                 if(cent==0)
+ 146   4                 m=data1;
+ 147   4                 if(cent==1)
+ 148   4                 m=data2;
+ 149   4                 if(cent==2)
+ 150   4                 m=data3;
+ 151   4                 if(cent==3)
+ 152   4                 m=data4;       
+ 153   4                 }
+ 154   3                 else
+ 155   3                 m--; 
+ 156   3      
+ 157   3                 if(p==1)
+ 158   3                 {
+ 159   4                 cent_2++;
+ 160   4                 if(cent_2>3)
+ 161   4                  cent_2=0;
+ 162   4                 if(cent_2==0)
+ 163   4                 p=data1;
+ 164   4                 if(cent_2==1)
+ 165   4                 p=data2;
+ 166   4                 if(cent_2==2)
+ 167   4                 p=data3;
+ 168   4                 if(cent_2==3)
+ 169   4                 p=data4;       
+ 170   4                 }
+ 171   3                 else
+ 172   3                 p--;
+ 173   3                
+ 174   3                }
+ 175   2                 if(flag2==0)           //正常状态下，指示灯状态
+ 176   2                {
+ 177   3                if(cent==0)
+ 178   3                {
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 4   
+
+ 179   4                      LED_NBZ=0; 
+ 180   4                      LED_NBG=1;
+ 181   4                      LED_NBY=0; 
+ 182   4                      LED_NBR=0;  
+ 183   4                
+ 184   4                }
+ 185   3                        if(cent==1)
+ 186   3                {
+ 187   4                      LED_NBZ=0; 
+ 188   4                      LED_NBG=0;
+ 189   4                      LED_NBY=1; 
+ 190   4                      LED_NBR=0;  
+ 191   4                
+ 192   4                }
+ 193   3                        if(cent==2)
+ 194   3                {
+ 195   4                      LED_NBZ=1; 
+ 196   4                      LED_NBG=0;
+ 197   4                      LED_NBY=0; 
+ 198   4                      LED_NBR=0;  
+ 199   4                
+ 200   4                }
+ 201   3                        if(cent==3)
+ 202   3                {
+ 203   4                      LED_NBZ=0; 
+ 204   4                      LED_NBG=0;
+ 205   4                      LED_NBY=0; 
+ 206   4                      LED_NBR=1;  
+ 207   4                
+ 208   4                }
+ 209   3      
+ 210   3              if(cent_2==0)
+ 211   3                {
+ 212   4                      LED_DXZ=0; 
+ 213   4                      LED_DXG=1;
+ 214   4                      LED_DXY=0; 
+ 215   4                      LED_DXR=0;  
+ 216   4                
+ 217   4                }
+ 218   3                        if(cent_2==1)
+ 219   3                {
+ 220   4                      LED_DXZ=0; 
+ 221   4                      LED_DXG=0;
+ 222   4                      LED_DXY=1; 
+ 223   4                      LED_DXR=0;  
+ 224   4                
+ 225   4                }
+ 226   3                        if(cent_2==2)
+ 227   3                {
+ 228   4                      LED_DXZ=1; 
+ 229   4                      LED_DXG=0;
+ 230   4                      LED_DXY=0; 
+ 231   4                      LED_DXR=0;  
+ 232   4                
+ 233   4                }
+ 234   3                        if(cent_2==3)
+ 235   3                {
+ 236   4                      LED_DXZ=0; 
+ 237   4                      LED_DXG=0;
+ 238   4                      LED_DXY=0; 
+ 239   4                      LED_DXR=1;  
+ 240   4                
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 5   
+
+ 241   4                }
+ 242   3                }
+ 243   2                 else                    //禁行状态下，指示灯状态
+ 244   2                {
+ 245   3                      LED_NBZ=0; 
+ 246   3                      LED_NBG=0;
+ 247   3                      LED_NBY=0; 
+ 248   3                      LED_NBR=1; 
+ 249   3                      LED_DXZ=0; 
+ 250   3                      LED_DXG=0;
+ 251   3                      LED_DXY=0; 
+ 252   3                      LED_DXR=1; 
+ 253   3                
+ 254   3                }
+ 255   2                        if(key3==0)                           //K1，禁行/解除按键处理
+ 256   2                {
+ 257   3                
+ 258   3                              while(key3==0);
+ 259   3                              flag2=~flag2;
+ 260   3              
+ 261   3                        LedNumVal=901;
+ 262   3                        m=1;
+ 263   3                        p=1;
+ 264   3                        cent=3;
+ 265   3                        cent_2=2; 
+ 266   3                      D4=~D4;
+ 267   3                }
+ 268   2      
+ 269   2      
+ 270   2                
+ 271   2      
+ 272   2              if(key1==0&&flag2==0)
+ 273   2              {
+ 274   3                      while(key1==0);
+ 275   3                      flag3=0;
+ 276   3                      if(flag3==0)
+ 277   3              {
+ 278   4                      if(shi>7&&shi<12)
+ 279   4                      {
+ 280   5                              data1=15;                                 //赋予初始值
+ 281   5                              data2=5;                                        
+ 282   5                              data3=10;
+ 283   5                              data4=30;               
+ 284   5                      }
+ 285   4                      else if(shi>11&&shi<19)
+ 286   4                      {
+ 287   5                              data1=30;                                 //赋予初始值
+ 288   5                              data2=5;                                        
+ 289   5                              data3=10;
+ 290   5                              data4=45;
+ 291   5                      }
+ 292   4                      else if(shi<8||shi>18)
+ 293   4                      {
+ 294   5                              data1=45;                                 //赋予初始值
+ 295   5                              data2=5;                                        
+ 296   5                              data3=10;
+ 297   5                              data4=60;
+ 298   5                      }       
+ 299   4              }
+ 300   3              
+ 301   3                        
+ 302   3                        m=data1;      
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 6   
+
+ 303   3                        p=data4;
+ 304   3                        cent=0;
+ 305   3                        cent_2=3;
+ 306   3      
+ 307   3              }
+ 308   2                      if(key2==0&&flag2==0)
+ 309   2              {
+ 310   3                      while(key2==0);
+ 311   3                      flag3=1;
+ 312   3                      if(flag3==1)
+ 313   3              {
+ 314   4                      if(shi>7&&shi<12)
+ 315   4                      {
+ 316   5                              data1=30;                                 //赋予初始值
+ 317   5                              data2=5;                                        
+ 318   5                              data3=10;
+ 319   5                              data4=45;               
+ 320   5                      }
+ 321   4                      else if(shi>11&&shi<19)
+ 322   4                      {
+ 323   5                              data1=15;                                 //赋予初始值
+ 324   5                              data2=5;                                        
+ 325   5                              data3=10;
+ 326   5                              data4=30;
+ 327   5                      }
+ 328   4                      else if(shi<8||shi>18)
+ 329   4                      {
+ 330   5                              data1=45;                                 //赋予初始值
+ 331   5                              data2=5;                                        
+ 332   5                              data3=10;
+ 333   5                              data4=60;
+ 334   5                      }       
+ 335   4              }
+ 336   3              
+ 337   3                        
+ 338   3                        m=data1;      
+ 339   3                        p=data4;
+ 340   3                        cent=0;
+ 341   3                        cent_2=3;
+ 342   3      
+ 343   3              }
+ 344   2      
+ 345   2      
+ 346   2      
+ 347   2      
+ 348   2      
+ 349   2      
+ 350   2      
+ 351   2      
+ 352   2      
+ 353   2      
+ 354   2      
+ 355   2              if(flag3==0)
+ 356   2              {
+ 357   3                      if(shi>7&&shi<12)
+ 358   3                      {
+ 359   4                              data1=15;                                 //赋予初始值
+ 360   4                              data2=5;                                        
+ 361   4                              data3=10;
+ 362   4                              data4=30;               
+ 363   4                      }
+ 364   3                      else if(shi>11&&shi<19)
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 7   
+
+ 365   3                      {
+ 366   4                              data1=30;                                 //赋予初始值
+ 367   4                              data2=5;                                        
+ 368   4                              data3=10;
+ 369   4                              data4=45;
+ 370   4                      }
+ 371   3                      else if(shi<8||shi>18)
+ 372   3                      {
+ 373   4                              data1=45;                                 //赋予初始值
+ 374   4                              data2=5;                                        
+ 375   4                              data3=10;
+ 376   4                              data4=60;
+ 377   4                      }       
+ 378   3              }
+ 379   2              else
+ 380   2              {
+ 381   3                      if(flag3==1)
+ 382   3                      {
+ 383   4                              if(shi>7&&shi<12)
+ 384   4                              {
+ 385   5                                      data1=30;                                 //赋予初始值
+ 386   5                                      data2=5;                                        
+ 387   5                                      data3=10;
+ 388   5                                      data4=45;               
+ 389   5                              }
+ 390   4                              else if(shi>11&&shi<19)
+ 391   4                              {
+ 392   5                                      data1=15;                                 //赋予初始值
+ 393   5                                      data2=5;                                        
+ 394   5                                      data3=10;
+ 395   5                                      data4=30;
+ 396   5                              }
+ 397   4                              else if(shi<8||shi>18)
+ 398   4                              {
+ 399   5                                      data1=45;                                 //赋予初始值
+ 400   5                                      data2=5;                                        
+ 401   5                                      data3=10;
+ 402   5                                      data4=60;
+ 403   5                              }       
+ 404   4                      }       
+ 405   3              }
+ 406   2      
+ 407   2                /*
+ 408   2                        if(key3==0)
+ 409   2                {
+ 410   2                while(key3==0);
+ 411   2                 data1=45;
+ 412   2                      data2=5;
+ 413   2                       data3=10;
+ 414   2                        data4=60;     
+ 415   2                        LedNumVal=901;
+ 416   2                        m=1;
+ 417   2                        p=1;
+ 418   2                        cent=3;
+ 419   2                        cent_2=2; 
+ 420   2                
+ 421   2                }
+ 422   2                */
+ 423   2      
+ 424   2      
+ 425   2      
+ 426   2      
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 8   
+
+ 427   2      
+ 428   2                 
+ 429   2               
+ 430   2          }
+ 431   1      }
+ 432          
+ 433           void T0zd(void) interrupt 1      //3定时器1的中断号  1定时器0的中断号 0外部中断1 2外部中断2  4串口中断
+ 434          {
+ 435   1      
+ 436   1               
+ 437   1               TH0 = (8192 - 500)/32;
+ 438   1               TL0 = (8192 - 500)%32;    
+ 439   1               if(flag2==0)            //正常状态下，1秒计数器
+ 440   1               LedNumVal++; 
+ 441   1               Num++; 
+ 442   1               Num2++; 
+ 443   1               Num3++;
+ 444   1               Num4++;
+ 445   1               if(Num2>1)                               //东西方向数码管动态扫描
+ 446   1               {
+ 447   2               Num2=0;
+ 448   2               n++;
+ 449   2                      D0=1;
+ 450   2                      D1=1;
+ 451   2                      D2=1;
+ 452   2                      D3=1;
+ 453   2               if(n>3)
+ 454   2               n=0;
+ 455   2               if(n==0||n==1)
+ 456   2                P1=table_dm[Display_Buffer2[n]];
+ 457   2                else 
+ 458   2                P1=table_dm[Display_Buffer[n-2]];
+ 459   2                if(n==0)
+ 460   2                 {
+ 461   3                  D0=0;
+ 462   3                      D1=1;
+ 463   3                      D2=1;
+ 464   3                      D3=1;      
+ 465   3                 }
+ 466   2                      else if(n==1)
+ 467   2                 {
+ 468   3                  D0=1;
+ 469   3                      D1=0;
+ 470   3                      D2=1;
+ 471   3                      D3=1;      
+ 472   3                 }
+ 473   2                              else if(n==2)
+ 474   2                 {
+ 475   3                  D0=1;
+ 476   3                      D1=1;
+ 477   3                      D2=0;
+ 478   3                      D3=1;      
+ 479   3                 }
+ 480   2                              else if(n==3)
+ 481   2                 {
+ 482   3                  D0=1;
+ 483   3                      D1=1;
+ 484   3                      D2=1;
+ 485   3                      D3=0;      
+ 486   3                 }
+ 487   2               
+ 488   2               }
+C51 COMPILER V8.08   LED                                                                   06/30/2018 16:00:12 PAGE 9   
+
+ 489   1                 /*
+ 490   1                       if(Num3>20)        //南北方向数码管动态扫描
+ 491   1               {
+ 492   1               Num3=0;
+ 493   1               k++;
+ 494   1                      D2=1;
+ 495   1                      D3=1;
+ 496   1               if(k>1)
+ 497   1               k=0;
+ 498   1                P2=table_dm[Display_Buffer[k]];
+ 499   1                if(k==0)
+ 500   1                 {
+ 501   1                  D2=0;
+ 502   1                      D3=1;      
+ 503   1                 }
+ 504   1                      if(k==1)
+ 505   1                 {
+ 506   1                  D2=1;
+ 507   1                      D3=0;      
+ 508   1                 }
+ 509   1               
+ 510   1               }
+ 511   1               */
+ 512   1      
+ 513   1      
+ 514   1               
+ 515   1      }
+ 516                   
+ 517          
+ 518          
+ 519          
+ 520          
+ 521          
+ 522          
+ 523          
+ 524          
+ 525          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1082    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     59    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      8    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

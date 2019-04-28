@@ -1,0 +1,53 @@
+C51 COMPILER V9.01   DELAY                                                                 06/02/2018 22:56:37 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DELAY
+OBJECT MODULE PLACED IN delay.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE delay.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          
+   2          /*************  功能说明        **************
+   3          
+   4          本文件为STC15xxx系列的端口初始化程序,用户几乎可以不修改这个程序.
+   5          
+   6          
+   7          ******************************************/
+   8          
+   9          #include        "delay.h"
+  10          
+  11          
+  12          
+  13          //========================================================================
+  14          // 函数: void  delay_ms
+  15          // 描述: 延时函数。
+  16          // 参数: ms,要延时的ms数, 这里只支持1~65536ms. 自动适应主时钟.
+  17          // 返回: none.
+  18          // 版本: VER1.0
+  19          // 日期: 2013-4-1
+  20          // 备注: 
+  21          //========================================================================
+  22          void delay_ms(u16 ms)
+  23          {
+  24   1         u16 i;
+  25   1               do{
+  26   2                  i = (u16)(MAIN_Fosc / 13000);
+  27   2                        while(--i)    ;   //14T per loop
+  28   2           }while(--ms);
+  29   1      }
+  30          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     23    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

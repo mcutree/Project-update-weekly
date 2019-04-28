@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"xian.obj" 
+TO "xian" 
+RAMSIZE(256) 

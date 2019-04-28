@@ -1,0 +1,277 @@
+C51 COMPILER V9.01   LED_595                                                               06/02/2018 22:56:36 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LED_595
+OBJECT MODULE PLACED IN LED_595.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LED_595.C BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "string.h"
+   2          #include "delay.h"
+   3          #include "uart.h"
+   4          #define MAIN_Fosc               22118400L       //定义主时钟
+   5          #define RX1_Lenth               32                      //串口接收缓冲长度
+   6          #define BaudRate1               115200UL        //选择波特率
+   7          
+   8          
+   9          #define Timer1_Reload   (65536UL -(MAIN_Fosc / 4 / BaudRate1))          //Timer 1 重装值， 对应300KHZ
+  10          #define Timer2_Reload   (65536UL -(MAIN_Fosc / 4 / BaudRate1))          //Timer 2 重装值， 对应300KHZ
+  11          
+  12          #include        "STC15Fxxxx.H"
+  13          #define uchar unsigned char
+  14          #define uint  unsigned int
+  15          #define ulong  unsigned long
+  16          
+  17          
+  18          
+  19          
+  20          //u8 Time_count=0;
+  21          bdata u8 Flag;//定时器标志位
+  22          sbit Timer0_start =Flag^0;      //定时器0延时启动计数器
+  23          sbit Uart2_Start  =Flag^1;      //串口2开始接收数据
+  24          sbit Uart2_End          =Flag^2;        //串口2接收数据结束
+  25          
+  26          bit flag0=0;
+  27          
+  28          
+  29          sbit SDA1=P1^4;         //数据串入595引脚
+  30          sbit SCL1=P1^5;         //595的位移时钟引脚
+  31          
+  32          sbit SCL11=P1^2;                //数据串入595引脚
+  33          
+  34          sbit SCL2=P1^3;         //595的并出时钟引脚
+  35          
+  36          
+  37          
+  38          sbit key=P1^7;          //595的并出时钟引脚
+  39          
+  40          
+  41          
+  42          unsigned char code duan[]={     0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,
+  43                               0x80,0x90,0x83,0xc6,0xa1,0x86,0x8e };//共阳数码管低电平点亮
+  44          unsigned char code wei[]={0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};//高电平位选
+  45          unsigned char Data1,Data2,Data3,Data4,Data5;
+  46          unsigned char cent[10]={0,0,0,0,0,0,0,0,0,0};
+  47          unsigned char cent1[10]={0,0,0,0,0,0,0,0,0,0};
+  48          unsigned char receive[2]={0,0};
+  49          
+  50          
+  51          
+  52          /*************  本地函数声明    **************/
+  53          void GPIO_config(void); //端口初始化配置
+  54          void Timer0Init(void);  //定时器0初始化
+  55          void CLR_Buf2(void);    //清除串口2接收缓存
+C51 COMPILER V9.01   LED_595                                                               06/02/2018 22:56:36 PAGE 2   
+
+  56          u8 Find(u8 *a);         //查找字符串
+  57          void Second_AT_Command(u8 *b,u8 *a,u8 wait_time); //发送AT指令函数
+  58          void Set_Pdu_Mode(void);//设置短信模式PDU
+  59          void Wait_CREG(void);   //查询等待模块注册成功
+  60          void Send_Pdu_Sms(void);//发送一条中文短信
+  61          
+  62          
+  63          void Delay(void)                       //延时函数
+  64          {
+  65   1       unsigned char i,j;
+  66   1       for(i=133;i>0;i--)
+  67   1       for(j=6;j>0;j--);
+  68   1      }
+  69          /*********************************/
+  70          void W595_in(unsigned char Data)   //完成一个字节8位的输入
+  71          {
+  72   1        unsigned char i;
+  73   1        for(i=0;i<8;i++)
+  74   1        {
+  75   2         SCL1=0;                        //拉低位移时钟信号线
+  76   2         SDA1=Data&0x80;       //将最高位赋值给SDA1，即595数据串入引脚
+  77   2         Data<<=1;             //数据左移一位
+  78   2         SCL1=1;                       //拉高位移时钟信号线 ，完成一位的存储
+  79   2        }
+  80   1      }
+  81          
+  82          void W595_in1(unsigned char Data1)   //完成一个字节8位的输入
+  83          {
+  84   1        unsigned char i;
+  85   1        for(i=0;i<8;i++)
+  86   1        {
+  87   2         SCL11=0;                       //拉低位移时钟信号线
+  88   2         SDA1=Data1&0x80;      //将最高位赋值给SDA1，即595数据串入引脚
+  89   2         Data1<<=1;            //数据左移一位
+  90   2         SCL11=1;                      //拉高位移时钟信号线 ，完成一位的存储
+  91   2        }
+  92   1      }
+  93          /*****************************/
+  94          void W595_out(void)      //完成并出数据功能
+  95          {
+  96   1       SCL2=0;                  //拉低并出时钟信号线
+  97   1       _nop_();
+  98   1       SCL2=1;                  //拉高并出时钟信号线
+  99   1      
+ 100   1      }
+ 101          /**************************/
+ 102          
+ 103          void Disp(uchar *s)     
+ 104          {
+ 105   1              unsigned char i;
+ 106   1              for(i=0;i<10;i++)
+ 107   1              W595_in(wei[s[9-i]]);
+ 108   1              W595_out();
+ 109   1              Delay();
+ 110   1      }
+ 111          void Disp1(uchar *w)    
+ 112          {
+ 113   1              unsigned char i;
+ 114   1              for(i=0;i<10;i++)
+ 115   1              W595_in1(wei[w[9-i]]);
+ 116   1              W595_out();
+ 117   1              Delay();
+C51 COMPILER V9.01   LED_595                                                               06/02/2018 22:56:36 PAGE 3   
+
+ 118   1      }
+ 119          void main(void)
+ 120          {
+ 121   1              //GPIO_config();
+ 122   1              Timer0Init();
+ 123   1      
+ 124   1      
+ 125   1              EA=1;   //开总中断
+ 126   1              Data1=76;
+ 127   1              
+ 128   1              flag0=1;
+ 129   1              
+ 130   1              while(1)
+ 131   1              {
+ 132   2                      unsigned char i;
+ 133   2                      if(key==0&&flag0==0)
+ 134   2                      {
+ 135   3                              flag0=1;
+ 136   3                              Data1++;        
+ 137   3                              while(key==0);
+ 138   3                      }
+ 139   2      
+ 140   2                      //if(flag0==1&&receive[0]<=78)
+ 141   2                      if(flag0==1&&Data1<=78)
+ 142   2                      {       
+ 143   3                              
+ 144   3                              ES=1;
+ 145   3                              flag0=0;
+ 146   3                              Data2=(Data1-1)/8;
+ 147   3                              Data3=((Data1-1)%8+1);
+ 148   3                              cent[Data2]=Data3;
+ 149   3      
+ 150   3                              
+ 151   3                              Disp(cent);
+ 152   3                              receive[0]=0;
+ 153   3                              for(i=0;i<10;i++)
+ 154   3                              cent[i]=0;
+ 155   3                      }
+ 156   2                      else if(flag0==1&&Data1>78&&Data1<157)
+ 157   2                      {  
+ 158   3                              
+ 159   3                              ES=1;
+ 160   3                              flag0=0;
+ 161   3      
+ 162   3                              Data2=(Data1-79)/8;
+ 163   3                              Data3=((Data1-79)%8+1);
+ 164   3                              cent1[Data2]=Data3;
+ 165   3      
+ 166   3                              
+ 167   3                              Disp1(cent1);
+ 168   3                              receive[0]=0;
+ 169   3                              for(i=0;i<10;i++)
+ 170   3                              cent1[i]=0;
+ 171   3                      }
+ 172   2      
+ 173   2      
+ 174   2                      else if(flag0==1&&receive[0]>156)
+ 175   2                      {
+ 176   3                              ES=1;
+ 177   3                              receive[0]=0;
+ 178   3                              flag0=0;
+ 179   3                      }
+C51 COMPILER V9.01   LED_595                                                               06/02/2018 22:56:36 PAGE 4   
+
+ 180   2      
+ 181   2                      
+ 182   2                      
+ 183   2              }
+ 184   1              
+ 185   1      }
+ 186          
+ 187          /*******************************************************************************
+ 188          * 函数名 : Uart1 
+ 189          * 描述   : 串口1中断服务入口函数
+ 190          * 输入   : 
+ 191          * 输出   : 
+ 192          * 返回   : 
+ 193          * 注意   : 
+ 194          *******************************************************************************/
+ 195          
+ 196          void    GPIO_config(void)
+ 197          {
+ 198   1                      P3M1 &= 0XC3;  //配置P32~P35为推挽输出
+ 199   1                      P3M0 |= ~0XC3;
+ 200   1              
+ 201   1      }
+ 202          void Timer0Init(void)           //20毫秒@22.1184MHz
+ 203          {
+ 204   1      
+ 205   1              S1_8bit();                              //8位数据
+ 206   1              S1_USE_P30P31();                //UART1 使用P30 P31口   默认
+ 207   1      
+ 208   1      
+ 209   1              AUXR &= ~(1<<4);        //Timer stop            波特率使用Timer2产生
+ 210   1              AUXR |= 0x01;           //S1 BRT Use Timer2;
+ 211   1              AUXR |=  (1<<2);        //Timer2 set as 1T mode
+ 212   1              TH2 = (u8)(Timer2_Reload >> 8);
+ 213   1              TL2 = (u8)Timer2_Reload;
+ 214   1              AUXR |=  (1<<4);        //Timer run enable
+ 215   1      
+ 216   1              REN = 1;        //允许接收
+ 217   1              ES  = 1;        //允许中断
+ 218   1      
+ 219   1              EA = 1;         //允许全局中断
+ 220   1              
+ 221   1      
+ 222   1      
+ 223   1      }
+ 224          
+ 225          void UART1_int (void) interrupt UART1_VECTOR
+ 226          {
+ 227   1              
+ 228   1              if(RI==1)
+ 229   1              {
+ 230   2                      static unsigned char count;//串口接收计数的变量
+ 231   2                      receive[count]=SBUF;
+ 232   2                      flag0=1;        
+ 233   2                      RI=0;//手动清某个寄存器，大家都懂的
+ 234   2                      ES  = 0;
+ 235   2              }
+ 236   1              if(TI)
+ 237   1              {
+ 238   2                      TI = 0;
+ 239   2              }
+ 240   1      
+ 241   1      
+C51 COMPILER V9.01   LED_595                                                               06/02/2018 22:56:36 PAGE 5   
+
+ 242   1      }
+ 243          
+ 244          
+ 245          
+ 246          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    425    ----
+   CONSTANT SIZE    =     24    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     29       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

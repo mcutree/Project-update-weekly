@@ -1,0 +1,103 @@
+C51 COMPILER V9.01   LCD1602                                                               06/24/2018 18:03:28 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN LCD1602.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE LCD1602.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <intrins.h>
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          
+   6          sbit RS = P2^0;
+   7          sbit RW = P2^1;
+   8          sbit EN = P2^2;
+   9          
+  10          void Delayms(uint ms)
+  11          {
+  12   1              uchar i;
+  13   1              while(ms--)
+  14   1              {
+  15   2                      for(i=0;i<120;i++);
+  16   2              }
+  17   1      }
+  18          
+  19          uchar Busy_Check()
+  20          {
+  21   1              uchar LCD_Status;
+  22   1              RS = 0;
+  23   1              RW = 1;
+  24   1              EN = 1;
+  25   1              Delayms(1);
+  26   1              LCD_Status = P0;
+  27   1              EN = 0;
+  28   1              return LCD_Status;
+  29   1      }
+  30          
+  31          void Write_LCD_Command(uchar cmd)
+  32          {
+  33   1              while((Busy_Check()&0x80)==0x80);
+  34   1              RS = 0;
+  35   1              RW = 0;
+  36   1              EN = 0;
+  37   1              P0 = cmd;
+  38   1              EN = 1;
+  39   1              Delayms(1);
+  40   1              EN = 0;
+  41   1      }
+  42          
+  43          void Write_LCD_Data(uchar dat)
+  44          {
+  45   1              while((Busy_Check()&0x80)==0x80);
+  46   1              RS = 1;
+  47   1              RW = 0;
+  48   1              EN = 0;
+  49   1              P0 = dat;
+  50   1              EN = 1;
+  51   1              Delayms(1);
+  52   1              EN = 0;
+  53   1      }
+  54          
+  55          void Initialize_LCD()
+C51 COMPILER V9.01   LCD1602                                                               06/24/2018 18:03:28 PAGE 2   
+
+  56          {
+  57   1              Write_LCD_Command(0x38);
+  58   1              Delayms(1);     
+  59   1              Write_LCD_Command(0x01);
+  60   1              Delayms(1);     
+  61   1              Write_LCD_Command(0x06);
+  62   1              Delayms(1);     
+  63   1              Write_LCD_Command(0x0c);
+  64   1              Delayms(1);     
+  65   1      }
+  66          
+  67          void ShowString(uchar x,uchar y,uchar *str)
+  68          {
+  69   1              uchar i = 0;
+  70   1              if(y == 0)
+  71   1                      Write_LCD_Command(0x80 | x);
+  72   1              if(y == 1)
+  73   1                      Write_LCD_Command(0xc0 | x);
+  74   1              for(i=0;i<16;i++)
+  75   1              {
+  76   2                      Write_LCD_Data(str[i]); 
+  77   2              }
+  78   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    186    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

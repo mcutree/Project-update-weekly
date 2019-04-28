@@ -1,0 +1,105 @@
+C51 COMPILER V9.00   LCD1602                                                               01/01/2019 17:59:09 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE LCD1602
+OBJECT MODULE PLACED IN lcd1602.OBJ
+COMPILER INVOKED BY: E:\keil\C51\BIN\C51.EXE lcd1602.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "lcd1602.h"
+   2          
+   3          void delay(unsigned int t)       //延时
+   4          {    
+   5   1              while(t--);
+   6   1      }
+   7          
+   8          void  LCD_Wait(void)    //读忙状态
+   9          {                                                                  
+  10   1              LcdRs=0;
+  11   1              LcdRw=1;
+  12   1              LcdEn=1;delay(10);LcdEn=0;      //下降沿        
+  13   1              while(Lcdbf)
+  14   1              {
+  15   2                LcdEn=0;LcdEn=1;       //仿真才需要此语句,实际硬件中不需要
+  16   2              }                       
+  17   1      } 
+  18          
+  19          void LCD_Write(bit style, unsigned char input)   //写数据1/命令0
+  20          {
+  21   1              LcdRs=style;
+  22   1              LcdRw=0;                
+  23   1              DBPort=input;   
+  24   1              LcdEn=1;delay(10);LcdEn=0;                      
+  25   1              LCD_Wait();     
+  26   1      }
+  27          
+  28          void GotoXY(unsigned char x, unsigned char y)  //移动光标到指定位置
+  29          {
+  30   1              if(y==0)        LCD_Write(0,0x80|x);
+  31   1              if(y==1)    LCD_Write(0,0xc0|x);
+  32   1      }
+  33          
+  34          void LCD_Initial(void)                    //初始化LCD
+  35          {
+  36   1              LCD_Write(0,0x38);               //8位数据端口,2行显示,5*7点阵
+  37   1              delay(300);
+  38   1              delay(300);
+  39   1              LCD_Write(0,0x0c);           //显示模式
+  40   1              LCD_Write(0,0x01);           //清屏
+  41   1              LCD_Write(0,0x06);           //输入模式
+  42   1      }
+  43          
+  44          
+  45          
+  46          void Print(unsigned char *str, unsigned char x, unsigned char y)         //指定坐标输出字符串
+  47          {
+  48   1              unsigned char i=0, temp=0;
+  49   1              while(*str)  
+  50   1              {
+  51   2                      if(i==0 && temp==0)
+  52   2                      {
+  53   3                              GotoXY(x+i, y);
+  54   3                              temp = 1;
+  55   3                      }
+C51 COMPILER V9.00   LCD1602                                                               01/01/2019 17:59:09 PAGE 2   
+
+  56   2                      if(temp == 1)
+  57   2                      {
+  58   3                              GotoXY(x+i, y);
+  59   3                              LCD_Write(1,*str++);
+  60   3                              i++;
+  61   3                      }
+  62   2              }
+  63   1      }
+  64          
+  65          void display_int(unsigned int dat, unsigned char x, unsigned char y, unsigned char num_size)
+  66          {
+  67   1                      unsigned char i;
+  68   1                      unsigned char display[5] = {0};
+  69   1                      display[0]      = dat / 10000;
+  70   1                      display[1]      = dat % 10000 / 1000;
+  71   1                      display[2]      = dat % 10000 % 1000 / 100;
+  72   1                      display[3]      = dat % 10000 % 1000 % 100 / 10;
+  73   1                      display[4]      = dat % 10000 % 1000 % 100 % 10;
+  74   1                      GotoXY(x, y);
+  75   1                      for(i=5-num_size; i<5; i++)
+  76   1                      {
+  77   2                              LCD_Write(1, display[i]+'0');
+  78   2                      }
+  79   1      }
+  80          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    384    ----
+   CONSTANT SIZE    =      5    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      18
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

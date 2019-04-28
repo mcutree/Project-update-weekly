@@ -1,0 +1,5 @@
+"STARTUP.obj",
+"232.obj",
+"LCD1602.obj" 
+TO "int" 
+RAMSIZE(256) 

@@ -1,0 +1,278 @@
+C51 COMPILER V9.01   2                                                                     11/28/2018 13:41:49 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE 2
+OBJECT MODULE PLACED IN 2.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 2.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #define uchar unsigned char    //ºê¶¨Òå
+   3          #define uint unsigned int
+   4          sbit TEST_LED = P1^0;               //work LED, flash once per second 
+   5          uint count;                         //1000 times counter
+   6          uchar a,b,c;
+   7          sbit key1=P0^0;
+   8          sbit key2=P0^1;
+   9          
+  10          void delay(uint i)              //ÑÓÊ±×Ó³ÌÐò
+  11          {
+  12   1              while(i--);     
+  13   1      }
+  14          void main()
+  15          {
+  16   1              TMOD = 0x00; //Ñ¡Ôñ¶¨Ê±Æ÷Ä£Ê½
+  17   1              TH0 = (8192 - 1000)/32;     //¶¨Ê±Æ÷0³õÖµ,1ms
+  18   1              TL0 = (8192 - 1000)%32;         //¶¨Ê±Æ÷0³õÖµ,1ms
+  19   1          TR0 = 1;                    //timer0 start running
+  20   1          ET0 = 1;                    //enable timer0 interrupt
+  21   1          EA = 1;                     //open global interrupt switch
+  22   1          
+  23   1              a=0;
+  24   1              c=0;
+  25   1              b=0;
+  26   1              P0=0xff;
+  27   1              P1=0xff;
+  28   1              P3=0xfF;
+  29   1              P2=0xff;
+  30   1          while (1)
+  31   1              {
+  32   2                      if(key1==0&&a==0)          //×ó¼üÅÐ¶Ï
+  33   2                      {
+  34   3                              delay(10);
+  35   3                              if(key1==0&&a==0)
+  36   3                              {
+  37   4                                      a=1;
+  38   4                                      b=0;
+  39   4                                      c=0;
+  40   4                                      count = 0;
+  41   4                              }               
+  42   3                      }
+  43   2                      if(key2==0&&a==0)               //ÓÒ¼üÅÐ¶Ï
+  44   2                      {
+  45   3                              delay(10);
+  46   3                              if(key2==0&&a==0)
+  47   3                              {         
+  48   4                                      a=2;
+  49   4                                      b=0;
+  50   4                                      c=0;
+  51   4                                      count = 0;
+  52   4                              }               
+  53   3                      }
+  54   2                      if(a==1)                                         //×ó¼ü°´ÏÂºóµÄÐ§¹û
+  55   2                      {
+C51 COMPILER V9.01   2                                                                     11/28/2018 13:41:49 PAGE 2   
+
+  56   3                              
+  57   3                              if(b<=2)
+  58   3                              {
+  59   4                                      P1=0xfb;
+  60   4                                      P3=0xff;
+  61   4                                      P2=0xff;
+  62   4                              }
+  63   3                              else if(b<=5)
+  64   3                              {
+  65   4                                      P1=0xf5;
+  66   4                                      P3=0xff;
+  67   4                                      P2=0xff;
+  68   4                              }
+  69   3                              else if(b<=8)
+  70   3                              {
+  71   4                                      P1=0xee;
+  72   4                                      P3=0xff;
+  73   4                                      P2=0xff;
+  74   4                              }
+  75   3                              else if(b<=11)
+  76   3                              {
+  77   4                                      P1=0xdf;
+  78   4                                      P3=0xff;
+  79   4                                      P2=0xff;
+  80   4                              }
+  81   3                              else if(b<=14)
+  82   3                              {
+  83   4                                      P1=0xbf;
+  84   4                                      P3=0xff;
+  85   4                                      P2=0xff;
+  86   4                              }               
+  87   3                              else if(b<=17)
+  88   3                              {
+  89   4                                      P1=0x7f;
+  90   4                                      P3=0xff;
+  91   4                                      P2=0xff;
+  92   4                              }
+  93   3                              else if(b<=21)
+  94   3                              {
+  95   4                                      P1=0xff;
+  96   4                                      P3=0xfe;
+  97   4                                      P2=0xff;
+  98   4                              }
+  99   3                              else if(b<=25)
+ 100   3                              {
+ 101   4                                      P1=0xff;
+ 102   4                                      P3=0xfd;
+ 103   4                                      P2=0xff;
+ 104   4                              }
+ 105   3                              else if(b<=29)
+ 106   3                              {
+ 107   4                                      P1=0xff;
+ 108   4                                      P3=0xfb;
+ 109   4                                      P2=0xff;
+ 110   4                              }
+ 111   3                              else if(b<=33)
+ 112   3                              {
+ 113   4                                      P1=0xff;
+ 114   4                                      P3=0xf7;
+ 115   4                                      P2=0xff;
+ 116   4                              }
+ 117   3                              else if(b<=37)
+C51 COMPILER V9.01   2                                                                     11/28/2018 13:41:49 PAGE 3   
+
+ 118   3                              {
+ 119   4                                      P1=0xff;
+ 120   4                                      P3=0xef;
+ 121   4                                      P2=0xff;
+ 122   4                              }
+ 123   3                              else if(b<=40)
+ 124   3                              {
+ 125   4                                      P1=0xff;
+ 126   4                                      P3=0xdf;
+ 127   4                                      P2=0xff;
+ 128   4                              }
+ 129   3                              else if(b<=43)
+ 130   3                              {
+ 131   4                                      P1=0xff;
+ 132   4                                      P3=0xbf;
+ 133   4                                      P2=0xff;
+ 134   4                              }
+ 135   3                              else if(b<=46)
+ 136   3                              {
+ 137   4                                      P1=0xff;
+ 138   4                                      P3=0x7f;
+ 139   4                                      P2=0xff;
+ 140   4                              }
+ 141   3                              else if(b<=49)
+ 142   3                              {
+ 143   4                                      P1=0xff;
+ 144   4                                      P3=0xff;
+ 145   4                                      P2=0xfe;
+ 146   4                              }
+ 147   3                              else if(b<=52)
+ 148   3                              {
+ 149   4                                      P1=0xff;
+ 150   4                                      P3=0xff;
+ 151   4                                      P2=0xfd;
+ 152   4                              }
+ 153   3                              else if(b<=55)
+ 154   3                              {
+ 155   4                                      P1=0xff;
+ 156   4                                      P3=0xff;
+ 157   4                                      P2=0xfb;
+ 158   4                              }
+ 159   3                              else if(b<=58)
+ 160   3                              {
+ 161   4                                      P1=0xff;
+ 162   4                                      P3=0xff;
+ 163   4                                      P2=0xf7;
+ 164   4                              }
+ 165   3                              else if(b<=59)
+ 166   3                              {
+ 167   4                                      P1=0xff;
+ 168   4                                      P2=0xff;
+ 169   4                                      P3=0xff;
+ 170   4                              }
+ 171   3      
+ 172   3      
+ 173   3                      }
+ 174   2                      else if(a==2)              //ÓÒ¼ü°´ÏÂºóµÄÐ§¹û
+ 175   2                      {
+ 176   3                              
+ 177   3                              if(c<=2)
+ 178   3                              {
+ 179   4                                      P2=0xfd;
+C51 COMPILER V9.01   2                                                                     11/28/2018 13:41:49 PAGE 4   
+
+ 180   4                                      P3=0xff;
+ 181   4                                      P1=0xff;
+ 182   4                              }
+ 183   3                              else if(c<=5)
+ 184   3                              {
+ 185   4                                      P2=0xfa;
+ 186   4                                      P3=0xff;
+ 187   4                                      P1=0xff;
+ 188   4                              }
+ 189   3                              else if(c<=8)
+ 190   3                              {
+ 191   4                                      P2=0xf7;
+ 192   4                                      P3=0x7f;
+ 193   4                                      P1=0xff;
+ 194   4                              }
+ 195   3                              else if(c<=11)
+ 196   3                              {
+ 197   4                                      P2=0xff;
+ 198   4                                      P3=0xbf;
+ 199   4                                      P1=0xff;
+ 200   4                              }
+ 201   3                              else if(c<=14)
+ 202   3                              {
+ 203   4                                      P2=0xff;
+ 204   4                                      P3=0xdf;
+ 205   4                                      P1=0xff;
+ 206   4                              }               
+ 207   3                              else if(c<=15)
+ 208   3                              {
+ 209   4                                      P1=0xff;
+ 210   4                                      P3=0xff;
+ 211   4                                      P2=0xff;
+ 212   4                              }
+ 213   3                              
+ 214   3      
+ 215   3      
+ 216   3      
+ 217   3                      }
+ 218   2      
+ 219   2      
+ 220   2      
+ 221   2      
+ 222   2      
+ 223   2      
+ 224   2                      if (count>=500)               //1ms * 500 -> 0.5s
+ 225   2              {
+ 226   3                      count = 0;               
+ 227   3                      if(a==1&&b<60)
+ 228   3                              b++;                            
+ 229   3                              
+ 230   3                              else if(a==2&&c<16)
+ 231   3                              c++;
+ 232   3                               
+ 233   3                              if(b>=60)
+ 234   3                              a=0;
+ 235   3                              if(c>=16)
+ 236   3                              a=0;  
+ 237   3              }
+ 238   2              }
+ 239   1      }
+ 240           void T0zd(void) interrupt 1      //3£º¶¨Ê±Æ÷1µÄÖÐ¶ÏºÅ  1£º¶¨Ê±Æ÷0µÄÖÐ¶ÏºÅ 0£ºÍâ²¿ÖÐ¶Ï1 2£ºÍâ²¿ÖÐ¶Ï2  4£º´
+             -®¿ÚÖÐ¶Ï
+C51 COMPILER V9.01   2                                                                     11/28/2018 13:41:49 PAGE 5   
+
+ 241          {        
+ 242   1               TH0 = (8192 - 1000)/32;         //¶¨Ê±Æ÷0³õÖµ,1ms
+ 243   1               TL0 = (8192 - 1000)%32;         //¶¨Ê±Æ÷0³õÖµ,1ms
+ 244   1               count++;
+ 245   1      
+ 246   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    605    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

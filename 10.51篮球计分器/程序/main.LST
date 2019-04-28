@@ -1,0 +1,84 @@
+C51 COMPILER V9.00   MAIN                                                                  01/01/2019 17:59:09 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: E:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "lcd1602.h"
+   3          
+   4          sbit S1 = P3^0;//暂停、开始
+   5          sbit S2 = P3^1;//换场
+   6          sbit S3 = P3^2;//a
+   7          sbit S4 = P3^3;//b
+   8          
+   9          unsigned char Ascore, Bscore; // A/B两队比分；
+  10          unsigned char ChangeFlag;//换场标志； 比赛节数；
+  11          unsigned char StartFlag = 1; //开始比赛标志；
+  12          
+  13          void KeyCon(void)
+  14          {
+  15   1              static unsigned char flag1, flag2, flag3, flag4;//消抖变量；
+  16   1              if(S1 == 0) flag1 = 1;
+  17   1              if(S1 == 1 && flag1 == 1) {flag1 = 0; StartFlag =! StartFlag; Print("                ", 0, 0);}
+  18   1      
+  19   1              if(S2 == 0) flag2 = 1;
+  20   1              if(S2 == 1 && flag2 == 1) {flag2 = 0; ChangeFlag =! ChangeFlag;}
+  21   1      
+  22   1              if(S3 == 0) flag3 = 1;
+  23   1              if(S3 == 1 && flag3 == 1) {flag3 = 0; if(StartFlag)Ascore++;}
+  24   1      
+  25   1              if(S4 == 0) flag4 = 1;
+  26   1              if(S4 == 1 && flag4 == 1) {flag4 = 0; if(StartFlag)Bscore++;}
+  27   1      }
+  28          
+  29          void main(void)
+  30          {       
+  31   1              LCD_Initial();//初始化LCD;
+  32   1              while(1)
+  33   1              {       
+  34   2                      KeyCon(); //按键扫描；
+  35   2                      if(StartFlag == 1)//比赛开始；
+  36   2                      {       
+  37   3                              Print("VS", 8, 0);//固定显示；
+  38   3                              Print(":", 8, 1);
+  39   3                              if(ChangeFlag == 1)//场地转换；
+  40   3                              {
+  41   4                                      Print(" IG", 2, 0);//显示队名；
+  42   4                                      Print("RNG", 12, 0);
+  43   4      
+  44   4                                      display_int( Ascore, 2, 1, 3);//显示比分；
+  45   4                                      display_int(Bscore, 12, 1, 3);
+  46   4                              }
+  47   3                              else //交换显示；
+  48   3                              {
+  49   4                                      Print(" IG", 12, 0);
+  50   4                                      Print("RNG", 2, 0);
+  51   4                                      display_int( Ascore, 12, 1, 3);
+  52   4                                      
+  53   4                                      display_int(Bscore, 2, 1, 3);
+  54   4                              }
+  55   3                              
+C51 COMPILER V9.00   MAIN                                                                  01/01/2019 17:59:09 PAGE 2   
+
+  56   3                      }
+  57   2                      else  Print(" *****STOP***** ", 0, 0); //比赛暂停，暂停提示；                   
+  58   2              }
+  59   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    289    ----
+   CONSTANT SIZE    =     47    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

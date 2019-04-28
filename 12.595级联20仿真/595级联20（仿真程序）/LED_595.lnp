@@ -1,0 +1,6 @@
+"STARTUP.obj",
+"LED_595.obj",
+"delay.obj",
+"uart.obj" 
+TO "LED_595" 
+RAMSIZE(256) 

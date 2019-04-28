@@ -1,0 +1,212 @@
+C51 COMPILER V9.56.0.0   XIAN                                                              12/14/2018 15:29:33 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE XIAN
+OBJECT MODULE PLACED IN xian.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE xian.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4                  
+   5          sbit duan = P2^6;
+   6          sbit wei  = P2^7;
+   7          sbit key  = P3^2;
+   8          sbit LED1 = P2^0;
+   9          sbit LED2 = P2^1;
+  10          sbit LED3 = P2^2;
+  11          sbit LED4 = P2^3;
+  12          
+  13          uchar stu_flag = 1,dat = 0;
+  14          
+  15          //学号数组
+  16          uchar stu1_ID[8]={1,6,0,3,2,1,0,6};
+  17          uchar stu2_ID[8]={1,6,0,3,2,1,0,7};
+  18          uchar stu3_ID[8]={1,6,0,3,2,1,1,7};
+  19          
+  20          //数码管0-f数组
+  21          uchar table_duan[16]={
+  22                  0x3f,0x06,0x5b,0x4f,
+  23                  0x66,0x6d,0x7d,0x07,
+  24                  0x7f,0x67,0x77,0x7c,
+  25                  0x39,0x5e,0x79,0x71
+  26          };
+  27          
+  28          //数码管位选数组（选择哪个数码管）
+  29          uchar table_wei[8]={
+  30                  0xfe,0xfd,0xfb,0xf7,
+  31                  0xef,0xdf,0xbf,0x7f,
+  32          };
+  33          
+  34          void delay(uint z);             //延时函数
+  35          void LED_Flash(uchar ch);       //选择LED闪烁
+  36          
+  37          void main()
+  38          {
+  39   1              uchar i = 0;
+  40   1              SCON= 0x50;     //设定串口工作方式0101 0000
+  41   1              PCON= 0x00;
+  42   1              TMOD= 0x21;
+  43   1              TL1 = 0xF3;     //波特率2400 = 12M/12/32/（256-初值0xf3(即243)）
+  44   1              TH1 = 0xF3;
+  45   1              TR1 = 1;
+  46   1              TH0 = (65536-10000)/256;        //定时10ms=12/12M*10000
+  47   1              TL0 = (65536-10000)%256;        
+  48   1              TR0 = 1;        //启动定时器0
+  49   1              ET0 = 1;
+  50   1              EX0 = 1;
+  51   1              EA = 1;
+  52   1              ES = 1;
+  53   1              while(1)
+  54   1              {
+  55   2                      if(stu_flag == 1)                       //学号标志位选择
+C51 COMPILER V9.56.0.0   XIAN                                                              12/14/2018 15:29:33 PAGE 2   
+
+  56   2                      {
+  57   3                              for(i = 0;i < 8;i++)    //八位数码管循环显示
+  58   3                              {                       
+  59   4                                      wei=1;                          //数码管位选
+  60   4                                      P0=table_wei[i];
+  61   4                                      wei=0;
+  62   4                                      P0=0xff;                        //消影
+  63   4                                      duan=1;
+  64   4                                      P0=table_duan[stu1_ID[i]];      //数码管段选
+  65   4                                      duan=0;
+  66   4                                      P0=0xff;
+  67   4                                      delay(2);
+  68   4                              }
+  69   3                      }
+  70   2                      
+  71   2                      if(stu_flag == 2)
+  72   2                      {
+  73   3                              for(i = 0;i < 8;i++)
+  74   3                              {                       
+  75   4                                      wei=1;
+  76   4                                      P0=table_wei[i];
+  77   4                                      wei=0;
+  78   4                                      P0=0xff;
+  79   4                                      duan=1;
+  80   4                                      P0=table_duan[stu2_ID[i]];
+  81   4                                      duan=0;
+  82   4                                      P0=0xff;
+  83   4                                      delay(2);
+  84   4                              }
+  85   3                      }
+  86   2                      
+  87   2                      if(stu_flag == 3)
+  88   2                      {
+  89   3                              for(i = 0;i < 8;i++)
+  90   3                              {                       
+  91   4                                      wei=1;
+  92   4                                      P0=table_wei[i];
+  93   4                                      wei=0;
+  94   4                                      P0=0xff;
+  95   4                                      duan=1;
+  96   4                                      P0=table_duan[stu3_ID[i]];
+  97   4                                      duan=0;
+  98   4                                      P0=0xff;
+  99   4                                      delay(2);
+ 100   4                              }
+ 101   3                      }
+ 102   2              }
+ 103   1      }
+ 104          
+ 105          void key_int(void) interrupt 0          //按键中断
+ 106          {
+ 107   1              if(key == 0)
+ 108   1              {
+ 109   2                      delay(10);                      //延时
+ 110   2                      if(key == 0)
+ 111   2                      {
+ 112   3                              stu_flag++;             //切换模式                      
+ 113   3                              if(stu_flag > 3)        //只留三种模式
+ 114   3                                      stu_flag = 1;
+ 115   3                              LED_Flash(stu_flag);
+ 116   3                      }
+ 117   2              }
+C51 COMPILER V9.56.0.0   XIAN                                                              12/14/2018 15:29:33 PAGE 3   
+
+ 118   1      }
+ 119          
+ 120          void time0_isr() interrupt 1     //10ms 进入一次
+ 121          {
+ 122   1              static char c;
+ 123   1              TH0 = (65536-10000)/256;        //定时10ms
+ 124   1              TL0 = (65536-10000)%256;        
+ 125   1              c++;
+ 126   1              if(c > 50)
+ 127   1              {
+ 128   2                      LED4 = !LED4;   //LED闪烁
+ 129   2                      c=0;
+ 130   2              }
+ 131   1      }
+ 132          
+ 133          void usart_receive(void) interrupt 4    //串口服务函数                     
+ 134          {        
+ 135   1              if(RI == 1) 
+ 136   1              {    
+ 137   2                      RI = 0;        
+ 138   2                      dat=SBUF;
+ 139   2                      switch(dat)             //切换模式
+ 140   2                      {
+ 141   3                              case '1':stu_flag = 1;LED_Flash(stu_flag);break;
+ 142   3                              case '2':stu_flag = 2;LED_Flash(stu_flag);break;
+ 143   3                              case '3':stu_flag = 3;LED_Flash(stu_flag);break;
+ 144   3                              default :                         break;
+ 145   3                      }
+ 146   2          }  
+ 147   1          else  
+ 148   1              {          
+ 149   2                      TI = 0;         
+ 150   2          }                                                           
+ 151   1      }
+ 152          
+ 153          void LED_Flash(uchar ch)
+ 154          {
+ 155   1              if(ch == 1)
+ 156   1              {
+ 157   2                      LED1 = 0;
+ 158   2                      delay(500);
+ 159   2                      LED1 = 1;
+ 160   2              }
+ 161   1              
+ 162   1              if(ch == 2)
+ 163   1              {
+ 164   2                      LED2 = 0;
+ 165   2                      delay(500);
+ 166   2                      LED2 = 1;
+ 167   2              }
+ 168   1              
+ 169   1              if(ch == 3)
+ 170   1              {
+ 171   2                      LED3 = 0;
+ 172   2                      delay(500);
+ 173   2                      LED3 = 1;
+ 174   2              }
+ 175   1      }
+ 176          
+ 177          void delay(uint z)
+ 178          {
+ 179   1              uint i,j;
+C51 COMPILER V9.56.0.0   XIAN                                                              12/14/2018 15:29:33 PAGE 4   
+
+ 180   1              for(i=z;i>0;i--)
+ 181   1                      for(j=110;j>0;j--);
+ 182   1      }
+ 183                  
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    470    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     51       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

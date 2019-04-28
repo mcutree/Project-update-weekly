@@ -1,0 +1,368 @@
+C51 COMPILER V7.06   数码_苌了_                                                            07/09/2018 21:49:01 PAGE 1   
+
+
+C51 COMPILER V7.06, COMPILATION OF MODULE 数码_苌了_
+OBJECT MODULE PLACED IN .\obj\数码管闪烁.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 数码管闪烁.c BROWSE DEBUG OBJECTEXTEND PRINT(.\obj\数码管闪烁.lst) OBJECT(.
+                    -\obj\数码管闪烁.obj)
+
+stmt level    source
+
+   1          #include<reg52.h>
+   2          
+   3          #define uchar unsigned char
+   4          #define uint unsigned int
+   5          
+   6          sbit duan = P1^6; //段选
+   7          sbit wei = P1^7; //位选
+   8          sbit S1 = P3^0; //开始修改参数键
+   9          sbit S2 = P3^6; //增加键
+  10          sbit S3 = P3^7; //减少键
+  11          
+  12          uchar code aaa[] = {0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+  13          uchar temp,out = 1,qq = 0,ww = 0,H,M,S,j1,j2,k1,k2,l1,l2;
+  14          uchar H1 = 0,M1 = 0,Sa = 0,j10,j20,k10,k20,l10,l20,SS = 0;
+  15          uint UT;
+  16          //无按键按下开始计数标志
+  17          uint num=0;
+  18          
+  19          
+  20          void TIM0_Init()
+  21          {
+  22   1              TMOD = 0x01; 
+  23   1              TH0 = (65536 - 50000)/256; //初值：2^16=65536  12M 50ms定时
+  24   1              TL0 = (65536 - 50000)%256;
+  25   1              EA=1;
+  26   1              ET0 = 1; //中断打开，打开外部中断0和定时器0中断
+  27   1              TR0=1;                     //打开定时器开关
+  28   1      }
+  29          void TIM1_Init(void)
+  30          {
+  31   1               TMOD |= 0x10;
+  32   1              TH1=(65536-50000)/256;
+  33   1              TL1=(65536-50000)%256;
+  34   1              EA=1;
+  35   1              ET1=1;
+  36   1              TR1=1;   
+  37   1      }
+  38          
+  39          
+  40          
+  41          
+  42          void delayMS(x) //延时函数，单位毫秒
+  43          {
+  44   1              uint a , b;
+  45   1              for(a = 0 ; a < x ; a++ )
+  46   1              for(b = 0 ; b < 110 ; b++);
+  47   1      }
+  48          
+  49          
+  50          void play(uint h1 , uint h2 , uint m1 , uint m2 , uint s1 , uint s2) //时分秒的显示
+  51          {
+  52   1              wei = 1; //时的十位
+  53   1              P2 = 0x7f;
+  54   1              wei = 0; 
+C51 COMPILER V7.06   数码_苌了_                                                            07/09/2018 21:49:01 PAGE 2   
+
+  55   1      
+  56   1              duan = 1;
+  57   1              P0 = aaa[h1];
+  58   1              duan = 0;
+  59   1              delayMS(3);
+  60   1      
+  61   1              wei = 1; //时的个位
+  62   1              P2 = 0xbf;
+  63   1              wei = 0; 
+  64   1      
+  65   1              duan = 1;
+  66   1              P0 = aaa[h2];
+  67   1              duan = 0;       
+  68   1              delayMS(3);
+  69   1      
+  70   1              wei = 1; //分的十位
+  71   1              P2 = 0xdf;
+  72   1              wei = 0; 
+  73   1      
+  74   1              duan = 1;
+  75   1              P0 = aaa[m1];
+  76   1              duan = 0;
+  77   1              delayMS(3);
+  78   1      
+  79   1              wei = 1; //分的个位
+  80   1              P2 = 0xef;
+  81   1              wei = 0; 
+  82   1      
+  83   1              duan = 1;
+  84   1              P0 = aaa[m2];
+  85   1              duan = 0;
+  86   1              delayMS(3);
+  87   1      
+  88   1              wei = 1; //秒的十位
+  89   1              P2 = 0xf7;
+  90   1              wei = 0; 
+  91   1      
+  92   1              duan = 1;
+  93   1              P0 = aaa[s1];
+  94   1              duan = 0;
+  95   1              delayMS(3);
+  96   1      
+  97   1              wei = 1; //秒的个位
+  98   1              P2 = 0xfb; 
+  99   1              wei = 0; 
+ 100   1      
+ 101   1              duan = 1;
+ 102   1              P0 = aaa[s2];
+ 103   1              duan = 0;
+ 104   1              delayMS(3);             
+ 105   1      }  
+ 106          
+ 107          void stopfunc() //S1键函数开始修改参数
+ 108          {
+ 109   1              if(S1 == 0)
+ 110   1              {
+ 111   2                      while(!S1);
+ 112   2                      qq++;
+ 113   2                      out = 0; //暂停
+ 114   2                      TR0 = 0;
+ 115   2                      TR1=1;
+ 116   2                      num=0;
+C51 COMPILER V7.06   数码_苌了_                                                            07/09/2018 21:49:01 PAGE 3   
+
+ 117   2              }               
+ 118   1      }
+ 119          
+ 120          
+ 121          void buttfunc() //S2键、S3键函数 调时
+ 122          {
+ 123   1              
+ 124   1              if(qq == 1) //第一次按S1时，调秒
+ 125   1              {
+ 126   2                      if(S2 == 0)
+ 127   2                      {
+ 128   3                              while(!S2);
+ 129   3                              if(S < 59)
+ 130   3                              {
+ 131   4                                      S++;
+ 132   4                              }
+ 133   3                              else
+ 134   3                              {
+ 135   4                                      S = 0;  
+ 136   4                              }
+ 137   3                              delayMS(5);
+ 138   3                              num==0;
+*** WARNING C275 IN LINE 138 OF 数码管闪烁.C: expression with possibly no effect
+ 139   3                      }
+ 140   2                      if(S3 == 0)
+ 141   2                      {
+ 142   3                              while(!S3);
+ 143   3                              if(S > 0)
+ 144   3                              {                                       
+ 145   4                                      S--;
+ 146   4                              }
+ 147   3                              else
+ 148   3                              {
+ 149   4                                      S = 59;
+ 150   4                              }
+ 151   3                              delayMS(5);
+ 152   3                              num==0;
+*** WARNING C275 IN LINE 152 OF 数码管闪烁.C: expression with possibly no effect
+ 153   3                      }
+ 154   2                              j1=H%10;
+ 155   2                              j2=H/10;
+ 156   2                              k1=M%10;
+ 157   2                              k2=M/10;
+ 158   2                              l1=S%10;
+ 159   2                              l2=S/10;
+ 160   2                              play(j2,j1,k2,k1,l2,l1);
+ 161   2              }
+ 162   1              if(qq == 2) //第二次按S1时，调分
+ 163   1              {
+ 164   2                      if(S2 == 0)
+ 165   2                      {
+ 166   3                              while(!S2);
+ 167   3                              if(M < 59)
+ 168   3                              {
+ 169   4                                      M++;
+ 170   4                              }
+ 171   3                              else
+ 172   3                              {
+ 173   4                                      M = 0;
+ 174   4                              }
+ 175   3                              num==0;
+*** WARNING C275 IN LINE 175 OF 数码管闪烁.C: expression with possibly no effect
+C51 COMPILER V7.06   数码_苌了_                                                            07/09/2018 21:49:01 PAGE 4   
+
+ 176   3                              delayMS(5);
+ 177   3                      }
+ 178   2                      if(S3 == 0)
+ 179   2                      {
+ 180   3                              while(!S3);
+ 181   3                              if(M > 0)
+ 182   3                              {                                       
+ 183   4                                      M--;
+ 184   4                              }
+ 185   3                              else
+ 186   3                              {
+ 187   4                                      M = 59;
+ 188   4                              }
+ 189   3                              num==0;
+*** WARNING C275 IN LINE 189 OF 数码管闪烁.C: expression with possibly no effect
+ 190   3                              delayMS(5);
+ 191   3                      }
+ 192   2                              j1=H%10;
+ 193   2                              j2=H/10;
+ 194   2                              k1=M%10;
+ 195   2                              k2=M/10;
+ 196   2                              l1=S%10;
+ 197   2                              l2=S/10;
+ 198   2                              play(j2,j1,k2,k1,l2,l1);
+ 199   2              }
+ 200   1              if(qq == 3) //第三次按S1时，调时
+ 201   1              {
+ 202   2                      if(S2 == 0)
+ 203   2                      {
+ 204   3                              while(!S2);
+ 205   3                              if(H < 23)
+ 206   3                              {
+ 207   4                                      H++;
+ 208   4                              }
+ 209   3                              else
+ 210   3                              {
+ 211   4                                      H = 0;
+ 212   4                              }
+ 213   3                              num==0;
+*** WARNING C275 IN LINE 213 OF 数码管闪烁.C: expression with possibly no effect
+ 214   3                              delayMS(5);
+ 215   3                      }
+ 216   2                      if(S3 == 0)
+ 217   2                      {
+ 218   3                              while(!S3);
+ 219   3                              if(H > 0)
+ 220   3                              {                                       
+ 221   4                                      H--;
+ 222   4                              }
+ 223   3                              else
+ 224   3                              {
+ 225   4                                      H = 23;
+ 226   4                              }
+ 227   3                              num==0;
+*** WARNING C275 IN LINE 227 OF 数码管闪烁.C: expression with possibly no effect
+ 228   3                              delayMS(5);
+ 229   3      
+ 230   3                      }
+ 231   2                              j1=H%10;
+ 232   2                              j2=H/10;
+ 233   2                              k1=M%10;
+ 234   2                              k2=M/10;
+C51 COMPILER V7.06   数码_苌了_                                                            07/09/2018 21:49:01 PAGE 5   
+
+ 235   2                              l1=S%10;
+ 236   2                              l2=S/10;
+ 237   2                              play(j2,j1,k2,k1,l2,l1);
+ 238   2              }
+ 239   1      }
+ 240          
+ 241          
+ 242          
+ 243          
+ 244          
+ 245          
+ 246          void main()
+ 247          {
+ 248   1              TIM0_Init();
+ 249   1              TIM1_Init();
+ 250   1              while(1)
+ 251   1              { 
+ 252   2                      stopfunc();
+ 253   2                      if(out == 1)
+ 254   2                      {
+ 255   3                              TR0 = 1;
+ 256   3                              TR1=0;
+ 257   3                              if(UT == 20) //1秒钟到了----20*50=1000ms
+ 258   3                              {       
+ 259   4                                      UT = 0;
+ 260   4                                      S++;
+ 261   4                                      if(S == 60)
+ 262   4                                      {
+ 263   5                                              S=0;
+ 264   5                                              M++;
+ 265   5                                              if(M == 60)
+ 266   5                                              {
+ 267   6                                                      M = 0;
+ 268   6                                                      H++;
+ 269   6                                                      if(H == 24) //24小时制
+ 270   6                                                      {
+ 271   7                                                              H = 0;
+ 272   7                                                      }
+ 273   6                                              }
+ 274   5                                      }
+ 275   4                              }
+ 276   3                      
+ 277   3                              j1=H%10;
+ 278   3                              j2=H/10;
+ 279   3                              k1=M%10;
+ 280   3                              k2=M/10;
+ 281   3                              l1=S%10;
+ 282   3                              l2=S/10;
+ 283   3                              play(j2,j1,k2,k1,l2,l1);
+ 284   3                      
+ 285   3                      }
+ 286   2                      else
+ 287   2                      {
+ 288   3                              buttfunc();     
+ 289   3                      }
+ 290   2              }
+ 291   1      }
+ 292          
+ 293          void TIME() interrupt 1
+ 294          {
+ 295   1              TH0 = (65536 - 50000)/256; //初值：2^16=65536  12M 50ms定时
+ 296   1              TL0 = (65536 - 50000)%256;
+C51 COMPILER V7.06   数码_苌了_                                                            07/09/2018 21:49:01 PAGE 6   
+
+ 297   1              UT++;
+ 298   1      }
+ 299          
+ 300          void Timer1_isr(void) interrupt 3 using 1
+ 301          {
+ 302   1              TH1 = (65536-50000)/256;//晶振12M 50ms 16bit 自动重载
+ 303   1              TL1 = (65536-50000)%256;
+ 304   1              num++;
+ 305   1              if(num==60)
+ 306   1              {
+ 307   2              qq=0;
+ 308   2              out=1;
+ 309   2              num=0;
+ 310   2              }
+ 311   1      }
+ 312          
+ 313          
+ 314          
+ 315          
+ 316                          
+ 317          
+ 318          
+ 319          
+ 320          
+ 321          
+ 322          
+ 323          
+ 324          
+ 325          
+ 326          
+ 327           
+ 328          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    601    ----
+   CONSTANT SIZE    =     10    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     27      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  6 WARNING(S),  0 ERROR(S)

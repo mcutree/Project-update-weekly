@@ -1,0 +1,346 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        12/14/2018  15:29:33  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE STARTUP.obj, xian.obj TO xian RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  xian.obj (XIAN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  xian (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0033H     UNIT         ?DT?XIAN
+            DATA    003BH     0003H     UNIT         _DATA_GROUP_
+            IDATA   003EH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     0005H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     0015H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     07DAH                  *** GAP ***
+            CODE    0800H     009AH     UNIT         ?PR?MAIN?XIAN
+            CODE    089AH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0926H     0063H     UNIT         ?PR?USART_RECEIVE?XIAN
+            CODE    0989H     0056H     UNIT         ?PR?KEY_INT?XIAN
+            CODE    09DFH     0041H     UNIT         ?C_INITSEG
+            CODE    0A20H     0033H     UNIT         ?PR?_LED_FLASH?XIAN
+            CODE    0A53H     0031H     UNIT         ?PR?_DELAY?XIAN
+            CODE    0A84H     001FH     UNIT         ?PR?TIME0_ISR?XIAN
+
+
+
+OVERLAY MAP OF MODULE:   xian (?C_STARTUP)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?XIAN
+  +--> ?C_INITSEG
+
+?PR?MAIN?XIAN                  003BH    0001H
+  +--> ?PR?_DELAY?XIAN
+
+*** NEW ROOT ***************************************************
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  15:29:33  PAGE 2
+
+
+
+?PR?KEY_INT?XIAN               -----    -----
+  +--> ?PR?_DELAY?XIAN
+  +--> ?PR?_LED_FLASH?XIAN
+
+?PR?_LED_FLASH?XIAN            003DH    0001H
+  +--> ?PR?_DELAY?XIAN
+
+*** NEW ROOT ***************************************************
+
+?PR?USART_RECEIVE?XIAN         -----    -----
+  +--> ?PR?_LED_FLASH?XIAN
+
+
+
+SYMBOL TABLE OF MODULE:  xian (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:089AH         SEGMENT       ?C_C51STARTUP
+  I:003EH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:089DH         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:089AH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:089AH         LINE#         133
+  C:089CH         LINE#         134
+  C:089DH         LINE#         135
+  C:089EH         LINE#         136
+  C:08A0H         LINE#         185
+  C:08A3H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        XIAN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0009H         PUBLIC        stu3_ID
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  15:29:33  PAGE 3
+
+
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  B:00A0H.0       PUBLIC        LED1
+  B:00A0H.1       PUBLIC        LED2
+  B:00A0H.2       PUBLIC        LED3
+  B:00A0H.3       PUBLIC        LED4
+  D:00A8H         PUBLIC        IE
+  C:0A84H         PUBLIC        time0_isr
+  C:0A66H         PUBLIC        _delay
+  D:0011H         PUBLIC        table_duan
+  B:00A8H.4       PUBLIC        ES
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  C:0800H         PUBLIC        main
+  C:0A20H         PUBLIC        _LED_Flash
+  B:00A0H.6       PUBLIC        duan
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  D:0021H         PUBLIC        table_wei
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:0029H         PUBLIC        dat
+  B:00A0H.7       PUBLIC        wei
+  B:00A8H.1       PUBLIC        ET0
+  B:00B0H.2       PUBLIC        key
+  D:008CH         PUBLIC        TH0
+  B:00A8H.0       PUBLIC        EX0
+  D:008DH         PUBLIC        TH1
+  D:008AH         PUBLIC        TL0
+  D:008BH         PUBLIC        TL1
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  D:002AH         PUBLIC        stu_flag
+  D:00C8H         PUBLIC        T2CON
+  C:0989H         PUBLIC        key_int
+  C:0926H         PUBLIC        usart_receive
+  D:00D0H         PUBLIC        PSW
+  D:002BH         PUBLIC        stu1_ID
+  D:0033H         PUBLIC        stu2_ID
+  -------         PROC          MAIN
+  -------         DO            
+  D:003BH         SYMBOL        i
+  -------         ENDDO         
+  C:0800H         LINE#         37
+  C:0800H         LINE#         38
+  C:0800H         LINE#         39
+  C:0803H         LINE#         40
+  C:0806H         LINE#         41
+  C:0808H         LINE#         42
+  C:080BH         LINE#         43
+  C:080EH         LINE#         44
+  C:0811H         LINE#         45
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  15:29:33  PAGE 4
+
+
+  C:0813H         LINE#         46
+  C:0816H         LINE#         47
+  C:0819H         LINE#         48
+  C:081BH         LINE#         49
+  C:081DH         LINE#         50
+  C:081FH         LINE#         51
+  C:0821H         LINE#         52
+  C:0823H         LINE#         53
+  C:0823H         LINE#         54
+  C:0823H         LINE#         55
+  C:0829H         LINE#         56
+  C:0829H         LINE#         57
+  C:082BH         LINE#         58
+  C:082BH         LINE#         59
+  C:082DH         LINE#         60
+  C:0835H         LINE#         61
+  C:0837H         LINE#         62
+  C:083AH         LINE#         63
+  C:083CH         LINE#         64
+  C:083EH         LINE#         65
+  C:083EH         LINE#         66
+  C:083EH         LINE#         67
+  C:0841H         LINE#         68
+  C:084AH         LINE#         69
+  C:084AH         LINE#         71
+  C:0850H         LINE#         72
+  C:0850H         LINE#         73
+  C:0852H         LINE#         74
+  C:0852H         LINE#         75
+  C:0854H         LINE#         76
+  C:085CH         LINE#         77
+  C:085EH         LINE#         78
+  C:0861H         LINE#         79
+  C:0863H         LINE#         80
+  C:0865H         LINE#         81
+  C:0865H         LINE#         82
+  C:0865H         LINE#         83
+  C:0868H         LINE#         84
+  C:0871H         LINE#         85
+  C:0871H         LINE#         87
+  C:0877H         LINE#         88
+  C:0877H         LINE#         89
+  C:0880H         LINE#         90
+  C:0880H         LINE#         91
+  C:0882H         LINE#         92
+  C:088AH         LINE#         93
+  C:088CH         LINE#         94
+  C:088FH         LINE#         95
+  C:0891H         LINE#         96
+  C:0893H         LINE#         97
+  C:0893H         LINE#         98
+  C:0893H         LINE#         99
+  C:0896H         LINE#         100
+  -------         ENDPROC       MAIN
+  -------         PROC          KEY_INT
+  C:0989H         LINE#         105
+  C:09A6H         LINE#         107
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  15:29:33  PAGE 5
+
+
+  C:09A9H         LINE#         108
+  C:09A9H         LINE#         109
+  C:09B0H         LINE#         110
+  C:09B3H         LINE#         111
+  C:09B3H         LINE#         112
+  C:09B5H         LINE#         113
+  C:09BCH         LINE#         114
+  C:09BFH         LINE#         115
+  C:09C4H         LINE#         116
+  C:09C4H         LINE#         117
+  C:09C4H         LINE#         118
+  -------         ENDPROC       KEY_INT
+  -------         PROC          TIME0_ISR
+  -------         DO            
+  D:0008H         SYMBOL        c
+  -------         ENDDO         
+  C:0A84H         LINE#         120
+  C:0A88H         LINE#         123
+  C:0A8BH         LINE#         124
+  C:0A8EH         LINE#         125
+  C:0A90H         LINE#         126
+  C:0A99H         LINE#         127
+  C:0A99H         LINE#         128
+  C:0A9BH         LINE#         129
+  C:0A9EH         LINE#         130
+  C:0A9EH         LINE#         131
+  -------         ENDPROC       TIME0_ISR
+  -------         PROC          USART_RECEIVE
+  C:0926H         LINE#         133
+  C:0943H         LINE#         135
+  C:0946H         LINE#         136
+  C:0946H         LINE#         137
+  C:0948H         LINE#         138
+  C:094BH         LINE#         139
+  C:0958H         LINE#         140
+  C:0958H         LINE#         141
+  C:095DH         LINE#         142
+  C:0962H         LINE#         143
+  C:096CH         LINE#         144
+  C:096CH         LINE#         145
+  C:096CH         LINE#         146
+  C:096CH         LINE#         148
+  C:096CH         LINE#         149
+  C:096EH         LINE#         150
+  C:096EH         LINE#         151
+  -------         ENDPROC       USART_RECEIVE
+  -------         PROC          _LED_FLASH
+  D:003DH         SYMBOL        ch
+  C:0A20H         LINE#         153
+  C:0A22H         LINE#         154
+  C:0A22H         LINE#         155
+  C:0A27H         LINE#         156
+  C:0A27H         LINE#         157
+  C:0A29H         LINE#         158
+  C:0A30H         LINE#         159
+  C:0A32H         LINE#         160
+  C:0A32H         LINE#         162
+BL51 BANKED LINKER/LOCATER V6.22                                                      12/14/2018  15:29:33  PAGE 6
+
+
+  C:0A37H         LINE#         163
+  C:0A37H         LINE#         164
+  C:0A39H         LINE#         165
+  C:0A40H         LINE#         166
+  C:0A42H         LINE#         167
+  C:0A42H         LINE#         169
+  C:0A47H         LINE#         170
+  C:0A47H         LINE#         171
+  C:0A49H         LINE#         172
+  C:0A50H         LINE#         173
+  C:0A52H         LINE#         174
+  C:0A52H         LINE#         175
+  -------         ENDPROC       _LED_FLASH
+  C:0A53H         SYMBOL        L?0046
+  -------         PROC          L?0045
+  -------         ENDPROC       L?0045
+  C:0A53H         SYMBOL        L?0046
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        z
+  -------         DO            
+  D:0006H         SYMBOL        i
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0A66H         LINE#         177
+  C:0A66H         LINE#         178
+  C:0A66H         LINE#         180
+  C:0A6FH         LINE#         181
+  C:0A83H         LINE#         182
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        XIAN
+
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_LED_FLASH?XIAN
+    CALLER1: ?PR?KEY_INT?XIAN
+    CALLER2: ?PR?USART_RECEIVE?XIAN
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 022EH BYTE (27%) *
+******************************************************************************
+
+Program Size: data=63.0 xdata=0 code=687
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

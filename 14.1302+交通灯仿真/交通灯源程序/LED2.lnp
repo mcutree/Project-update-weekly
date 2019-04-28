@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"led.obj",
+"ds1302.obj" 
+TO "LED2" 
