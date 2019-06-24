@@ -1,0 +1,977 @@
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 1   
+
+
+C51 COMPILER V8.02, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\KEIL\C51\BIN\C51.EXE main.c OPTIMIZE(9,SPEED) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          //版本：V1.0
+   2          //作品：贪吃蛇+万年历+俄罗斯方块
+   3          //作者所属院校：南阳理工学院
+   4          //作者QQ: 497259320
+   5          //申明：转载请标明作品来源 知识产权归作者本人所有！
+   6          //工作之余，写下此程序，程序、设计中有很多不足之处，风格、命名也很乱，这是下一个版本要改进的
+   7          //在V1.1版本中还会增加矩阵键盘和科学计算器等功能，此程序已成功移植于AVR单片机。硬件上实现要修改底层驱动！
+   8          #include <at89x51.h>
+   9          #include "18b20.h"
+  10          #include "1302.h"
+  11          #include "12864.h"
+  12          #include "zifu.h"
+  13          uchar k,direction;
+  14          bit flag;
+  15          bit flag5=0;                       //flag5是外部中断1的标志位 flag1是步进标志
+  16          uchar p,dengji;               //定时次数 
+  17          bit flag1=0;
+  18          systemtime realtime;
+  19          bit first=1;                               //中断次数控制
+  20          void dingshi() interrupt 1  using 1  //定时程序.产生步进时间
+  21          {
+  22   1         if(p--)
+  23   1         {
+  24   2          TL0=0;
+  25   2              TH0=0xa0;
+  26   2              flag1=0;
+  27   2         }
+  28   1         else
+  29   1         {
+  30   2           flag1=1;
+  31   2               TL0=0;
+  32   2               TH0=0x00;
+  33   2               p=20-(dengji>>1);
+  34   2         }
+  35   1       }
+  36          /*开始确认暂停键的判断*/
+  37          void zhongduan1() interrupt 2 using 2
+  38          {
+  39   1         if(!flag5)
+  40   1         {
+  41   2           flag5=1;
+  42   2         }
+  43   1         else
+  44   1         {
+  45   2           flag5=0;
+  46   2         }
+  47   1      }
+  48          void zhongduan() interrupt 0 using 0 
+  49            {
+  50   1          uchar i=0;
+  51   1              if(first)              //FIRST=1;打开方向按键判断标志
+  52   1              {
+  53   2              first=0;            
+  54   2              k=(P2>>6);         
+  55   2              k=k&0x03;                               
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 2   
+
+  56   2              if(flag)
+  57   2                {
+  58   3                  if(k==1)     direction=3;//左
+  59   3                  if(k==2)     direction=1;//右
+  60   3                }
+  61   2                else
+  62   2                {
+  63   3                  if(k==0)     direction=4;//上
+  64   3                  if(k==3)     direction=2;//下
+  65   3                }
+  66   2              }
+  67   1        }
+  68           /*显示四个小格的方块*/
+  69          void playbuf(uchar buff,char offsetx,char offsety)        
+  70          {
+  71   1        //i=(moxing+((dat&0xf0)|((dat&0x0f)<<2)));
+  72   1        change1((((*(moxing+((buff&0xf0)+((buff&0x0f)<<2))))&0xf0)>>4)+offsetx,((*((moxing+((buff&0xf0)|((buff&0
+             -x0f)<<2)))))&0x0f)+offsety);
+  73   1        change1((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx,((*(((moxing+((buff&0xf0)|((b
+             -uff&0x0f)<<2))))+1))&0x0f)+offsety);
+  74   1        change1((((*(((moxing+((buff&0xf0)|((buff&0x0f)<<2))))+2))&0xf0)>>4)+offsetx,((*((moxing+((buff&0xf0)|((
+             -buff&0x0f)<<2)))+2))&0x0f)+offsety);
+  75   1        change1((((*(((moxing+((buff&0xf0)|((buff&0x0f)<<2))))+3))&0xf0)>>4)+offsetx,((*((moxing+((buff&0xf0)|((
+             -buff&0x0f)<<2)))+3))&0x0f)+offsety);
+  76   1      
+  77   1      }
+  78          /*判断方块停止向下运动*/
+  79          bit tingzhixia(uchar buff,char offsetx,char offsety)
+  80          {
+  81   1         char x0,y0,x1,y1,x2,y2,x3,y3;
+  82   1         bit tz=0;
+  83   1         x0=(((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0xf0)>>4)+offsetx;
+  84   1         x1=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx;
+  85   1         x2=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0xf0)>>4)+offsetx;
+  86   1         x3=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0xf0)>>4)+offsetx;
+  87   1         y2=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0x0f)+offsety;
+  88   1         y3=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0x0f)+offsety;
+  89   1         y0=((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0x0f)+offsety;
+  90   1         y1=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+1))&0x0f)+offsety;
+  91   1         
+  92   1         if(readfk(x0+1,y0))
+  93   1         {
+  94   2            if(!((((x0+1)==x1)&&(y0==y1))|(((x0+1)==x2)&&(y0==y2))|(((x0+1)==x3)&&(y0==y3))))
+  95   2               { 
+  96   3                tz=1;
+  97   3                }
+  98   2         }
+  99   1          if(readfk(x1+1,y1))
+ 100   1         {
+ 101   2            if(!((((x1+1)==x0)&&(y1==y0))|(((x1+1)==x2)&&(y1==y2))|(((x1+1)==x3)&&(y1==y3))))
+ 102   2               { 
+ 103   3                tz=1;
+ 104   3               }
+ 105   2         }
+ 106   1         if(readfk(x2+1,y2))
+ 107   1         {
+ 108   2            if(!((((x2+1)==x0)&&(y2==y0))|(((x2+1)==x1)&&(y2==y1))|(((x2+1)==x3)&&(y2==y3))))
+ 109   2                {
+ 110   3                 tz=1;
+ 111   3                }
+ 112   2         }
+ 113   1         if(readfk(x3+1,y3))
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 3   
+
+ 114   1         {
+ 115   2            if(!((((x3+1)==x0)&&(y3==y0))|(((x3+1)==x1)&&(y3==y1))|(((x3+1)==x2)&&(y3==y2))))
+ 116   2                {
+ 117   3                 tz=1;
+ 118   3                }
+ 119   2         }
+ 120   1         return(tz);
+ 121   1      }
+ 122          /*判断一行是否可以消除*/
+ 123          bit hangman(uchar x)
+ 124          {
+ 125   1       uchar i;
+ 126   1       bit   man=1;
+ 127   1       for(i=0;i<15;i++)
+ 128   1       {
+ 129   2              man=man&(readfk(x,i));
+ 130   2              if(!man)
+ 131   2              break;
+ 132   2       }
+ 133   1       return(man);
+ 134   1      }
+ 135          /*消除一行*/
+ 136          void xiaohang(uchar x)
+ 137          {
+ 138   1        uchar i,j;
+ 139   1        for(i=0;i<15;i++)
+ 140   1        {
+ 141   2          clear1(x,i);
+ 142   2        }
+ 143   1        for(i=1;i<=x;i++)
+ 144   1        {
+ 145   2         for(j=0;j<15;j++)
+ 146   2         {
+ 147   3           if(readfk(x-i,j))
+ 148   3               {
+ 149   4                change1(x-i+1,j);
+ 150   4                clear1(x-i,j);
+ 151   4               }
+ 152   3         }
+ 153   2        }
+ 154   1      }
+ 155          /*判断是否停止向右*/
+ 156          bit tingzhiyou(uchar buff,char offsetx,char offsety)
+ 157          {
+ 158   1         char x0,y0,x1,y1,x2,y2,x3,y3;
+ 159   1         bit tz=0;
+ 160   1         x0=(((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0xf0)>>4)+offsetx;
+ 161   1         x1=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx;
+ 162   1         x2=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0xf0)>>4)+offsetx;
+ 163   1         x3=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0xf0)>>4)+offsetx;
+ 164   1         y2=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0x0f)+offsety;
+ 165   1         y3=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0x0f)+offsety;
+ 166   1         y0=((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0x0f)+offsety;
+ 167   1         y1=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+1))&0x0f)+offsety;
+ 168   1         if(readfk(x0,y0-1))
+ 169   1         {
+ 170   2            if(!(((x0==x1)&&((y0-1)==y1))|((x0==x2)&&((y0-1)==y2))|((x0==x3)&&((y0-1)==y3))))
+ 171   2               { 
+ 172   3                 tz=1;
+ 173   3                }
+ 174   2         }
+ 175   1         if(readfk(x1,y1-1))
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 4   
+
+ 176   1           {
+ 177   2            if(!(((x1==x0)&&((y1-1)==y0))|((x1==x2)&&((y1-1)==y2))|((x1==x3)&&((y1-1)==y3))))
+ 178   2               { 
+ 179   3                tz=1;    
+ 180   3               }
+ 181   2       }
+ 182   1          if(readfk(x2,y2-1))
+ 183   1         {
+ 184   2            if(!(((x2==x0)&&((y2-1)==y0))|((x2==x1)&&((y2-1)==y1))|((x2==x3)&&((y2-1)==y3))))
+ 185   2                {
+ 186   3                 tz=1;
+ 187   3                }
+ 188   2         }
+ 189   1            if(readfk(x3,y3-1))
+ 190   1         {
+ 191   2            if(!(((x3==x0)&&((y3-1)==y0))|((x3==x1)&&((y3-1)==y1))|((x3==x2)&&((y3-1)==y2))))
+ 192   2                {
+ 193   3                 tz=1;
+ 194   3                }
+ 195   2         }
+ 196   1         return(tz);
+ 197   1      }
+ 198          /*判断是否停止向左*/
+ 199          bit tingzhizuo(uchar buff,char offsetx,char offsety)
+ 200          {
+ 201   1         char x0,y0,x1,y1,x2,y2,x3,y3;
+ 202   1         bit tz=0;
+ 203   1         x0=(((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0xf0)>>4)+offsetx;
+ 204   1         x1=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx;
+ 205   1         x2=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0xf0)>>4)+offsetx;
+ 206   1         x3=(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0xf0)>>4)+offsetx;
+ 207   1         y2=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0x0f)+offsety;
+ 208   1         y3=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0x0f)+offsety;
+ 209   1         y0=((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0x0f)+offsety;
+ 210   1         y1=((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+1))&0x0f)+offsety;
+ 211   1         if(readfk(x0,y0+1))
+ 212   1         {
+ 213   2            if(!(((x0==x1)&&((y0+1)==y1))|((x0==x2)&&((y0+1)==y2))|((x0==x3)&&((y0+1)==y3))))
+ 214   2               { 
+ 215   3                 tz=1;
+ 216   3                }
+ 217   2         }
+ 218   1         if(readfk(x1,y1+1))
+ 219   1           {
+ 220   2            if(!(((x1==x0)&&((y1+1)==y0))|((x1==x2)&&((y1+1)==y2))|((x1==x3)&&((y1+1)==y3))))
+ 221   2               { 
+ 222   3                tz=1;    
+ 223   3               }
+ 224   2       }
+ 225   1          if(readfk(x2,y2+1))
+ 226   1         {
+ 227   2            if(!(((x2==x0)&&((y2+1)==y0))|((x2==x1)&&((y2+1)==y1))|((x2==x3)&&((y2+1)==y3))))
+ 228   2                {
+ 229   3                 tz=1;
+ 230   3                }
+ 231   2         }
+ 232   1            if(readfk(x3,y3+1))
+ 233   1         {
+ 234   2            if(!(((x3==x0)&&((y3+1)==y0))|((x3==x1)&&((y3+1)==y1))|((x3==x2)&&((y3+1)==y2))))
+ 235   2                {
+ 236   3                 tz=1;
+ 237   3                }
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 5   
+
+ 238   2         }
+ 239   1         return(tz); 
+ 240   1      }
+ 241          /*清除一个方块*/
+ 242          void clearbuf(uchar dat,char setx,char sety)
+ 243          {
+ 244   1        uchar *i;
+ 245   1        i=(moxing+((dat&0xf0)|((dat&0x0f)<<2)));
+ 246   1        clear1(((((*i)&0xf0)>>4)+setx),(((*i)&0x0f)+sety));
+ 247   1        clear1(((((*(i+1))&0xf0)>>4)+setx),(((*(i+1))&0x0f)+sety));
+ 248   1        clear1(((((*(i+2))&0xf0)>>4)+setx),(((*(i+2))&0x0f)+sety));
+ 249   1        clear1(((((*(i+3))&0xf0)>>4)+setx),(((*(i+3))&0x0f)+sety));  
+ 250   1      }
+ 251          /*俄罗斯方块子程序*/
+ 252          void fangkuai(void)
+ 253          {
+ 254   1        uchar fenshu=0;
+ 255   1        char offsety,offsetx;
+ 256   1        char offsety_buff,offsetx_buff;
+ 257   1        uchar buff=0x10;               
+ 258   1        bit ting=0;                                                           
+ 259   1        uchar i;
+ 260   1        //flag5=1;
+ 261   1        TMOD=1;         //定时器工作方式
+ 262   1        IT0=1;          //边延有效
+ 263   1        IT1=1;
+ 264   1        EA=1;           //开CPU中断
+ 265   1        ET0=1;          //开定时器中断
+ 266   1        EX0=1;          //开外部中断
+ 267   1        EX1=1;
+ 268   1        TL0=0x00;
+ 269   1        TH0=0x00;       //定时器初值
+ 270   1        TR0=1;          //启动定时器
+ 271   1        k=5;
+ 272   1        choose12864(2);
+ 273   1        clear12864();
+ 274   1        play16(0,0,0,els);
+ 275   1        play16(0,0,1,els+32);
+ 276   1        play16(0,0,2,els+64);
+ 277   1        play16(0,2,0,els+96);
+ 278   1        play16(0,2,1,els+128);
+ 279   1        play8(0,0,3,shu0);
+ 280   1        play8(0,1,3,shu0);
+ 281   1        vertical(1,60,30);
+ 282   1        vertical(1,60,127);
+ 283   1        for(i=0;i<98;i++)
+ 284   1        {
+ 285   2          dot(30+i,1);
+ 286   2              dot(30+i,62);
+ 287   2        }
+ 288   1        offsety=7;
+ 289   1        offsetx=-3;
+ 290   1        for(;;)
+ 291   1       {
+ 292   2         if(P3&0x04)
+ 293   2         first=1;
+ 294   2         if((k==0x02)&&((P3&0x04)==0x04))
+ 295   2         {
+ 296   3           offsety_buff=offsety;
+ 297   3               ting=tingzhiyou(buff,offsetx,offsety);
+ 298   3              if(!ting)
+ 299   3               {
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 6   
+
+ 300   4                if(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0x0f)+offsety)
+ 301   4            offsety--;
+ 302   4                clearbuf(buff,offsetx_buff,offsety_buff);
+ 303   4                playbuf(buff,offsetx,offsety);
+ 304   4                offsety_buff=offsety;
+ 305   4                
+ 306   4          }
+ 307   3                k=5;
+ 308   3         }
+ 309   2         if((k==0x01)&&((P3&0x04)==0x04))
+ 310   2         {
+ 311   3      
+ 312   3           offsety_buff=offsety;
+ 313   3               ting=tingzhizuo(buff,offsetx,offsety);
+ 314   3               if(!ting)
+ 315   3              {
+ 316   4               if(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0x0f)+offsety<=13)
+ 317   4           offsety++;
+ 318   4               k=5;
+ 319   4               clearbuf(buff,offsetx_buff,offsety_buff);
+ 320   4               playbuf(buff,offsetx,offsety);
+ 321   4               offsety_buff=offsety;
+ 322   4              }
+ 323   3         }
+ 324   2         if((k==0x03)&&((P3&0x04)==0x04))
+ 325   2         {
+ 326   3           dengji=36;/////////////
+ 327   3               k=5;
+ 328   3         }
+ 329   2         if((k==0x00)&&((P3&0x04)==0x04))
+ 330   2         {
+ 331   3            uchar i;
+ 332   3                k=5;
+ 333   3                i=buff;
+ 334   3                buff++;
+ 335   3                if((buff&0x0f)>=4)
+ 336   3                buff=buff&0xf0;
+ 337   3                
+ 338   3                //change1(0,14);
+ 339   3            if(((*(((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0x0f)+offsety)>14)
+ 340   3             {
+ 341   4                   do
+ 342   4                        {
+ 343   5                              offsety--;
+ 344   5                        }while((((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0x0f)+offsety)>14);
+ 345   4                       
+ 346   4                 }
+ 347   3                if(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0x0f)+offsety<0)
+ 348   3                {
+ 349   4                  do
+ 350   4                      {
+ 351   5                        offsety++;
+ 352   5                      }while(((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0x0f)+offsety);
+ 353   4                }
+ 354   3                clearbuf(i,offsetx_buff,offsety_buff);
+ 355   3                playbuf(buff,offsetx,offsety);
+ 356   3         }
+ 357   2         ting=tingzhixia(buff,offsetx,offsety);
+ 358   2         while(flag5);
+ 359   2         if(flag1)
+ 360   2         {
+ 361   3           offsetx_buff=offsetx;
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 7   
+
+ 362   3               offsety_buff=offsety;
+ 363   3           offsetx++;
+ 364   3               clearbuf(buff,offsetx_buff,offsety_buff);
+ 365   3               playbuf(buff,offsetx,offsety);
+ 366   3           offsetx_buff=offsetx;
+ 367   3               flag1=0;
+ 368   3          }
+ 369   2         if((((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx)>22)|ting)
+ 370   2         { 
+ 371   3          uchar i=0;
+ 372   3              if(hangman((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx))
+ 373   3              {xiaohang((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+1)))&0xf0)>>4)+offsetx);fenshu++;i++;}
+ 374   3         
+ 375   3              if((((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0xf0)>>4)+offsetx>=(((*((moxing+((buff&0xf0)|((buff&0
+             -x0f)<<2)))+3))&0xf0)>>4)+offsetx)      //x2>=x3
+ 376   3              {
+ 377   4               if((((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0xf0)>>4)+offsetx<(((*((moxing+((buff&0xf0)|((buff&0
+             -x0f)<<2))+1)))&0xf0)>>4)+offsetx)     //x2<x1
+ 378   4               {
+ 379   5                 if(hangman((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+2)))&0xf0)>>4)+offsetx+i))
+ 380   5                 {xiaohang((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+2)))&0xf0)>>4)+offsetx+i);fenshu++;i++;}
+ 381   5               }
+ 382   4               if((((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0xf0)>>4)+offsetx<(((*((moxing+((buff&0xf0)|((buff&0
+             -x0f)<<2)))+2))&0xf0)>>4)+offsetx)      //x3<x2
+ 383   4                {
+ 384   5                 if(hangman((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+3)))&0xf0)>>4)+offsetx+i))
+ 385   5                 {xiaohang((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+3)))&0xf0)>>4)+offsetx+i);fenshu++;i++;}
+ 386   5                }
+ 387   4               if((((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0xf0)>>4)+offsetx<(((*((moxing+((buff&0xf0)|((buff&0x0f)
+             -<<2)))+3))&0xf0)>>4)+offsetx)  //x0<x3
+ 388   4               {
+ 389   5                 if(hangman((((*(moxing+((buff&0xf0)+((buff&0x0f)<<2))))&0xf0)>>4)+offsetx+i))
+ 390   5                 {xiaohang((((*(moxing+((buff&0xf0)+((buff&0x0f)<<2))))&0xf0)>>4)+offsetx+i);fenshu++;i++;}
+ 391   5               }
+ 392   4              }
+ 393   3              if((((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+2))&0xf0)>>4)+offsetx<(((*((moxing+((buff&0xf0)|((buff&0x
+             -0f)<<2)))+3))&0xf0)>>4)+offsetx) //x2<x3
+ 394   3              {
+ 395   4                 if((((*((moxing+((buff&0xf0)|((buff&0x0f)<<2)))+3))&0xf0)>>4)+offsetx<(((*((moxing+((buff&0xf0)|((buff
+             -&0x0f)<<2))+1)))&0xf0)>>4)+offsetx)
+ 396   4                 {
+ 397   5                   if(hangman((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+3)))&0xf0)>>4)+offsetx+i))
+ 398   5                   {xiaohang((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+3)))&0xf0)>>4)+offsetx+i);fenshu++;i++;}
+ 399   5                 }
+ 400   4                 if(hangman((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+2)))&0xf0)>>4)+offsetx+i))
+ 401   4                 {xiaohang((((*((moxing+((buff&0xf0)+((buff&0x0f)<<2))+2)))&0xf0)>>4)+offsetx+i);fenshu++;i++;}
+ 402   4                 if((((*(moxing+((buff&0xf0)|((buff&0x0f)<<2))))&0xf0)>>4)+offsetx<(((*((moxing+((buff&0xf0)|((buff&0x0
+             -f)<<2)))+2))&0xf0)>>4)+offsetx)
+ 403   4                 {
+ 404   5                   if(hangman((((*(moxing+((buff&0xf0)+((buff&0x0f)<<2))))&0xf0)>>4)+offsetx+i))
+ 405   5                   {xiaohang((((*(moxing+((buff&0xf0)+((buff&0x0f)<<2))))&0xf0)>>4)+offsetx+i);fenshu++;i++;}
+ 406   5                 }
+ 407   4              }
+ 408   3               
+ 409   3              play8(0,0,3,shu0+((fenshu/10)<<4));
+ 410   3              play8(0,1,3,shu0+((fenshu%10)<<4));
+ 411   3              dengji=fenshu/5;
+ 412   3              if(((((*(moxing+((buff&0xf0)+((buff&0x0f)<<2))))&0xf0)>>4)+offsetx)<1)
+ 413   3              {
+ 414   4      
+ 415   4                delay1ms(450);
+ 416   4            delay1ms(450);
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 8   
+
+ 417   4            choose12864(2);
+ 418   4            clear12864();
+ 419   4            play16(0,4,1,over);
+ 420   4            play16(0,6,1,over+32);
+ 421   4            play16(1,0,1,over+64);
+ 422   4            play16(1,2,1,over+96);
+ 423   4            delay1ms(450);
+ 424   4            delay1ms(450);
+ 425   4            break;
+ 426   4              }       
+ 427   3              buff=(((TL0%7)<<4)|(TH0%4));
+ 428   3              //buff=0x11;
+ 429   3          offsety=7;
+ 430   3          offsetx=-3;
+ 431   3              offsetx_buff=-9;
+ 432   3              offsety_buff=-9;
+ 433   3              } 
+ 434   2       } 
+ 435   1       
+ 436   1      }                                         
+ 437          
+ 438          
+ 439          /*万年历子程序*/                                          
+ 440          void wannianli(void)
+ 441          {
+ 442   1        uchar i;
+ 443   1        uchar count1=0;
+ 444   1        k=0;
+ 445   1        choose12864(2);
+ 446   1        init12864();
+ 447   1        clear12864();
+ 448   1        play8(0,0,0,shu2);             //屏，列，页，地址
+ 449   1        play8(0,1,0,shu0);
+ 450   1        play16(0,4,0,nian);
+ 451   1        play16(1,0,0,yue);
+ 452   1        play16(1,4,0,ri);
+ 453   1        play16(0,2,1,shi);
+ 454   1        play16(0,6,1,fen);
+ 455   1        play16(1,2,1,miao);
+ 456   1        
+ 457   1        play16(1,0,2,xing);
+ 458   1        play16(1,2,2,qi);
+ 459   1        vertical(3,63,127);
+ 460   1        vertical(3,63,126);
+ 461   1        vertical(3,63,122);
+ 462   1        vertical(3,63,121);
+ 463   1         for(i=0;i<7;i++)
+ 464   1        {
+ 465   2          dot(121+i,3);
+ 466   2              dot(121+i,63);
+ 467   2        }
+ 468   1        for(i=0;i<12;i++)
+ 469   1        {
+ 470   2          dot(123,8+5*i);
+ 471   2        }
+ 472   1        for(i=0;i<7;i++)
+ 473   1        {
+ 474   2          if(i<4)
+ 475   2              {
+ 476   3                play16(0,i<<1,3,yanyu+(i<<5));
+ 477   3              }
+ 478   2              if(i>=4)
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 9   
+
+ 479   2              {
+ 480   3                play16(1,(i-4)<<1,3,yanyu+(i<<5));
+ 481   3              }
+ 482   2        }
+ 483   1        init_ds1302();
+ 484   1        init_time();
+ 485   1        flag5=0;
+ 486   1        do
+ 487   1        {
+ 488   2           if(P3&0x04)
+ 489   2           first=1;
+ 490   2           init_ds1302();
+ 491   2           gettime(&realtime);
+ 492   2               play8(0,2,0,(shu0+(datastring[0]<<4)));
+ 493   2               play8(0,3,0,(shu0+(datastring[1]<<4)));
+ 494   2               play8(0,6,0,(shu0+(datastring[2]<<4)));
+ 495   2               play8(0,7,0,(shu0+(datastring[3]<<4)));
+ 496   2               play8(1,2,0,(shu0+(datastring[4]<<4)));
+ 497   2               play8(1,3,0,(shu0+(datastring[5]<<4)));
+ 498   2               play8(0,0,1,(shu0+(datastring[6]<<4)));
+ 499   2               play8(0,1,1,(shu0+(datastring[7]<<4)));
+ 500   2               play8(0,4,1,(shu0+(datastring[8]<<4)));
+ 501   2               play8(0,5,1,(shu0+(datastring[9]<<4)));
+ 502   2               play8(1,0,1,(shu0+(datastring[10]<<4)));
+ 503   2               play8(1,1,1,(shu0+(datastring[11]<<4)));
+ 504   2               play16(1,4,2,(yi+((datastring[12]-2)<<5)));
+ 505   2               gettemperature();
+ 506   2               if(flagg)
+ 507   2               {
+ 508   3                 play8(0,0,2,fu);
+ 509   3                 play8(1,6,3,fu);
+ 510   3               }
+ 511   2               else
+ 512   2                {
+ 513   3                  clear8(6,4,0);
+ 514   3                      play8(1,6,3,zheng);
+ 515   3                }
+ 516   2               play8(0,4+flagg,2,dian);
+ 517   2           play8(0,5+flagg,2,C);
+ 518   2               play8(0,0+flagg,2,(shu0+(temp[0]<<4)));
+ 519   2               play8(0,1+flagg,2,(shu0+(temp[1]<<4)));
+ 520   2               play8(0,2+flagg,2,xiao);
+ 521   2               play8(0,3+flagg,2,(shu0+(temp[2]<<4)));
+ 522   2               play();
+ 523   2               dot(124,3);
+ 524   2               if((k==0x02)&&((P3&0x04)==0x04))
+ 525   2               {
+ 526   3                 count1++;
+ 527   3                 if(count1==7)
+ 528   3                 count1=0;
+ 529   3                 switch (count1)
+ 530   3                 {
+ 531   4                   case 0:
+ 532   4                              {
+ 533   5                        play16(1,0,2,xing);
+ 534   5                        play16(1,2,2,qi);
+ 535   5                                        k=0;break;
+ 536   5                                      }
+ 537   4                
+ 538   4                   case 1:
+ 539   4                              {
+ 540   5                                        play16_fb(0,4,0);                     
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 10  
+
+ 541   5                                        k=0; break;
+ 542   5                                      }
+ 543   4                      case 2:
+ 544   4                              {
+ 545   5                        play16(0,4,0,nian);
+ 546   5                        play16_fb(1,0,0);
+ 547   5                                        k=0;break;                              
+ 548   5                                      }
+ 549   4                  case 3:
+ 550   4                              {
+ 551   5                                        play16(1,0,0,yue);
+ 552   5                        play16_fb(1,4,0); 
+ 553   5                                        k=0;break;
+ 554   5                                      }  
+ 555   4                      case 4:
+ 556   4                              {
+ 557   5                                        play16(1,4,0,ri);
+ 558   5                        play16_fb(0,2,1);
+ 559   5                                        k=0;break;
+ 560   5                                      }
+ 561   4                      case 5:
+ 562   4                              {
+ 563   5                                        play16(0,2,1,shi);
+ 564   5                        play16_fb(0,6,1);
+ 565   5                                        k=0;break;
+ 566   5                                      }
+ 567   4                      case 6:
+ 568   4                              {
+ 569   5                                         play16(0,6,1,fen);
+ 570   5                                         play16_fb(1,0,2);
+ 571   5                         play16_fb(1,2,2);
+ 572   5                                         k=0;break;
+ 573   5                                      }
+ 574   4                      default:k=0;break;
+ 575   4                 }
+ 576   3               }
+ 577   2               if((k==0x03)&&((P3&0x04)==0x04))
+ 578   2               {
+ 579   3                 switch(count1)
+ 580   3                 {
+ 581   4                   case 1:
+ 582   4                               {
+ 583   5                                         setjia(ds1302_year);k=0;break;
+ 584   5                                       }
+ 585   4                       case 2:
+ 586   4                                       {
+ 587   5                                         setjia(ds1302_month);k=0;break;
+ 588   5                                       }
+ 589   4                       case 3:
+ 590   4                                       {
+ 591   5                                         setjia(ds1302_day);k=0;break;
+ 592   5                                       }
+ 593   4                       case 4:
+ 594   4                                       {
+ 595   5                                         setjia(ds1302_hour);k=0;break;
+ 596   5                                       }
+ 597   4                       case 5:
+ 598   4                                       {
+ 599   5                                         setjia(ds1302_minute);k=0;break;
+ 600   5                                       }
+ 601   4                       case 6:
+ 602   4                                       {
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 11  
+
+ 603   5                                        setjia(ds1302_week);k=0;break;
+ 604   5                                       }
+ 605   4                 }
+ 606   3               }
+ 607   2               if((k==0x01)&&((P3&0x04)==0x04))
+ 608   2               {
+ 609   3                 switch(count1)
+ 610   3                 {
+ 611   4                   case 1:
+ 612   4                               {
+ 613   5                                         setjian(ds1302_year);k=0;break;
+ 614   5                                       }
+ 615   4                       case 2:
+ 616   4                                       {
+ 617   5                                         setjian(ds1302_month);k=0;break;
+ 618   5                                       }
+ 619   4                       case 3:
+ 620   4                                       {
+ 621   5                                         setjian(ds1302_day);k=0;break;
+ 622   5                                       }
+ 623   4                       case 4:
+ 624   4                                       {
+ 625   5                                         setjian(ds1302_hour);k=0;break;
+ 626   5                                       }
+ 627   4                       case 5:
+ 628   4                                       {
+ 629   5                                         setjian(ds1302_minute);k=0;break;
+ 630   5                                       }
+ 631   4                       case 6:
+ 632   4                                       {
+ 633   5                                         setjian(ds1302_week);k=0;break;
+ 634   5                                       }
+ 635   4                 }
+ 636   3              }
+ 637   2        }     while(!flag5);
+ 638   1      }
+ 639          /*贪吃蛇子程序*/
+ 640          void tanchishe(void)                                                                                                       
+ 641          {          
+ 642   1        uchar xdata length[102]={0,8,1,8};     //存放蛇身的数组;
+ 643   1        uchar food[2]={12,8};
+ 644   1        uchar i,x,y;
+ 645   1        bit flag2,flag3,flag4;
+ 646   1        TMOD=1;         //定时器工作方式
+ 647   1        IT0=1;          //边延有效
+ 648   1        IT1=1;
+ 649   1        EA=1;           //开CPU中断
+ 650   1        ET0=1;          //开定时器中断
+ 651   1        EX0=1;          //开外部中断
+ 652   1        EX1=1;
+ 653   1        TL0=0x00;
+ 654   1        TH0=0x00;       //定时器初值
+ 655   1        TR0=1;          //启动定时器
+ 656   1      
+ 657   1        dengji=2;
+ 658   1        p=20;
+ 659   1        direction=1;
+ 660   1        flag5=0;
+ 661   1        
+ 662   1        choose12864(2);
+ 663   1        clear12864(); 
+ 664   1        vertical(1,61,30);
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 12  
+
+ 665   1        vertical(1,61,127);
+ 666   1        for(i=0;i<98;i++)
+ 667   1        {
+ 668   2          dot(30+i,1);
+ 669   2              dot(30+i,62);
+ 670   2        }
+ 671   1        play16(0,0,0,tan);
+ 672   1        play16(0,0,1,chi);
+ 673   1        play16(0,0,2,she);
+ 674   1        change(length,(length+1));
+ 675   1        change((length+2),(length+3));
+ 676   1        change(food,food+1);
+ 677   1        for(;;)
+ 678   1        {
+ 679   2          do
+ 680   2         {
+ 681   3          first=1;
+ 682   3          while(flag5|!flag1);
+ 683   3          x=*(length);                               
+ 684   3          y=*(length+1);
+ 685   3          switch(direction)                      //右
+ 686   3              {
+ 687   4                case 1:
+ 688   4                  {
+ 689   5                    for(i=0;i<dengji-1;i++)
+ 690   5                     {
+ 691   6                       *(length+(i<<1))=*(length+(i<<1)+2);
+ 692   6                           *(length+(i<<1)+1)=*(length+(i<<1)+3);
+ 693   6                     }
+ 694   5                     (*(length+(dengji<<1)-2))++;
+ 695   5                         flag=0;
+ 696   5                         break;
+ 697   5                    }
+ 698   4                      case 2:                                   //下
+ 699   4                       {
+ 700   5                    for(i=0;i<dengji-1;i++)
+ 701   5                     {
+ 702   6                       *(length+(i<<1))=*(length+(i<<1)+2);
+ 703   6                           *(length+(i<<1)+1)=*(length+(i<<1)+3);
+ 704   6                     }
+ 705   5                          (*(length+(dengji<<1)-1))++;
+ 706   5                              flag=1;
+ 707   5                              break;
+ 708   5                        }
+ 709   4                      case 3:                                 //左
+ 710   4                       {
+ 711   5                     for(i=0;i<dengji-1;i++)
+ 712   5                     {
+ 713   6                       *(length+(i<<1))=*(length+(i<<1)+2);
+ 714   6                           *(length+(i<<1)+1)=*(length+(i<<1)+3);
+ 715   6                     }
+ 716   5                     (*(length+(dengji<<1)-2))--;
+ 717   5                         flag=0;
+ 718   5                         break;
+ 719   5                       }
+ 720   4                      case 4:
+ 721   4                       {                      //上
+ 722   5                       for(i=0;i<dengji-1;i++)
+ 723   5                     {
+ 724   6                       *(length+(i<<1))=*(length+(i<<1)+2);
+ 725   6                           *(length+(i<<1)+1)=*(length+(i<<1)+3);
+ 726   6                     }
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 13  
+
+ 727   5                          (*(length+(dengji<<1)-1))--;
+ 728   5                              flag=1;
+ 729   5                              break;
+ 730   5                       }
+ 731   4               }
+ 732   3               flag4=((*(length+(dengji<<1)-2))==food[0])&&((*(length+(dengji<<1)-1))==food[1]);
+ 733   3               if(flag4)      //
+ 734   3               {
+ 735   4                      for(i=dengji;i>0;i--)
+ 736   4                      {
+ 737   5                        *(length+(i<<1))=*(length+(i<<1)-2);
+ 738   5                        *(length+(i<<1)+1)=*(length+(i<<1)-1);
+ 739   5                      }
+ 740   4                      *length=x;
+ 741   4                      *(length+1)=y;
+ 742   4                      dengji++;
+ 743   4                      do
+ 744   4                      {
+ 745   5                        flag3=0;
+ 746   5                        food[0]=TL0%24;
+ 747   5                    food[1]=TL0%15;
+ 748   5                        for(i=0;i<dengji-1;i++)        //食物是否在蛇身身上
+ 749   5                        {
+ 750   6                          if((*(length+(i<<1)))==food[0]&&((*(length+(i<<1)+1))==food[1]))
+ 751   6                              {
+ 752   7                                flag3=1;
+ 753   7                                break;
+ 754   7                               }
+ 755   6                        }
+ 756   5                      }while(flag3);
+ 757   4                      change(food,food+1); 
+ 758   4               }
+ 759   3           flag2=1;     //蛇头没有遇到蛇身
+ 760   3               for(i=0;i<dengji-1;i++)
+ 761   3              {
+ 762   4                         if(*(length+(i<<1))==*(length+(dengji<<1)-2)&&(*(length+(i<<1)+1)==*(length+(dengji<<1)-1)))
+ 763   4                         {
+ 764   5                           flag2=0;
+ 765   5                               break;
+ 766   5                              }
+ 767   4                      }
+ 768   3                flag2=flag2&&*(length+(dengji<<1)-2)>=0&&*(length+(dengji<<1)-2)<24;//蛇头是否出边界
+ 769   3                flag2=flag2&&*(length+(dengji<<1)-1)>=0&&*(length+(dengji<<1)-1)<15;
+ 770   3                if(flag2)
+ 771   3                 {
+ 772   4                  clear(&x,&y); 
+ 773   4                      
+ 774   4                  
+ 775   4                   {
+ 776   5                     change(length+(dengji<<1)-2,length+(dengji<<1)-1);
+ 777   5                   }
+ 778   4                       if(flag4)
+ 779   4                       {
+ 780   5                         change(&x,&y);
+ 781   5                        }
+ 782   4                  flag1=0;
+ 783   4                  play8(0,0,3,shu0+((dengji/10)<<4));
+ 784   4                  play8(0,1,3,shu0+(((dengji)%10)<<4));
+ 785   4                 }
+ 786   3         }
+ 787   2         while(flag2);
+ 788   2         delay1ms(450);
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 14  
+
+ 789   2         delay1ms(450);
+ 790   2         choose12864(2);
+ 791   2         clear12864();
+ 792   2         play16(0,4,1,over);
+ 793   2         play16(0,6,1,over+32);
+ 794   2         play16(1,0,1,over+64);
+ 795   2         play16(1,2,1,over+96);
+ 796   2         delay1ms(450);
+ 797   2         delay1ms(450);
+ 798   2         break;
+ 799   2        }
+ 800   1      }
+ 801          //////////////////////////////
+ 802          main(void)
+ 803          {
+ 804   1       uchar i;
+ 805   1       uchar count=0;
+ 806   1       P2=0xff;
+ 807   1        EA=1;           //开CPU中断
+ 808   1        //ET0=1;        //开定时器中断
+ 809   1        EX0=1;          //开外部中断
+ 810   1        EX1=1;
+ 811   1       choose12864(2);
+ 812   1       init12864();
+ 813   1       clear12864();
+ 814   1       ////////////////////
+ 815   1       play16(0,4,0,tan);
+ 816   1       play16(0,6,0,chi);
+ 817   1       play16(1,0,0,she);
+ 818   1       ///////////////////
+ 819   1       play16(0,4,1,els);
+ 820   1       play16(0,6,1,els+32);
+ 821   1       for(i=0;i<3;i++)
+ 822   1       {
+ 823   2         play16(1,i<<1,1,(els+64+(i<<5)));
+ 824   2       }
+ 825   1       //////////////////
+ 826   1      
+ 827   1       play16(0,4,2,wnl);
+ 828   1       play16(0,6,2,wnl+32);
+ 829   1       play16(1,0,2,wnl+64);
+ 830   1       
+ 831   1       //////////////////
+ 832   1       for(;;)
+ 833   1        {
+ 834   2          if((k==0x03)&&((P3&0x04)==0x04))
+ 835   2         {
+ 836   3              count++;
+ 837   3              k=0;
+ 838   3              if(count==4)
+ 839   3              count=1;
+ 840   3              switch(count)
+ 841   3              {
+ 842   4                case 1:
+ 843   4                       {
+ 844   5                                  play16(0,4,2,wnl);
+ 845   5                      play16(0,6,2,wnl+32);
+ 846   5                      play16(1,0,2,wnl+64);
+ 847   5                                      play16_fb(0,4,0);
+ 848   5                      play16_fb(0,6,0);
+ 849   5                      play16_fb(1,0,0);
+ 850   5                               };break;
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 15  
+
+ 851   4                case 2: {
+ 852   5                                       play16(0,4,0,tan);
+ 853   5                       play16(0,6,0,chi);
+ 854   5                       play16(1,0,0,she);
+ 855   5                                       play16_fb(0,4,1);
+ 856   5                       play16_fb(0,6,1);
+ 857   5                       for(i=0;i<3;i++)
+ 858   5                       {
+ 859   6                         play16_fb(1,i<<1,1);
+ 860   6                        }
+ 861   5                         };break;
+ 862   4                case 3:
+ 863   4                        {
+ 864   5                          
+ 865   5                                       play16(0,4,1,els);
+ 866   5                       play16(0,6,1,els+32);
+ 867   5                       for(i=0;i<3;i++)
+ 868   5                       {
+ 869   6                         play16(1,i<<1,1,(els+64+(i<<5)));
+ 870   6                       } 
+ 871   5                                       play16_fb(0,4,2);
+ 872   5                       play16_fb(0,6,2);
+ 873   5                       play16_fb(1,0,2); 
+ 874   5                        };break;
+ 875   4              default:break;
+ 876   4              }
+ 877   3        }
+ 878   2        if(P3&0x04)
+ 879   2        first=1;
+ 880   2        if(flag5)
+ 881   2        {
+ 882   3          switch(count)
+ 883   3              {
+ 884   4                case 1:flag5=0;tanchishe();count=0;flag5=0;k=0;break;
+ 885   4                case 2:flag5=0;fangkuai();count=0;flag5=0; k=0;break;
+ 886   4                case 3:flag5=0;wannianli();count=0;flag5=0;k=0;break;
+ 887   4                default:count=0;k=3;flag5=0;break;
+ 888   4              }
+ 889   3               choose12864(2);
+ 890   3           init12864();
+ 891   3           clear12864();
+ 892   3       ////////////////////
+ 893   3           play16(0,4,0,tan);
+ 894   3           play16(0,6,0,chi);
+ 895   3           play16(1,0,0,she);
+ 896   3       ///////////////////
+ 897   3           play16(0,4,1,els);
+ 898   3           play16(0,6,1,els+32);
+ 899   3           for(i=0;i<3;i++)
+ 900   3           {
+ 901   4             play16(1,i<<1,1,(els+64+(i<<5)));
+ 902   4           }
+ 903   3       //////////////////
+ 904   3      
+ 905   3           play16(0,4,2,wnl);
+ 906   3           play16(0,6,2,wnl+32);
+ 907   3           play16(1,0,2,wnl+64);
+ 908   3       //////////////////
+ 909   3        }
+ 910   2       }
+ 911   1      
+ 912   1      }
+C51 COMPILER V8.02   MAIN                                                                  12/20/2003 01:50:29 PAGE 16  
+
+*** WARNING C316 IN LINE 912 OF main.c: unterminated conditionals
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   8463    ----
+   CONSTANT SIZE    =   1608    ----
+   XDATA SIZE       =   ----     134
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     31      82
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4      11
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

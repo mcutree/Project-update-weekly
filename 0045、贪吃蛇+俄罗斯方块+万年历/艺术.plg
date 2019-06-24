@@ -1,0 +1,16 @@
+<html>
+<body>
+<pre>
+<h1>礦ision3 Build Log</h1>
+<h2>Project:</h2>
+C:\Documents and Settings\Administrator\桌面\123\艺术.uv2
+Project File Date:  07/20/2010
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling main.c...
+main.c(912): warning C316: unterminated conditionals
+linking...
+Program Size: data=65.7 xdata=102 code=10733
+creating hex file from "艺术"...
+"艺术" - 0 Error(s), 1 Warning(s).
